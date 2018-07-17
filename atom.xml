@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-07-17T09:00:49.000Z</updated>
+  <updated>2018-07-17T11:35:25.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -18,19 +18,18 @@
   
   <entry>
     <title></title>
-    <link href="http://www.yifanguo.top/2018/07/17/HEXO%20%E5%B7%A5%E5%85%B7%E5%B0%8F%E8%AE%B0/"/>
-    <id>http://www.yifanguo.top/2018/07/17/HEXO 工具小记/</id>
-    <published>2018-07-17T09:00:49.000Z</published>
-    <updated>2018-07-17T09:00:49.000Z</updated>
+    <link href="http://www.yifanguo.top/2018/07/17/HEXO%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE/"/>
+    <id>http://www.yifanguo.top/2018/07/17/HEXO常用配置/</id>
+    <published>2018-07-17T11:35:25.000Z</published>
+    <updated>2018-07-17T11:35:25.000Z</updated>
     
-    <content type="html"><![CDATA[<p>[toc]</p><h1 id="HEXO-工具小记"><a href="#HEXO-工具小记" class="headerlink" title="HEXO 工具小记"></a>HEXO 工具小记</h1>]]></content>
+    <content type="html"><![CDATA[<h1 id="HEXO工具小记"><a href="#HEXO工具小记" class="headerlink" title="HEXO工具小记"></a>HEXO工具小记</h1>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;[toc]&lt;/p&gt;
-&lt;h1 id=&quot;HEXO-工具小记&quot;&gt;&lt;a href=&quot;#HEXO-工具小记&quot; class=&quot;headerlink&quot; title=&quot;HEXO 工具小记&quot;&gt;&lt;/a&gt;HEXO 工具小记&lt;/h1&gt;
+        &lt;h1 id=&quot;HEXO工具小记&quot;&gt;&lt;a href=&quot;#HEXO工具小记&quot; class=&quot;headerlink&quot; title=&quot;HEXO工具小记&quot;&gt;&lt;/a&gt;HEXO工具小记&lt;/h1&gt;
       
     
     </summary>
