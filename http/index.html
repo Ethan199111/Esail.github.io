@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Yifan's Site" type="application/atom+xml" />
 
@@ -83,14 +85,14 @@
 
 <meta name="description" content="HTTPchapter 1HTTP: HyperText Transfer Protocol 超文本传输协议* TCP/IP是互联网相关的各类协议族的总称 TCP/IP按层次分为：应用层 传输层 网络层 数据链路层 应用层：FTP file transfer protocolDNS domain name systemhttp 传输层：处于应用层下方 提供处于网络连接中的两台计算机之间的数据传输T">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Yifan&#39;s Site">
-<meta property="og:url" content="http://www.yifanguo.top/tags/index.html">
+<meta property="og:title" content="http">
+<meta property="og:url" content="http://www.yifanguo.top/http/index.html">
 <meta property="og:site_name" content="Yifan&#39;s Site">
 <meta property="og:description" content="HTTPchapter 1HTTP: HyperText Transfer Protocol 超文本传输协议* TCP/IP是互联网相关的各类协议族的总称 TCP/IP按层次分为：应用层 传输层 网络层 数据链路层 应用层：FTP file transfer protocolDNS domain name systemhttp 传输层：处于应用层下方 提供处于网络连接中的两台计算机之间的数据传输T">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-24T07:53:34.000Z">
+<meta property="og:updated_time" content="2018-07-24T09:03:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yifan&#39;s Site">
+<meta name="twitter:title" content="http">
 <meta name="twitter:description" content="HTTPchapter 1HTTP: HyperText Transfer Protocol 超文本传输协议* TCP/IP是互联网相关的各类协议族的总称 TCP/IP按层次分为：应用层 传输层 网络层 数据链路层 应用层：FTP file transfer protocolDNS domain name systemhttp 传输层：处于应用层下方 提供处于网络连接中的两台计算机之间的数据传输T">
 
 
@@ -121,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/tags/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/http/"/>
 
 
 
 
 
-  <title> | Yifan's Site</title>
+  <title>http | Yifan's Site</title>
   
 
 
@@ -205,12 +207,32 @@
         </li>
       
         
-        <li class="menu-item menu-item-tags">
+        <li class="menu-item menu-item-http">
           <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Tags
+            http
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-spring">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            spring
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-netty">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            netty
           </a>
         </li>
       
@@ -240,7 +262,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline"></h1>
+	<h1 class="post-title" itemprop="name headline">http</h1>
 
 
 
@@ -299,7 +321,51 @@
 <p>cookie会根据从服务器端发送的响应报文内的一个叫做<br>set-cookie的首部字段信息，通知客户端保存cookie</p>
 <p>当下次客户端再往该服务发送请求时，客户端会自动在请求报文中加入cookie值后发出去</p>
 <p>服务端拿到cookie后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录<br>最后得到之前的状态信息</p>
-
+<h2><span id="chapter-3">chapter 3</span></h2><p>HTTP 报文内的HTTP信息</p>
+<p>报文： 用于HTTP协议交互的信息被称为HTTP报文<br>客户端的报文叫做 请求报文 服务端的报文 叫做响应报文</p>
+<p>报文首部<br>CR+LF换行符<br>报文主体</p>
+<p>并不一定要有报文主体</p>
+<h3><span id="message-vs-entity">message vs entity</span></h3><p>message 报文 是HTTP通信中的基本单位，由8位组字节流组成，通过http通信传输<br>entity 实体，做为请求或响应的有效payload被传输，由实体首部和实体主体组成<br>entity header + entity body</p>
+<p>http message的主体用于传输请求或响应的实体主体</p>
+<p>通常 报文主体等于实体主体，只有当传输中进行编码操作时，实体主体的内容发生变化，才导致它和报文主体产生差异</p>
+<h3><span id="compress">compress</span></h3><p>gzip compress delfate indentity</p>
+<h3><span id="分割发送的分块传输编码">分割发送的分块传输编码</span></h3><p>分块传输编码 chunked transfer coding</p>
+<p>分块传输编码会将四体主体分成多个部分，每一块都会用十六进制来标记块的大小，而实体主体的最后一块会使用 “0(CR+LF)” 来标记</p>
+<p>由客户端负责解码 恢复实体主体</p>
+<h2><span id="chapter-4">chapter 4</span></h2><p>status code状态码</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>msg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>204</td>
+<td>no content</td>
+</tr>
+<tr>
+<td>206</td>
+<td>partial content</td>
+</tr>
+<tr>
+<td>301</td>
+<td>moved permanently</td>
+</tr>
+<tr>
+<td>302</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="chapter-5">chapter 5</span></h2><p>Proxy 代理<br>caching proxy<br>transparent proxy<br>客户端缓存–临时网络文件 temporaray internet file</p>
+<h2><span id="chapter-6">chapter 6</span></h2><p>HTTP header </p>
+<h2><span id="chapter-7">chapter 7</span></h2>
         
       </div>
       
@@ -410,7 +476,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">chapter 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.1.</span> <span class="nav-text">与HTTP密切相关的三个协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用ARP协议凭借MAC地址进行通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.</span> <span class="nav-text">确保可靠性的TCP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">三次握手 three-way handshaking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">DNS 域名解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.4.</span> <span class="nav-text">URI vs URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">chapter 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.1.</span> <span class="nav-text">HTTP是不保存状态的协议 stateless</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.</span> <span class="nav-text">告知服务器意图的HTTP 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">POST</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">PUT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">HEAD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">DELETE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">OPTIONS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">TRACE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.8.</span> <span class="nav-text">CONNECT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.3.</span> <span class="nav-text">持久连接节省通信量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.4.</span> <span class="nav-text">管线化 pipelining</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.5.</span> <span class="nav-text">使用cookies管理状态</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">chapter 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.1.</span> <span class="nav-text">与HTTP密切相关的三个协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用ARP协议凭借MAC地址进行通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.</span> <span class="nav-text">确保可靠性的TCP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">三次握手 three-way handshaking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">DNS 域名解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.4.</span> <span class="nav-text">URI vs URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">chapter 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.1.</span> <span class="nav-text">HTTP是不保存状态的协议 stateless</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.</span> <span class="nav-text">告知服务器意图的HTTP 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">POST</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">PUT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">HEAD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">DELETE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">OPTIONS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">TRACE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.8.</span> <span class="nav-text">CONNECT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.3.</span> <span class="nav-text">持久连接节省通信量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.4.</span> <span class="nav-text">管线化 pipelining</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.5.</span> <span class="nav-text">使用cookies管理状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">chapter 3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.1.</span> <span class="nav-text">message vs entity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.2.</span> <span class="nav-text">compress</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.3.</span> <span class="nav-text">分割发送的分块传输编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">chapter 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">chapter 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.6.</span> <span class="nav-text">chapter 6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.7.</span> <span class="nav-text">chapter 7</span></a></li></ol></li></ol></div>
             
 
           </div>
