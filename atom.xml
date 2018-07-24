@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-07-17T12:07:28.000Z</updated>
+  <updated>2018-07-17T11:51:45.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>java concurrent notes</title>
-    <link href="http://www.yifanguo.top/2018/07/17/myblog/"/>
-    <id>http://www.yifanguo.top/2018/07/17/myblog/</id>
-    <published>2018-07-17T11:53:34.000Z</published>
-    <updated>2018-07-17T12:07:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="first">first</span></h1><h2><span id="second">second</span></h2><h1><span id="test">test</span></h1><h1><span id="test2">test2</span></h1>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;first&quot;&gt;first&lt;/span&gt;&lt;/h1&gt;&lt;h2&gt;&lt;span id=&quot;second&quot;&gt;second&lt;/span&gt;&lt;/h2&gt;&lt;h1&gt;&lt;span id=&quot;test&quot;&gt;test&lt;/span&gt;&lt;/h1&gt;&lt;h1&gt;&lt;span id=&quot;test2&quot;&gt;test2
-      
-    
-    </summary>
-    
-    
-      <category term="concurrent" scheme="http://www.yifanguo.top/tags/concurrent/"/>
-    
-  </entry>
   
   <entry>
     <title></title>
