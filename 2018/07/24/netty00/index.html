@@ -68,12 +68,10 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="netty," />
 
 
 
-
-  
 
 
   <link rel="alternate" href="/atom.xml" title="Yifan's Site" type="application/atom+xml" />
@@ -83,14 +81,18 @@
 
 
 
-<meta property="og:type" content="website">
+<meta name="description" content="netty简介Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 netty的所有IO操作都是异步非阻塞的用过future-listener机制，用户可以方便的主动获取 采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程">
+<meta name="keywords" content="netty">
+<meta property="og:type" content="article">
 <meta property="og:title" content="netty">
-<meta property="og:url" content="http://www.yifanguo.top/netty/index.html">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/24/netty00/index.html">
 <meta property="og:site_name" content="Yifan&#39;s Site">
+<meta property="og:description" content="netty简介Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 netty的所有IO操作都是异步非阻塞的用过future-listener机制，用户可以方便的主动获取 采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-24T09:02:00.000Z">
+<meta property="og:updated_time" content="2018-07-24T09:20:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty">
+<meta name="twitter:description" content="netty简介Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 netty的所有IO操作都是异步非阻塞的用过future-listener机制，用户可以方便的主动获取 采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程">
 
 
 
@@ -120,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/netty/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/24/netty00/"/>
 
 
 
@@ -254,33 +256,154 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty00/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">netty</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">netty</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T02:12:16-07:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1><span id="netty简介">netty简介</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
+<p>netty的所有IO操作都是异步非阻塞的<br>用过future-listener机制，用户可以方便的主动获取</p>
+<p>采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程销毁，这就是典型的一请求一应答模型。该架构最大的问题就是不具备弹性伸缩能力，当并发访问量增加后，服务端的线程个数和并发访问数成线性正比，由于线程是JAVA虚拟机非常宝贵的系统资源，当线程数膨胀之后，系统的性能急剧下降，随着并发量的继续增加，可能会发生句柄溢出、线程堆栈溢出等问题，并导致服务器最终宕机</p>
+<h1><span id="序列化方式问题java序列化存在如下几个典型问题">序列化方式问题：Java序列化存在如下几个典型问题：</span></h1><p>1) Java序列化机制是Java内部的一种对象编解码技术，无法跨语言使用；例如对于异构系统之间的对接，Java序列化后的码流需要能够通过其它语言反序列化成原始对象（副本），目前很难支持；</p>
+<p>2) 相比于其它开源的序列化框架，Java序列化后的码流太大，无论是网络传输还是持久化到磁盘，都会导致额外的资源占用；</p>
+<p>3) 序列化性能差（CPU资源占用高）。</p>
+<p>线程模型问题：由于采用同步阻塞IO，这会导致每个TCP连接都占用1个线程，由于线程资源是JVM虚拟机非常宝贵的资源，当IO读写阻塞导致线程无法及时释放时，会导致系统性能急剧下降，严重的甚至会导致虚拟机无法创建新的线程。</p>
+<h1><span id="高性能的三个主题">高性能的三个主题</span></h1><p>1) 传输：用什么样的通道将数据发送给对方，BIO、NIO或者AIO，IO模型在很大程度上决定了框架的性能。</p>
+<p>2) 协议：采用什么样的通信协议，HTTP或者内部私有协议。协议的选择不同，性能模型也不同。相比于公有协议，内部私有协议的性能通常可以被设计的更优。</p>
+<p>3) 线程：数据报如何读取？读取之后的编解码在哪个线程进行，编解码后的消息如何派发，Reactor线程模型的不同，对性能的影响也非常大。</p>
+<h1><span id="netty高性能之道">Netty高性能之道</span></h1><h2><span id="异步非阻塞通信">异步非阻塞通信</span></h2><p>在IO编程过程中，当需要同时处理多个客户端接入请求时，可以利用多线程或者IO多路复用技术进行处理。IO多路复用技术通过把多个IO的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求。与传统的多线程/多进程模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源。</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/24/netty01/" rel="prev" title="netty分析01 -- 简介">
+                netty分析01 -- 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -313,8 +436,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -372,6 +504,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">netty简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">序列化方式问题：Java序列化存在如下几个典型问题：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">高性能的三个主题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Netty高性能之道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">异步非阻塞通信</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

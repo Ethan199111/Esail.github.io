@@ -68,12 +68,10 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="netty," />
 
 
 
-
-  
 
 
   <link rel="alternate" href="/atom.xml" title="Yifan's Site" type="application/atom+xml" />
@@ -83,14 +81,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="netty">
-<meta property="og:url" content="http://www.yifanguo.top/netty/index.html">
+<meta name="description" content="什么是netty(what)Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 传统HTTP服务器的原理 1.创建一个serversocket listen 一个端口  client request ip-address/port 服务器使用accept获得一个来自client的socket连接对象 启动一个新的thread来处理连接 读socket 得到">
+<meta name="keywords" content="netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netty分析01 -- 简介">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/24/netty01/index.html">
 <meta property="og:site_name" content="Yifan&#39;s Site">
+<meta property="og:description" content="什么是netty(what)Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 传统HTTP服务器的原理 1.创建一个serversocket listen 一个端口  client request ip-address/port 服务器使用accept获得一个来自client的socket连接对象 启动一个新的thread来处理连接 读socket 得到">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-24T09:02:00.000Z">
+<meta property="og:updated_time" content="2018-07-25T02:09:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="netty">
+<meta name="twitter:title" content="netty分析01 -- 简介">
+<meta name="twitter:description" content="什么是netty(what)Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持 传统HTTP服务器的原理 1.创建一个serversocket listen 一个端口  client request ip-address/port 服务器使用accept获得一个来自client的socket连接对象 启动一个新的thread来处理连接 读socket 得到">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/netty/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/24/netty01/"/>
 
 
 
 
 
-  <title>netty | Yifan's Site</title>
+  <title>netty分析01 -- 简介 | Yifan's Site</title>
   
 
 
@@ -254,33 +256,173 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">netty</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">netty分析01 -- 简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T02:30:21-07:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1><span id="什么是nettywhat">什么是netty(what)</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
+<p>传统HTTP服务器的原理</p>
+<p>1.创建一个serversocket listen 一个端口</p>
+<ol start="2">
+<li>client request ip-address/port</li>
+<li>服务器使用accept获得一个来自client的socket连接对象</li>
+<li>启动一个新的thread来处理连接</li>
+<li>读socket 得到byte stream</li>
+<li>解码协议，得到http request</li>
+<li>处理http request, 得到一个结果，封装成http response</li>
+<li>encoing ,把结果序列化 byte stream</li>
+<li>写socket 把byte stream 发送给客户端</li>
+<li>客户端循环第五步</li>
+</ol>
+<p>HTTP服务器之所以叫HTTP,因为encoding 和decoding都是使用HTTP协议<br><strong>使用netty可以定制编解码协议，实现自己特定协议的服务器</strong></p>
+<p>NIO: non-blocking input/output operation 非阻塞io<br>BIO: blocking io<br><strong>netty是基于javaNIO封装的一套框架</strong></p>
+<p>NIO如何做到非阻塞，event driven.只有event coming才启动线程处理，平常挂起避免资源浪费</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">while true &#123;</span><br><span class="line">	events = takeEvents(fds)</span><br><span class="line">	for event in events &#123;</span><br><span class="line">		if event.isAcceptable &#123;</span><br><span class="line">			doAccept()</span><br><span class="line">			</span><br><span class="line">		&#125; else if event.isReadable &#123;</span><br><span class="line">			request = doRead()</span><br><span class="line">			if request.isCompelete() &#123;</span><br><span class="line">				doPrecess()</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else if event.isWriteable &#123;</span><br><span class="line">			do write()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Netty 可以处理tcp也可以处理udp</p>
+<h1><span id="netty-是什么">netty 是什么</span></h1><ol>
+<li>本质：JBoss做的一个jar包</li>
+<li>目的： 快速开发高性能，高可靠的网络服务器和客户端程序</li>
+<li>优点：提供异步，事件驱动的网络应用程序框架和工具</li>
+<li>通俗： 帮你处理socket</li>
+</ol>
+<h2><span id="应用">应用：</span></h2><p>RPC框架</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/24/netty00/" rel="next" title="netty">
+                <i class="fa fa-chevron-left"></i> netty
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/24/netty02/" rel="prev" title="netty02">
+                netty02 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -313,8 +455,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -372,6 +523,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">什么是netty(what)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">netty 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">应用：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
