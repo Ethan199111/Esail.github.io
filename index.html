@@ -264,7 +264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/java-concurrent-volatile02/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/cglib/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -283,7 +283,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/25/java-concurrent-volatile02/" itemprop="url">java_concurrent_volatile02</a></h1>
+                <a class="post-title-link" href="/2018/07/25/cglib/" itemprop="url">cglib</a></h1>
         
 
         <div class="post-meta">
@@ -295,7 +295,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T00:04:18-07:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T23:08:40-07:00">
                 2018-07-25
               </time>
             
@@ -335,663 +335,513 @@
       
         
           
-            <h1><span id="volatile">volatile</span></h1><ol>
-<li>保证内存可见性。</li>
-<li>保证排序，不会因为指令重排导致问题</li>
-<li>不保证原子性</li>
+            <h1><span id="cglib-code-generation-library">cglib – code generation library</span></h1><p>it is a byte instrumentation library used in many java framework such as hibernate or spring</p>
+<p>the bytecode instrumentation allows manipulating or creating classes after the compilation phase of a program</p>
+<h1><span id="function">function</span></h1><p>Classes in Java are loaded dynamically at runtime. Cglib is using this feature of Java language to make it possible to add new classes to an already running Java program.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/zookeeper-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/zookeeper-md/" itemprop="url">zookeeper.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T21:41:20-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="overview">Overview</span></h1><p>ZooKeeper is a distributed, open-source coordination service for distributed applications.</p>
+<h1><span id="purpose">Purpose</span></h1><p>Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty源码解读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty源码解读/" itemprop="url">netty源码解读</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T18:33:49-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记Chapter08/" itemprop="url">netty学习笔记Chapter08</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T08:23:24-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="chapter8">Chapter8</span></h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记Chapter6/" itemprop="url">netty学习笔记Chapter6</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T04:36:24-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="chapter-6">chapter 6</span></h1><p>java序列化的目的主要有两个：</p>
+<ol>
+<li>网络传输</li>
+<li>对象持久化</li>
 </ol>
-<h1><span id="demo">Demo</span></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    private static int flag = 0;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        new ThreadA().start();</span><br><span class="line">        new ThreadB().start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 线程A进入死循环直到读出变量大于3</span><br><span class="line">    // 会发现线程A永远无法跳出循环，因为flag不是volatile类型变量</span><br><span class="line">    static class ThreadA extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                if (flag &gt;= 3) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;in CustomerInLine....&quot; + flag);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 线程B不停增加flag值，但是jvm会把flag写进cpu cache提升优化</span><br><span class="line">    static class ThreadB extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (flag &lt; 10) &#123;</span><br><span class="line">                System.out.println(&quot;in Queue ...&quot; + flag++);</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(200);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>解决的办法很简单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile static int flag = 0;</span><br></pre></td></tr></table></figure>
-<h1><span id="指令重排">指令重排</span></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class MainOrder &#123;</span><br><span class="line"></span><br><span class="line">    private static String context = null;</span><br><span class="line">    private static boolean flag;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        new MainOrder.ThreadA().start();</span><br><span class="line">        new MainOrder.ThreadB().start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    static class ThreadA extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">           context = &quot;hello word&quot;;</span><br><span class="line">           flag = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class ThreadB extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                while (!flag) &#123;</span><br><span class="line">                    sleep(100);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(context);</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果指令重排，threadB会先看到true然后print一个null</p>
-<h1><span id="不保证原子性">不保证原子性</span></h1><p>如果多个线程同时读写一个volatile变量，不保证原子性。<br>使用java concurrent包来解决这个问题，或者加入synchronized声明</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/java-basic-cloneable/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yifan Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifan's Site">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/java-basic-cloneable/" itemprop="url">java_basic_cloneable</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T23:37:28-07:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1><span id="introduction">introduction</span></h1><p>from orcale java doc</p>
-<p>public interface Cloneable<br>A class implements the Cloneable interface to indicate to the Object.clone() method that it is legal for that method to make a field-for-field copy of instances of that class.<br>Invoking Object’s clone method on an instance that does not implement the Cloneable interface results in the exception CloneNotSupportedException being thrown.</p>
-<p>By convention, classes that implement this interface should override Object.clone (which is protected) with a public method. See Object.clone() for details on overriding this method.</p>
-<p>Note that this interface does not contain the clone method. Therefore, it is not possible to clone an object merely by virtue of the fact that it implements this interface. Even if the clone method is invoked reflectively, there is no guarantee that it will succeed.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/java-concurrent-volatile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yifan Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifan's Site">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/java-concurrent-volatile/" itemprop="url">java_concurrent_volatile</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T23:24:57-07:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1><span id="overall">Overall</span></h1><ol>
-<li>visibility gurantee</li>
-<li>happens-before gurantee</li>
+<p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以<br>但是rpc很少使用java序列化来进行消息的encoding 和decoding</p>
+<p>原因</p>
+<ol>
+<li>无法跨语言</li>
+<li>序列化后码流太大</li>
 </ol>
-<h1><span id="function">Function</span></h1><p>The Java volatile keyword guarantees visibility of changes to variables across threads. </p>
-<p>In a multithreaded application where the threads operate on non-volatile variables, each thread may copy variables from main memory into a CPU cache while working on them, for performance reasons. If your computer contains more than one CPU, each thread may run on a different CPU. That means, that each thread may copy the variables into the CPU cache of different CPUs.</p>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-24 23.25.32.png" alt=""></p>
-<h1><span id="hapen-before">Hapen before</span></h1><p>To address the instruction reordering challenge, the Java volatile keyword gives a “happens-before” guarantee, in addition to the visibility guarantee. The happens-before guarantee guarantees that:</p>
-<p>Reads from and writes to other variables cannot be reordered to occur after a write to a volatile variable, if the reads / writes originally occurred before the write to the volatile variable.<br>The reads / writes before a write to a volatile variable are guaranteed to “happen before” the write to the volatile variable. Notice that it is still possible for e.g. reads / writes of other variables located after a write to a volatile to be reordered to occur before that write to the volatile. Just not the other way around. From after to before is allowed, but from before to after is not allowed.<br>Reads from and writes to other variables cannot be reordered to occur before a read of a volatile variable, if the reads / writes originally occurred after the read of the volatile variable. Notice that it is possible for reads of other variables that occur before the read of a volatile variable can be reordered to occur after the read of the volatile. Just not the other way around. From before to after is allowed, but from after to before is not allowed.</p>
-<h1><span id="when-to-use">when to use</span></h1><p>if two threads are both reading and writing to a shared variable, then using the volatile keyword for that is not enough. You need to use a synchronized in that case to guarantee that the reading and writing of the variable is atomic</p>
-<p>As an alternative to a synchronized block you could also use one of the many atomic data types found in the java.util.concurrent package. For instance, the AtomicLong or AtomicReference or one of the others.</p>
-<p>In case only one thread reads and writes the value of a volatile variable and other threads only read the variable, then the reading threads are guaranteed to see the latest value written to the volatile variable. Without making the variable volatile, this would not be guaranteed.</p>
-<h1><span id="performce">Performce</span></h1><p>Reading from and writing to main memory is more expensive than accessing the CPU cache. Accessing volatile variables also prevent instruction reordering which is a normal performance enhancement technique. Thus, you should only use volatile variables when you really need to enforce visibility of variables.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yifan Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifan's Site">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/netty03/" itemprop="url">netty03--bootstrap</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T21:25:23-07:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1><span id="bootstrap">Bootstrap</span></h1><p>bootstrap makes it easy to bootstrap a channel to use for clients</p>
-<p>link() for udp<br>connect() tcp</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yifan Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifan's Site">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/netty02/" itemprop="url">netty02</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T19:10:05-07:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1><span id="introduction">Introduction</span></h1><p>Netty is an asynchhronous event-driven network application framework<br>for rapid development of maintainable high performance protocal servers&amp;clients<br>–high-scalability protocol servers and clients.</p>
-<p>Netty is an NIO client server framework that enables quick and easy development of network applications such as protocol servers and clients.</p>
-<h1><span id="framework">framework</span></h1><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-24 19.12.41.png" alt=""></p>
-<h1><span id="why-use-netty">why use Netty</span></h1><p>a general purpose protocal or its implementation sometimes does not scale very well</p>
-<h1><span id="protocol">protocol</span></h1><p>Additionally, Netty provides out-of-the-box decoders which enables you to implement most protocols very easily and helps you avoid from ending up with a monolithic unmaintainable handler implementation. Please refer to the following packages for more detailed examples:</p>
-<p>io.netty.example.factorial for a binary protocol, and<br>io.netty.example.telnet for a text line-based protocol.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yifan Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yifan's Site">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/netty01/" itemprop="url">netty分析01 -- 简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T02:30:21-07:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1><span id="什么是nettywhat">什么是netty(what)</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
-<p>传统HTTP服务器的原理</p>
-<p>1.创建一个serversocket listen 一个端口</p>
-<ol start="2">
-<li>client request ip-address/port</li>
-<li>服务器使用accept获得一个来自client的socket连接对象</li>
-<li>启动一个新的thread来处理连接</li>
-<li>读socket 得到byte stream</li>
-<li>解码协议，得到http request</li>
-<li>处理http request, 得到一个结果，封装成http response</li>
-<li>encoing ,把结果序列化 byte stream</li>
-<li>写socket 把byte stream 发送给客户端</li>
-<li>客户端循环第五步</li>
+<p>评判编解码框架优劣<br>1 是否支持跨语言<br>2 编码后的码流大小<br>3 编解码的性能<br>4 类库是否小巧，API使用是否方便<br>5 使用者需要手工快发的工作量和难度</p>
+<h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1><h2><span id="google的protobuf">Google的protobuf</span></h2><p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p>
+<ol>
+<li>结构化数据存储格式 xml json</li>
+<li>高效的encoding decoding性能</li>
+<li>语言无关，平台无关，扩展性好</li>
+<li>支持java c++ python</li>
 </ol>
-<p>HTTP服务器之所以叫HTTP,因为encoding 和decoding都是使用HTTP协议<br><strong>使用netty可以定制编解码协议，实现自己特定协议的服务器</strong></p>
-<p>NIO: non-blocking input/output operation 非阻塞io<br>BIO: blocking io<br><strong>netty是基于javaNIO封装的一套框架</strong></p>
-<p>NIO如何做到非阻塞，event driven.只有event coming才启动线程处理，平常挂起避免资源浪费</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">while true &#123;</span><br><span class="line">	events = takeEvents(fds)</span><br><span class="line">	for event in events &#123;</span><br><span class="line">		if event.isAcceptable &#123;</span><br><span class="line">			doAccept()</span><br><span class="line">			</span><br><span class="line">		&#125; else if event.isReadable &#123;</span><br><span class="line">			request = doRead()</span><br><span class="line">			if request.isCompelete() &#123;</span><br><span class="line">				doPrecess()</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else if event.isWriteable &#123;</span><br><span class="line">			do write()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Netty 可以处理tcp也可以处理udp</p>
-<h1><span id="netty-是什么">netty 是什么</span></h1><ol>
-<li>本质：JBoss做的一个jar包</li>
-<li>目的： 快速开发高性能，高可靠的网络服务器和客户端程序</li>
-<li>优点：提供异步，事件驱动的网络应用程序框架和工具</li>
-<li>通俗： 帮你处理socket</li>
+<h2><span id="facebook的thrift">Facebook的Thrift</span></h2><ol>
+<li>语言系统以及IDL编译器，负责由用户给定的IDL文件生成相应语言的接口代码</li>
+<li>Tprotocol: rpc协议层，可以选择多种不同的对象序列化方式 如json 和binary</li>
+<li>TTransport： RPC传输层，可以选择不同的传输层实现 如socket, NIO. memoryBuffer</li>
+<li>TProcessor: 做为协议层和用户提供的服务实现之间的纽带，负责调用服务实现的接口</li>
+<li>TServer: 聚合TProtocol, TTransport, TProcessor等对象</li>
 </ol>
-<h2><span id="应用">应用：</span></h2><p>RPC框架</p>
 
           
         
@@ -1040,7 +890,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/netty00/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -1059,7 +909,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/24/netty00/" itemprop="url">netty</a></h1>
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter5/" itemprop="url">netty学习笔记chapter5</a></h1>
         
 
         <div class="post-meta">
@@ -1071,8 +921,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T02:12:16-07:00">
-                2018-07-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T03:30:47-07:00">
+                2018-07-25
               </time>
             
 
@@ -1111,17 +961,553 @@
       
         
           
-            <h1><span id="netty简介">netty简介</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
-<p>netty的所有IO操作都是异步非阻塞的<br>用过future-listener机制，用户可以方便的主动获取</p>
-<p>采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程销毁，这就是典型的一请求一应答模型。该架构最大的问题就是不具备弹性伸缩能力，当并发访问量增加后，服务端的线程个数和并发访问数成线性正比，由于线程是JAVA虚拟机非常宝贵的系统资源，当线程数膨胀之后，系统的性能急剧下降，随着并发量的继续增加，可能会发生句柄溢出、线程堆栈溢出等问题，并导致服务器最终宕机</p>
-<h1><span id="序列化方式问题java序列化存在如下几个典型问题">序列化方式问题：Java序列化存在如下几个典型问题：</span></h1><p>1) Java序列化机制是Java内部的一种对象编解码技术，无法跨语言使用；例如对于异构系统之间的对接，Java序列化后的码流需要能够通过其它语言反序列化成原始对象（副本），目前很难支持；</p>
-<p>2) 相比于其它开源的序列化框架，Java序列化后的码流太大，无论是网络传输还是持久化到磁盘，都会导致额外的资源占用；</p>
-<p>3) 序列化性能差（CPU资源占用高）。</p>
-<p>线程模型问题：由于采用同步阻塞IO，这会导致每个TCP连接都占用1个线程，由于线程资源是JVM虚拟机非常宝贵的资源，当IO读写阻塞导致线程无法及时释放时，会导致系统性能急剧下降，严重的甚至会导致虚拟机无法创建新的线程。</p>
-<h1><span id="高性能的三个主题">高性能的三个主题</span></h1><p>1) 传输：用什么样的通道将数据发送给对方，BIO、NIO或者AIO，IO模型在很大程度上决定了框架的性能。</p>
-<p>2) 协议：采用什么样的通信协议，HTTP或者内部私有协议。协议的选择不同，性能模型也不同。相比于公有协议，内部私有协议的性能通常可以被设计的更优。</p>
-<p>3) 线程：数据报如何读取？读取之后的编解码在哪个线程进行，编解码后的消息如何派发，Reactor线程模型的不同，对性能的影响也非常大。</p>
-<h1><span id="netty高性能之道">Netty高性能之道</span></h1><h2><span id="异步非阻塞通信">异步非阻塞通信</span></h2><p>在IO编程过程中，当需要同时处理多个客户端接入请求时，可以利用多线程或者IO多路复用技术进行处理。IO多路复用技术通过把多个IO的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求。与传统的多线程/多进程模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源。</p>
+            <h1><span id="netty-chapter5">netty chapter5</span></h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter4/" itemprop="url">netty学习笔记chapter4</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T02:55:32-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="netty-chapter4">netty chapter4</span></h1><p>TCP底层并不了解上层业务数据的具体含义<br>它会根据tcp缓冲区的实际情况进行包的划分<br>所以一个完整的包可能会被tcp拆分成多个包进行发送<br>也有可能把多个小的包封装成一个大的数据包发送<br>这就是tcp 粘包和拆包的问题</p>
+<h1><span id="问题产生的原因">问题产生的原因</span></h1><ol>
+<li>application write写入的字节大小大于socket发送缓冲区的大小</li>
+<li>进行mss大小的tcp分段</li>
+<li>以太网帧的payload大于mtu进行ip分片</li>
+</ol>
+<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 03.23.27.png" alt=""></p>
+<p>这个问题只能通过上层的应用协议stack来解决</p>
+<ol>
+<li>消息定长，每个msg大小为固定的200byte,如果不够，空位补空格</li>
+<li>在包尾增加回车换行符进行分割 FTP协议</li>
+<li>将消息分为消息头和消息体，消息头中包含表示消息总长度的字段，通常设计思路为消息头的第一个字段使用int32表示消息的总长度</li>
+<li>更复杂的应用层协议</li>
+</ol>
+<h1><span id="netty如何解决">netty如何解决</span></h1><p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter3/" itemprop="url">netty学习笔记chapter3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T02:40:57-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter2/" itemprop="url">netty学习笔记chapter2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T01:44:41-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="netty-chapter2">netty chapter2</span></h1><h2><span id="传统的bio编程">传统的BIO编程</span></h2><p>网络编程的基本模式是c/s client/server。<br>实际处理的就是两个进程之间的通信问题</p>
+<p>其中server提供位置信息 ipaddress+port<br>客户端通过connect向server的port send request<br>通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p>
+<p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口<br>sokcet负责发起连接操作。<br>连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
+<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2><p>buffer是一个object 它包含一些要写入或者要读出的data</p>
+<p>NIO中所有data都是通过buffer处理</p>
+<p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p>
+<p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer<br>mappedbytebuffer<br>每一个都是buffer接口的instance 操作完全一样</p>
+<h2><span id="channel">channel</span></h2><p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
+<p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动<br>（如inputstream outputstream都是stream的instance 单方向）</p>
+<h2><span id="selector">selector</span></h2><p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，<br>会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
+<p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p>
+<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png" alt=""></p>
+<p>NIO server通信时序图</p>
+<ol>
+<li>打开serverSokcetChannel,用于监听客户端的connection,它是所有client connection的父管道</li>
+<li>绑定监听端口，设置connection为非阻塞模式</li>
+<li>创建reactor线程，创建selector并启动线程</li>
+<li>将serverSocketChannel注册到reactor线程的selector上，监听accept事件</li>
+<li>selector在thread run的无限循环体内轮询准备就绪的key</li>
+<li>selector监听到有新的客户端接入，处理新的接入请求，完成tcp三次握手，建立物理链路</li>
+<li>设置客户端链路为非阻塞模式</li>
+<li>将新接入的客户端注册到reactor线程的selector上，监听读操作，读取客户端发送的网络消息</li>
+<li>异步读取客户端请求消息到buffer</li>
+<li>对buffer进行编解码。如果有半包消息指针reset,继续读取后续的msg,将解码成功的消息封装成task,投递到业务threadpool中，进行业务逻辑编排</li>
+<li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li>
+<li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li>
+</ol>
+<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2><ol>
+<li>开发出高质量的NIO程序不简单</li>
+<li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li>
+<li>跟踪和检测困难</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan's Site">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter1/" itemprop="url">netty权威只能学习笔记chapter1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T01:19:09-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="chapter-01-java-io">chapter 01 –java i/o</span></h1><h2><span id="io-多路复用技术">i/o 多路复用技术</span></h2><p>i/o多路复用技术通过把多个i/o的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求</p>
+<p>和传统的多线程相比：<br>1: i/o多路复用的最大优势是系统开销小，不需要创建新的额外的线程或进程<br>2：服务器需要同时处理多个处于监听状态或者多个连接状态的套接字<br>3: 服务器需要同时处理多种网络协议套接字</p>
+<h2><span id="epoll-vs-select">epoll vs select</span></h2><p>select最大的缺陷就是单个进程所打开的FD有一定限制，它由FD_SETSIZE设置，默认值是1024.<br>对于那些需要支持上万个tcp connection的服务器来说太少了</p>
+<p>我们可以选择多进程的方案（传统的apache方案）来解决这个问题。</p>
+<p>但是进程间交换数据非常麻烦，对于java来说，由于没有共享内存，需要通过socket通信或者其他方式进行数据同步。</p>
+<p>epoll没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024</p>
+<p>cat /proc/sys/fs/file -max查看，这个值和系统内存关系比较大</p>
+<h2><span id="io效率不会随着fd数目的增加而线性下降">i/o效率不会随着fd数目的增加而线性下降</span></h2><p>传统的select/poll的另一个致命弱点： socket集合很大，由于网络延时或者链路空闲，任一时刻只有少部分的socket是活跃的。</p>
+<p>但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。</p>
+<p>epoll不存在这个问题，它只会对活跃的socket进行操作</p>
+<p>epoll是根据每个fd上面的callback函数实现的，只有活跃的socket才主动调用callback函数，其他idle状态的socket则不会</p>
+<h2><span id="使用mmap加速内核与用户空间的消息传递">使用mmap加速内核与用户空间的消息传递</span></h2><ol>
+<li>select, poll 还是epoll都需要内核把FD消息通知给用户空间</li>
+<li>epoll 是通过内核和用户空间mmap同一个内存来实现，避免不必要的内存复制</li>
+</ol>
+<h1><span id="jdk14-nio以jsr-51的身份正式发布">JDK1.4 NIO以JSR-51的身份正式发布</span></h1><ol>
+<li>进行异步i/o操作的缓冲区bytebuffer</li>
+<li>————–管道pipe</li>
+<li>channel serverSocketChannel 和 soketchannel</li>
+<li>多种字符集的编码能力和解码能力</li>
+<li>非阻塞i/o操作的多路复用器selector</li>
+<li>基于perl实现的正则表达式类库</li>
+<li>文件通道fileChannel</li>
+</ol>
 
           
         
@@ -1160,6 +1546,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1203,7 +1593,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1216,7 +1606,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

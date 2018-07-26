@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-07-25T07:33:09.000Z</updated>
+  <updated>2018-07-26T06:54:45.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,6 +15,223 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cglib</title>
+    <link href="http://www.yifanguo.top/2018/07/25/cglib/"/>
+    <id>http://www.yifanguo.top/2018/07/25/cglib/</id>
+    <published>2018-07-26T06:08:40.000Z</published>
+    <updated>2018-07-26T06:54:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="cglib-code-generation-library">cglib – code generation library</span></h1><p>it is a byte instrumentation library used in many java framework such as hibernate or spring</p><p>the bytecode instrumentation allows manipulating or creating classes after the compilation phase of a program</p><h1><span id="function">function</span></h1><p>Classes in Java are loaded dynamically at runtime. Cglib is using this feature of Java language to make it possible to add new classes to an already running Java program.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;cglib-code-generation-library&quot;&gt;cglib – code generation library&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;it is a byte instrumentation library used in many
+      
+    
+    </summary>
+    
+    
+      <category term="cglib" scheme="http://www.yifanguo.top/tags/cglib/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>zookeeper.md</title>
+    <link href="http://www.yifanguo.top/2018/07/25/zookeeper-md/"/>
+    <id>http://www.yifanguo.top/2018/07/25/zookeeper-md/</id>
+    <published>2018-07-26T04:41:20.000Z</published>
+    <updated>2018-07-26T06:04:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="overview">Overview</span></h1><p>ZooKeeper is a distributed, open-source coordination service for distributed applications.</p><h1><span id="purpose">Purpose</span></h1><p>Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;overview&quot;&gt;Overview&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;ZooKeeper is a distributed, open-source coordination service for distributed applications.&lt;/p
+      
+    
+    </summary>
+    
+    
+      <category term="zookeeper" scheme="http://www.yifanguo.top/tags/zookeeper/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty源码解读</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty源码解读/</id>
+    <published>2018-07-26T01:33:49.000Z</published>
+    <updated>2018-07-26T01:33:49.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记Chapter08</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0Chapter08/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter08/</id>
+    <published>2018-07-25T15:23:24.000Z</published>
+    <updated>2018-07-25T15:25:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="chapter8">Chapter8</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;chapter8&quot;&gt;Chapter8&lt;/span&gt;&lt;/h1&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记Chapter6</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0Chapter6/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter6/</id>
+    <published>2018-07-25T11:36:24.000Z</published>
+    <updated>2018-07-25T15:21:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="chapter-6">chapter 6</span></h1><p>java序列化的目的主要有两个：</p><ol><li>网络传输</li><li>对象持久化</li></ol><p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以<br>但是rpc很少使用java序列化来进行消息的encoding 和decoding</p><p>原因</p><ol><li>无法跨语言</li><li>序列化后码流太大</li></ol><p>评判编解码框架优劣<br>1 是否支持跨语言<br>2 编码后的码流大小<br>3 编解码的性能<br>4 类库是否小巧，API使用是否方便<br>5 使用者需要手工快发的工作量和难度</p><h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1><h2><span id="google的protobuf">Google的protobuf</span></h2><p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p><ol><li>结构化数据存储格式 xml json</li><li>高效的encoding decoding性能</li><li>语言无关，平台无关，扩展性好</li><li>支持java c++ python</li></ol><h2><span id="facebook的thrift">Facebook的Thrift</span></h2><ol><li>语言系统以及IDL编译器，负责由用户给定的IDL文件生成相应语言的接口代码</li><li>Tprotocol: rpc协议层，可以选择多种不同的对象序列化方式 如json 和binary</li><li>TTransport： RPC传输层，可以选择不同的传输层实现 如socket, NIO. memoryBuffer</li><li>TProcessor: 做为协议层和用户提供的服务实现之间的纽带，负责调用服务实现的接口</li><li>TServer: 聚合TProtocol, TTransport, TProcessor等对象</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;chapter-6&quot;&gt;chapter 6&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;java序列化的目的主要有两个：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;网络传输&lt;/li&gt;
+&lt;li&gt;对象持久化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;java序列化从jdk1.1就已经提供，只需要impl
+      
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记chapter5</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter5/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter5/</id>
+    <published>2018-07-25T10:30:47.000Z</published>
+    <updated>2018-07-25T10:31:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="netty-chapter5">netty chapter5</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;netty-chapter5&quot;&gt;netty chapter5&lt;/span&gt;&lt;/h1&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记chapter4</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter4/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter4/</id>
+    <published>2018-07-25T09:55:32.000Z</published>
+    <updated>2018-07-25T10:30:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="netty-chapter4">netty chapter4</span></h1><p>TCP底层并不了解上层业务数据的具体含义<br>它会根据tcp缓冲区的实际情况进行包的划分<br>所以一个完整的包可能会被tcp拆分成多个包进行发送<br>也有可能把多个小的包封装成一个大的数据包发送<br>这就是tcp 粘包和拆包的问题</p><h1><span id="问题产生的原因">问题产生的原因</span></h1><ol><li>application write写入的字节大小大于socket发送缓冲区的大小</li><li>进行mss大小的tcp分段</li><li>以太网帧的payload大于mtu进行ip分片</li></ol><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 03.23.27.png" alt=""></p><p>这个问题只能通过上层的应用协议stack来解决</p><ol><li>消息定长，每个msg大小为固定的200byte,如果不够，空位补空格</li><li>在包尾增加回车换行符进行分割 FTP协议</li><li>将消息分为消息头和消息体，消息头中包含表示消息总长度的字段，通常设计思路为消息头的第一个字段使用int32表示消息的总长度</li><li>更复杂的应用层协议</li></ol><h1><span id="netty如何解决">netty如何解决</span></h1><p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;netty-chapter4&quot;&gt;netty chapter4&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;TCP底层并不了解上层业务数据的具体含义&lt;br&gt;它会根据tcp缓冲区的实际情况进行包的划分&lt;br&gt;所以一个完整的包可能会被tcp拆分成多个包进行发送&lt;br&gt;也有可
+      
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记chapter3</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter3/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/</id>
+    <published>2018-07-25T09:40:57.000Z</published>
+    <updated>2018-07-25T09:41:07.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty学习笔记chapter2</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter2/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/</id>
+    <published>2018-07-25T08:44:41.000Z</published>
+    <updated>2018-07-25T09:39:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="netty-chapter2">netty chapter2</span></h1><h2><span id="传统的bio编程">传统的BIO编程</span></h2><p>网络编程的基本模式是c/s client/server。<br>实际处理的就是两个进程之间的通信问题</p><p>其中server提供位置信息 ipaddress+port<br>客户端通过connect向server的port send request<br>通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p><p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口<br>sokcet负责发起连接操作。<br>连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p><h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2><p>buffer是一个object 它包含一些要写入或者要读出的data</p><p>NIO中所有data都是通过buffer处理</p><p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p><p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer<br>mappedbytebuffer<br>每一个都是buffer接口的instance 操作完全一样</p><h2><span id="channel">channel</span></h2><p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p><p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动<br>（如inputstream outputstream都是stream的instance 单方向）</p><h2><span id="selector">selector</span></h2><p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，<br>会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p><p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png" alt=""></p><p>NIO server通信时序图</p><ol><li>打开serverSokcetChannel,用于监听客户端的connection,它是所有client connection的父管道</li><li>绑定监听端口，设置connection为非阻塞模式</li><li>创建reactor线程，创建selector并启动线程</li><li>将serverSocketChannel注册到reactor线程的selector上，监听accept事件</li><li>selector在thread run的无限循环体内轮询准备就绪的key</li><li>selector监听到有新的客户端接入，处理新的接入请求，完成tcp三次握手，建立物理链路</li><li>设置客户端链路为非阻塞模式</li><li>将新接入的客户端注册到reactor线程的selector上，监听读操作，读取客户端发送的网络消息</li><li>异步读取客户端请求消息到buffer</li><li>对buffer进行编解码。如果有半包消息指针reset,继续读取后续的msg,将解码成功的消息封装成task,投递到业务threadpool中，进行业务逻辑编排</li><li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li><li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li></ol><h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2><ol><li>开发出高质量的NIO程序不简单</li><li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li><li>跟踪和检测困难</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;netty-chapter2&quot;&gt;netty chapter2&lt;/span&gt;&lt;/h1&gt;&lt;h2&gt;&lt;span id=&quot;传统的bio编程&quot;&gt;传统的BIO编程&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;网络编程的基本模式是c/s client/server。&lt;br&gt;实际处理的
+      
+    
+    </summary>
+    
+    
+      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>netty权威只能学习笔记chapter1</title>
+    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter1/"/>
+    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter1/</id>
+    <published>2018-07-25T08:19:09.000Z</published>
+    <updated>2018-07-25T08:44:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="chapter-01-java-io">chapter 01 –java i/o</span></h1><h2><span id="io-多路复用技术">i/o 多路复用技术</span></h2><p>i/o多路复用技术通过把多个i/o的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求</p><p>和传统的多线程相比：<br>1: i/o多路复用的最大优势是系统开销小，不需要创建新的额外的线程或进程<br>2：服务器需要同时处理多个处于监听状态或者多个连接状态的套接字<br>3: 服务器需要同时处理多种网络协议套接字</p><h2><span id="epoll-vs-select">epoll vs select</span></h2><p>select最大的缺陷就是单个进程所打开的FD有一定限制，它由FD_SETSIZE设置，默认值是1024.<br>对于那些需要支持上万个tcp connection的服务器来说太少了</p><p>我们可以选择多进程的方案（传统的apache方案）来解决这个问题。</p><p>但是进程间交换数据非常麻烦，对于java来说，由于没有共享内存，需要通过socket通信或者其他方式进行数据同步。</p><p>epoll没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024</p><p>cat /proc/sys/fs/file -max查看，这个值和系统内存关系比较大</p><h2><span id="io效率不会随着fd数目的增加而线性下降">i/o效率不会随着fd数目的增加而线性下降</span></h2><p>传统的select/poll的另一个致命弱点： socket集合很大，由于网络延时或者链路空闲，任一时刻只有少部分的socket是活跃的。</p><p>但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。</p><p>epoll不存在这个问题，它只会对活跃的socket进行操作</p><p>epoll是根据每个fd上面的callback函数实现的，只有活跃的socket才主动调用callback函数，其他idle状态的socket则不会</p><h2><span id="使用mmap加速内核与用户空间的消息传递">使用mmap加速内核与用户空间的消息传递</span></h2><ol><li>select, poll 还是epoll都需要内核把FD消息通知给用户空间</li><li>epoll 是通过内核和用户空间mmap同一个内存来实现，避免不必要的内存复制</li></ol><h1><span id="jdk14-nio以jsr-51的身份正式发布">JDK1.4 NIO以JSR-51的身份正式发布</span></h1><ol><li>进行异步i/o操作的缓冲区bytebuffer</li><li>————–管道pipe</li><li>channel serverSocketChannel 和 soketchannel</li><li>多种字符集的编码能力和解码能力</li><li>非阻塞i/o操作的多路复用器selector</li><li>基于perl实现的正则表达式类库</li><li>文件通道fileChannel</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;chapter-01-java-io&quot;&gt;chapter 01 –java i/o&lt;/span&gt;&lt;/h1&gt;&lt;h2&gt;&lt;span id=&quot;io-多路复用技术&quot;&gt;i/o 多路复用技术&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;i/o多路复用技术通过把多个i/o的阻塞复用到同
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>java_concurrent_volatile02</title>

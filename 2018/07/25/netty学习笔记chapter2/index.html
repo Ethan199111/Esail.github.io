@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="concurrent," />
+  <meta name="keywords" content="netty," />
 
 
 
@@ -81,18 +81,20 @@
 
 
 
-<meta name="description" content="volatile 保证内存可见性。 保证排序，不会因为指令重排导致问题 不保证原子性  Demo12345678910111213141516171819202122232425262728293031323334353637public class Main &amp;#123;    private static int flag = 0;    public static void main(Str">
-<meta name="keywords" content="concurrent">
+<meta name="description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
+<meta name="keywords" content="netty">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java_concurrent_volatile02">
-<meta property="og:url" content="http://www.yifanguo.top/2018/07/25/java-concurrent-volatile02/index.html">
+<meta property="og:title" content="netty学习笔记chapter2">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/index.html">
 <meta property="og:site_name" content="Yifan&#39;s Site">
-<meta property="og:description" content="volatile 保证内存可见性。 保证排序，不会因为指令重排导致问题 不保证原子性  Demo12345678910111213141516171819202122232425262728293031323334353637public class Main &amp;#123;    private static int flag = 0;    public static void main(Str">
+<meta property="og:description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-25T07:33:09.000Z">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2002.17.19.png">
+<meta property="og:updated_time" content="2018-07-25T09:39:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java_concurrent_volatile02">
-<meta name="twitter:description" content="volatile 保证内存可见性。 保证排序，不会因为指令重排导致问题 不保证原子性  Demo12345678910111213141516171819202122232425262728293031323334353637public class Main &amp;#123;    private static int flag = 0;    public static void main(Str">
+<meta name="twitter:title" content="netty学习笔记chapter2">
+<meta name="twitter:description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
+<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2002.17.19.png">
 
 
 
@@ -122,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/2018/07/25/java-concurrent-volatile02/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/"/>
 
 
 
 
 
-  <title>java_concurrent_volatile02 | Yifan's Site</title>
+  <title>netty学习笔记chapter2 | Yifan's Site</title>
   
 
 
@@ -268,7 +270,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/java-concurrent-volatile02/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -285,7 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java_concurrent_volatile02</h1>
+          <h1 class="post-title" itemprop="name headline">netty学习笔记chapter2</h1>
         
 
         <div class="post-meta">
@@ -297,7 +299,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T00:04:18-07:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T01:44:41-07:00">
                 2018-07-25
               </time>
             
@@ -335,17 +337,38 @@
       
 
       
-        <h1><span id="volatile">volatile</span></h1><ol>
-<li>保证内存可见性。</li>
-<li>保证排序，不会因为指令重排导致问题</li>
-<li>不保证原子性</li>
+        <h1><span id="netty-chapter2">netty chapter2</span></h1><h2><span id="传统的bio编程">传统的BIO编程</span></h2><p>网络编程的基本模式是c/s client/server。<br>实际处理的就是两个进程之间的通信问题</p>
+<p>其中server提供位置信息 ipaddress+port<br>客户端通过connect向server的port send request<br>通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p>
+<p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口<br>sokcet负责发起连接操作。<br>连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
+<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2><p>buffer是一个object 它包含一些要写入或者要读出的data</p>
+<p>NIO中所有data都是通过buffer处理</p>
+<p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p>
+<p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer<br>mappedbytebuffer<br>每一个都是buffer接口的instance 操作完全一样</p>
+<h2><span id="channel">channel</span></h2><p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
+<p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动<br>（如inputstream outputstream都是stream的instance 单方向）</p>
+<h2><span id="selector">selector</span></h2><p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，<br>会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
+<p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p>
+<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png" alt=""></p>
+<p>NIO server通信时序图</p>
+<ol>
+<li>打开serverSokcetChannel,用于监听客户端的connection,它是所有client connection的父管道</li>
+<li>绑定监听端口，设置connection为非阻塞模式</li>
+<li>创建reactor线程，创建selector并启动线程</li>
+<li>将serverSocketChannel注册到reactor线程的selector上，监听accept事件</li>
+<li>selector在thread run的无限循环体内轮询准备就绪的key</li>
+<li>selector监听到有新的客户端接入，处理新的接入请求，完成tcp三次握手，建立物理链路</li>
+<li>设置客户端链路为非阻塞模式</li>
+<li>将新接入的客户端注册到reactor线程的selector上，监听读操作，读取客户端发送的网络消息</li>
+<li>异步读取客户端请求消息到buffer</li>
+<li>对buffer进行编解码。如果有半包消息指针reset,继续读取后续的msg,将解码成功的消息封装成task,投递到业务threadpool中，进行业务逻辑编排</li>
+<li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li>
+<li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li>
 </ol>
-<h1><span id="demo">Demo</span></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    private static int flag = 0;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        new ThreadA().start();</span><br><span class="line">        new ThreadB().start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 线程A进入死循环直到读出变量大于3</span><br><span class="line">    // 会发现线程A永远无法跳出循环，因为flag不是volatile类型变量</span><br><span class="line">    static class ThreadA extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                if (flag &gt;= 3) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;in CustomerInLine....&quot; + flag);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 线程B不停增加flag值，但是jvm会把flag写进cpu cache提升优化</span><br><span class="line">    static class ThreadB extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (flag &lt; 10) &#123;</span><br><span class="line">                System.out.println(&quot;in Queue ...&quot; + flag++);</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(200);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>解决的办法很简单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile static int flag = 0;</span><br></pre></td></tr></table></figure>
-<h1><span id="指令重排">指令重排</span></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class MainOrder &#123;</span><br><span class="line"></span><br><span class="line">    private static String context = null;</span><br><span class="line">    private static boolean flag;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        new MainOrder.ThreadA().start();</span><br><span class="line">        new MainOrder.ThreadB().start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    static class ThreadA extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">           context = &quot;hello word&quot;;</span><br><span class="line">           flag = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class ThreadB extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                while (!flag) &#123;</span><br><span class="line">                    sleep(100);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(context);</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果指令重排，threadB会先看到true然后print一个null</p>
-<h1><span id="不保证原子性">不保证原子性</span></h1><p>如果多个线程同时读写一个volatile变量，不保证原子性。<br>使用java concurrent包来解决这个问题，或者加入synchronized声明</p>
+<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2><ol>
+<li>开发出高质量的NIO程序不简单</li>
+<li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li>
+<li>跟踪和检测困难</li>
+</ol>
 
       
     </div>
@@ -363,7 +386,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/concurrent/" rel="tag"># concurrent</a>
+            <a href="/tags/netty/" rel="tag"># netty</a>
           
         </div>
       
@@ -376,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/24/java-basic-cloneable/" rel="next" title="java_basic_cloneable">
-                <i class="fa fa-chevron-left"></i> java_basic_cloneable
+              <a href="/2018/07/25/netty学习笔记chapter1/" rel="next" title="netty权威只能学习笔记chapter1">
+                <i class="fa fa-chevron-left"></i> netty权威只能学习笔记chapter1
               </a>
             
           </div>
@@ -386,8 +409,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/25/netty学习笔记chapter1/" rel="prev" title="netty权威只能学习笔记chapter1">
-                netty权威只能学习笔记chapter1 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/25/netty学习笔记chapter3/" rel="prev" title="netty学习笔记chapter3">
+                netty学习笔记chapter3 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -518,7 +541,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Demo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">指令重排</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">不保证原子性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">netty chapter2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">传统的BIO编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">Buffer 缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">selector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">为什么选择netty而不是自己开发NIO</span></a></li></ol></li></ol></div>
             
 
           </div>
