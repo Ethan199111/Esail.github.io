@@ -254,6 +254,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan Guo Personal Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/25/netty学习笔记chapter1/" itemprop="url">netty权威只能学习笔记chapter1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T01:19:09-07:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="chapter-01-java-io">chapter 01 –java i/o</span></h1><h2><span id="io-多路复用技术">i/o 多路复用技术</span></h2><p>i/o多路复用技术通过把多个i/o的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求</p>
+<p>和传统的多线程相比：<br>1: i/o多路复用的最大优势是系统开销小，不需要创建新的额外的线程或进程<br>2：服务器需要同时处理多个处于监听状态或者多个连接状态的套接字<br>3: 服务器需要同时处理多种网络协议套接字</p>
+<h2><span id="epoll-vs-select">epoll vs select</span></h2><p>select最大的缺陷就是单个进程所打开的FD有一定限制，它由FD_SETSIZE设置，默认值是1024.<br>对于那些需要支持上万个tcp connection的服务器来说太少了</p>
+<p>我们可以选择多进程的方案（传统的apache方案）来解决这个问题。</p>
+<p>但是进程间交换数据非常麻烦，对于java来说，由于没有共享内存，需要通过socket通信或者其他方式进行数据同步。</p>
+<p>epoll没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024</p>
+<p>cat /proc/sys/fs/file -max查看，这个值和系统内存关系比较大</p>
+<h2><span id="io效率不会随着fd数目的增加而线性下降">i/o效率不会随着fd数目的增加而线性下降</span></h2><p>传统的select/poll的另一个致命弱点： socket集合很大，由于网络延时或者链路空闲，任一时刻只有少部分的socket是活跃的。</p>
+<p>但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。</p>
+<p>epoll不存在这个问题，它只会对活跃的socket进行操作</p>
+<p>epoll是根据每个fd上面的callback函数实现的，只有活跃的socket才主动调用callback函数，其他idle状态的socket则不会</p>
+<h2><span id="使用mmap加速内核与用户空间的消息传递">使用mmap加速内核与用户空间的消息传递</span></h2><ol>
+<li>select, poll 还是epoll都需要内核把FD消息通知给用户空间</li>
+<li>epoll 是通过内核和用户空间mmap同一个内存来实现，避免不必要的内存复制</li>
+</ol>
+<h1><span id="jdk14-nio以jsr-51的身份正式发布">JDK1.4 NIO以JSR-51的身份正式发布</span></h1><ol>
+<li>进行异步i/o操作的缓冲区bytebuffer</li>
+<li>————–管道pipe</li>
+<li>channel serverSocketChannel 和 soketchannel</li>
+<li>多种字符集的编码能力和解码能力</li>
+<li>非阻塞i/o操作的多路复用器selector</li>
+<li>基于perl实现的正则表达式类库</li>
+<li>文件通道fileChannel</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/java-concurrent-volatile02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1327,7 +1488,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1340,7 +1501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1398,7 +1559,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">4.6k</span>
+    <span title="Site words total count">6.2k</span>
   
 </div>
 
