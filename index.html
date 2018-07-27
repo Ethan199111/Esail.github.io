@@ -343,162 +343,18 @@
       
         
           
-            <h1><span id="the-structure-of-jvm">The Structure of JVM</span></h1><h1><span id="21-the-class-file-format">2.1 the class file format</span></h1><ol>
-<li>Compiled code is in binary format </li>
-<li>stored in a file known as the class file format</li>
-<li>it precisely defines the representation of a class or interface</li>
-<li>it includes details such as byte ordering</li>
-</ol>
-<h1><span id="22-data-types">2.2 data types</span></h1><ol>
-<li>primitive types – primitive values</li>
-<li>reference types – reference values</li>
-<li>all type checking is done prior to run time, by compiler not JVM</li>
-<li>An object is either a dynamically allocated class instance or an array</li>
-<li>A reference to an object is considered to have JVM type reference</li>
-<li>values of type referecence can be thought of as pointers to objects</li>
-</ol>
-<h1><span id="23-primitive-types-and-values">2.3 primitive types and values</span></h1><ol>
-<li>the primitive data types supported by JVM are : numeric types , boolean types, returnAddress type</li>
-<li>numeric types consist of integral types and floating-pointing types</li>
-</ol>
-<h2><span id="numeric-types">numeric types</span></h2><table>
-<thead>
-<tr>
-<th style="text-align:left">type</th>
-<th style="text-align:left">size</th>
-<th style="text-align:left">range</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">byte</td>
-<td style="text-align:left">8-bit</td>
-<td style="text-align:left">-128 to 127</td>
-</tr>
-<tr>
-<td style="text-align:left">short</td>
-<td style="text-align:left">16 bit</td>
-<td style="text-align:left">-32768 to 32767</td>
-</tr>
-<tr>
-<td style="text-align:left">int</td>
-<td style="text-align:left">32bit</td>
-<td style="text-align:left">-2147483648 to 2147483647</td>
-</tr>
-<tr>
-<td style="text-align:left">long</td>
-<td style="text-align:left">64bit</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">char</td>
-<td style="text-align:left">16bit</td>
-<td style="text-align:left">0 to 65535 inclusive</td>
-</tr>
-</tbody>
-</table>
-<p>default  char: the null code point (‘\u0000’)</p>
-<h2><span id="floating-pointing-types">floating-pointing types:</span></h2><table>
-<thead>
-<tr>
-<th style="text-align:left">type</th>
-<th style="text-align:left">size</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">float</td>
-<td style="text-align:left">32 bit</td>
-</tr>
-<tr>
-<td style="text-align:left">double</td>
-<td style="text-align:left">64 bit</td>
-</tr>
-</tbody>
-</table>
-<h2><span id="boolean-types-true-or-false">boolean types true or false</span></h2><p>Although the Java Virtual Machine defines a boolean type, it only provides very limited support for it. There are no Java Virtual Machine instructions solely dedicated to operations on boolean values. Instead, expressions in the Java programming language that operate on boolean values are compiled to use values of the Java Virtual Machine int data type.<br>The Java Virtual Machine does directly support boolean arrays. Its newarray instruction (§newarray) enables creation of boolean arrays. Arrays of type boolean are accessed and modified using the byte array instructions baload and bastore (§baload, §bastore).</p>
-<h2><span id="returnaddress-type">returnAddress type</span></h2><p>The values of the returnAddress type are pointers to the opcodes of Java Virtual Machine instructions. Of the primitive types, only the returnAddress type is not directly associated with a Java programming language type.</p>
-<p>The returnAddress type is used by the Java Virtual Machine’s jsr, ret, and jsr_w instructions (§jsr, §ret, §jsr_w).</p>
-<p>The values of the returnAddress type are pointers to the opcodes(operation codes) of Java Virtual Machine instructions.</p>
-<h1><span id="reference-types-and-values">Reference types and values</span></h1><p>There are three kinds of reference types:<br>class types,<br>array types,<br>and interface types. </p>
-<p>Their values are references to dynamically created class instances, arrays, or class instances or arrays that implement interfaces, respectively.</p>
-<p>The default value of a reference type is null.</p>
-<h1><span id="run-time-data-areas">Run-time data areas</span></h1><p>The Java Virtual Machine defines various run-time data areas that are used during execution of a program. Some of these data areas are created on Java Virtual Machine start-up and are destroyed only when the Java Virtual Machine exits. Other data areas are per thread. Per-thread data areas are created when a thread is created and destroyed when the thread exits.</p>
-<h2><span id="the-pc-register">the pc register</span></h2><ol>
-<li>The Java Virtual Machine can support many threads of execution at once</li>
-<li>each jvm thread has its own pc(program counter) register</li>
-<li>At any point, each Java Virtual Machine thread is executing the code of a single method, namely the current method (§2.6) for that thread</li>
-<li>if not native method,  pc contains the address of JVM instruction being executed</li>
-<li>if native method, pc is undefined(null)</li>
-</ol>
-<h2><span id="the-jvm-stack">the JVM stack</span></h2><ol>
-<li>each JVM thread has a private JVM stack</li>
-<li>created as the same time as the thread</li>
-<li>it holds local variables and partial results, and plays a part in method invocation and return</li>
-</ol>
-<p>• If the computation in a thread requires a larger Java Virtual Machine stack than is permitted, the Java Virtual Machine throws a <strong>StackOverflowError</strong>.</p>
-<p>• If Java Virtual Machine stacks can be dynamically expanded, and expansion is attempted but insufficient memory can be made available to effect the expansion, or if insufficient memory can be made available to create the initial Java Virtual Machine stack for a new thread, the Java Virtual Machine throws an <strong>OutOfMemoryError</strong>.</p>
-<h2><span id="heap">HEAP</span></h2><ol>
-<li>heap is shared among all jvm threads</li>
-<li>The heap is the run-time data area from which memory for all class instances and arrays is allocated.</li>
-<li>created on virtual machine start-up. </li>
-<li>heap storage for objects is reclaimed by GC</li>
-<li>objects are never explicitly deallocated</li>
-<li>The memory for the heap does not need to be contiguous.</li>
-</ol>
-<p>• If a computation requires more heap than can be made available by the automatic storage management system, the Java Virtual Machine throws an OutOfMemoryError.</p>
-<h2><span id="method-area">method area</span></h2><ol>
-<li><p>shared among all threads</p>
-</li>
-<li><p>stores per-class structures such as<br><strong>the run-time constant pool</strong><br><strong>field and method data</strong><br><strong>the code for methods and constructors</strong></p>
-</li>
-<li><p>created on jvm start-up</p>
-</li>
-<li>Although the method area is logically part of the heap, simple implementations may choose not to either garbage collect or compact it.</li>
-</ol>
-<p>• If memory in the method area cannot be made available to satisfy an allocation<br>request, the Java Virtual Machine throws an OutOfMemoryError.</p>
-<h2><span id="run-time-constant-pool">Run-Time Constant Pool</span></h2><ol>
-<li>A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file</li>
-<li>the run-time constant pool for a class or interface is constructed when the class or interface is created (§5.3) by the Java Virtual Machine.</li>
-<li>part of method area</li>
-</ol>
-<h2><span id="native-method-stacks">Native Method Stacks</span></h2><h1><span id="frame">Frame</span></h1><p>A frame is used to store data and partial results, as well as to perform dynamic linking, return values for methods, and dispatch exceptions.</p>
-<p>A new frame is created each time a method is invoked. </p>
-<p>A frame is destroyed when its method invocation completes, whether that completion is normal or abrupt (it throws an uncaught exception)</p>
-<p>frames are allocated from the Java Virtual Machine stack (§2.5.2) of the thread creating the frame.</p>
-<p>Each frame has its own array of local variables (§2.6.1), its own operand stack (§2.6.2), and a reference to the run- time constant pool (§2.5.5) of the class of the current method.</p>
-<h2><span id="local-variable">local variable</span></h2><p>Each frame (§2.6) contains an array of variables known as its local variables.</p>
-<p>Local variables are addressed by indexing.</p>
-<p>The Java Virtual Machine uses local variables to pass parameters on method invocation. </p>
-<h2><span id="operand-stacks">operand stacks</span></h2><p>The operand stack is empty when the frame that contains it is created. The Java Virtual Machine supplies instructions to load constants or values from local variables or fields onto the operand stack. Other Java Virtual Machine instructions take operands from the operand stack, operate on them, and push the result back onto the operand stack. The operand stack is also used to prepare parameters to be passed to methods and to receive method results.</p>
-<h2><span id="dynamic-linking">dynamic linking</span></h2><p>Each frame (§2.6) contains a reference to the run-time constant pool (§2.5.5) for the type of the current method to support dynamic linking of the method code.</p>
-<h1><span id="exceptions">Exceptions</span></h1><p>An exception in the Java Virtual Machine is represented by an instance of the class Throwable or one of its subclasses. </p>
-<p>Throwing an exception results in an immediate nonlocal transfer of control from the point where the exception was thrown.</p>
-<h2><span id="exception-handler">exception handler</span></h2><p>An exception handler specifies the range of offsets into the Java Virtual Machine code implementing the method for which the exception handler is active, describes the type of exception that the exception handler is able to handle, and specifies the location of the code that is to handle that exception</p>
-<p>When an exception is thrown, the Java Virtual Machine searches for a matching exception handler in the current method. If a matching exception handler is found, the system branches to the exception handling code specified by the matched handler.</p>
-<h2><span id="instruction-set-summary">instruction set summary</span></h2><p>A Java Virtual Machine instruction consists of a one-byte opcode specifying the operation to be performed, followed by zero or more operands supplying arguments or data that are used by the operation.</p>
-<p> i for an int operation, l for long, s for short, b for byte, c for char, f for float, d for double, and a for reference.</p>
-<p> Given the Java Virtual Machine’s one-byte opcode size, encoding types into opcodes places pressure on the design of its instruction set. </p>
-<p> The only integer operations that can throw an exception are the integer divide instructions (idiv and ldiv) and the integer remainder instructions (irem and lrem), which throw an ArithmeticException if the divisor is zero.</p>
-<h1><span id="object-creation-and-manipulation">Object Creation and Manipulation</span></h1><ol>
-<li>both class instances and arrays are objects,</li>
-<li>creates and manipulates class instances and arrays using distinct sets of instructions:</li>
-<li>Create a new class instance: new.</li>
-<li>Access fields of classes (static fields, known as class variables) and fields of class instances (non-static fields, known as instance variables): getstatic, putstatic, getfield, putfield.</li>
-<li>Check properties of class instances or arrays: instanceof, checkcast.</li>
-</ol>
-<h1><span id="synchironization">Synchironization</span></h1><p>synchronization construct: the monitor.</p>
-<p>When invoking a method for which ACC_SYNCHRONIZED is set, the executing thread enters a monitor, invokes the method itself, and exits the monitor whether the method invocation completes normally or abruptly. </p>
-<p>During the time the executing thread owns the monitor, no other thread may enter it.</p>
-<p>Synchronization of sequences of instructions is typically used to encode the synchronized block of the Java programming language.</p>
-<p>The Java Virtual Machine supplies the monitorenter and monitorexit instructions to support such language constructs. </p>
-<p>Note that the monitor entry and exit automatically performed by the Java Virtual Machine when invoking a synchronized method are considered to occur during the calling method’s invocation.</p>
-<h1><span id="compiling">Compiling</span></h1><p>Compiler transfer java code into instruction set of the jvm</p>
-<p>Just-in-time code generator(JIT)<br>Note that the term “compiler” is sometimes used when referring to a translator from the instruction set of a Java Virtual Machine to the instruction set of a specific CPU. </p>
-<h1><span id="synchironization">Synchironization</span></h1><p>Synchronization in the Java Virtual Machine is implemented by monitor entry and exit</p>
-<h1><span id="the-class-file-format">the class file format</span></h1><p><img src="theClassFile.png" alt=""></p>
-
-          
+          The Structure of JVM2.1 the class file format
+Compiled code is in binary format 
+stored in a file known as the class file format
+it precisely defines 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/26/JVM01/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -634,11 +490,16 @@
       
         
           
-            <h1><span id="cglib-code-generation-library">cglib – code generation library</span></h1><p>it is a byte instrumentation library used in many java framework such as hibernate or spring</p>
-<p>the bytecode instrumentation allows manipulating or creating classes after the compilation phase of a program</p>
-<h1><span id="function">function</span></h1><p>Classes in Java are loaded dynamically at runtime. Cglib is using this feature of Java language to make it possible to add new classes to an already running Java program.</p>
-
-          
+          cglib – code generation libraryit is a byte instrumentation library used in many java framework such as hibernate or spring
+the bytecode instrumentati
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/cglib/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -774,10 +635,16 @@
       
         
           
-            <h1><span id="overview">Overview</span></h1><p>ZooKeeper is a distributed, open-source coordination service for distributed applications.</p>
-<h1><span id="purpose">Purpose</span></h1><p>Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.</p>
-
-          
+          OverviewZooKeeper is a distributed, open-source coordination service for distributed applications.
+PurposeCoordination services are notoriously hard t
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/zookeeper-md/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -913,8 +780,15 @@
       
         
           
-            
           
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty源码解读/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1050,8 +924,15 @@
       
         
           
-            <h1><span id="chapter8">Chapter8</span></h1>
+          Chapter8
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记Chapter08/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1187,34 +1068,23 @@
       
         
           
-            <h1><span id="chapter-6">chapter 6</span></h1><p>java序列化的目的主要有两个：</p>
-<ol>
-<li>网络传输</li>
-<li>对象持久化</li>
-</ol>
-<p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以<br>但是rpc很少使用java序列化来进行消息的encoding 和decoding</p>
-<p>原因</p>
-<ol>
-<li>无法跨语言</li>
-<li>序列化后码流太大</li>
-</ol>
-<p>评判编解码框架优劣<br>1 是否支持跨语言<br>2 编码后的码流大小<br>3 编解码的性能<br>4 类库是否小巧，API使用是否方便<br>5 使用者需要手工快发的工作量和难度</p>
-<h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1><h2><span id="google的protobuf">Google的protobuf</span></h2><p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p>
-<ol>
-<li>结构化数据存储格式 xml json</li>
-<li>高效的encoding decoding性能</li>
-<li>语言无关，平台无关，扩展性好</li>
-<li>支持java c++ python</li>
-</ol>
-<h2><span id="facebook的thrift">Facebook的Thrift</span></h2><ol>
-<li>语言系统以及IDL编译器，负责由用户给定的IDL文件生成相应语言的接口代码</li>
-<li>Tprotocol: rpc协议层，可以选择多种不同的对象序列化方式 如json 和binary</li>
-<li>TTransport： RPC传输层，可以选择不同的传输层实现 如socket, NIO. memoryBuffer</li>
-<li>TProcessor: 做为协议层和用户提供的服务实现之间的纽带，负责调用服务实现的接口</li>
-<li>TServer: 聚合TProtocol, TTransport, TProcessor等对象</li>
-</ol>
+          chapter 6java序列化的目的主要有两个：
 
-          
+网络传输
+对象持久化
+
+java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以但是rpc很少使用java序列化来进行消息的encoding 和decoding
+原因
+
+无法
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记Chapter6/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1350,8 +1220,15 @@
       
         
           
-            <h1><span id="netty-chapter5">netty chapter5</span></h1>
+          netty chapter5
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记chapter5/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1487,23 +1364,17 @@
       
         
           
-            <h1><span id="netty-chapter4">netty chapter4</span></h1><p>TCP底层并不了解上层业务数据的具体含义<br>它会根据tcp缓冲区的实际情况进行包的划分<br>所以一个完整的包可能会被tcp拆分成多个包进行发送<br>也有可能把多个小的包封装成一个大的数据包发送<br>这就是tcp 粘包和拆包的问题</p>
-<h1><span id="问题产生的原因">问题产生的原因</span></h1><ol>
-<li>application write写入的字节大小大于socket发送缓冲区的大小</li>
-<li>进行mss大小的tcp分段</li>
-<li>以太网帧的payload大于mtu进行ip分片</li>
-</ol>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 03.23.27.png" alt=""></p>
-<p>这个问题只能通过上层的应用协议stack来解决</p>
-<ol>
-<li>消息定长，每个msg大小为固定的200byte,如果不够，空位补空格</li>
-<li>在包尾增加回车换行符进行分割 FTP协议</li>
-<li>将消息分为消息头和消息体，消息头中包含表示消息总长度的字段，通常设计思路为消息头的第一个字段使用int32表示消息的总长度</li>
-<li>更复杂的应用层协议</li>
-</ol>
-<h1><span id="netty如何解决">netty如何解决</span></h1><p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>
-
-          
+          netty chapter4TCP底层并不了解上层业务数据的具体含义它会根据tcp缓冲区的实际情况进行包的划分所以一个完整的包可能会被tcp拆分成多个包进行发送也有可能把多个小的包封装成一个大的数据包发送这就是tcp 粘包和拆包的问题
+问题产生的原因
+application write写入的字节大小
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记chapter4/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1639,8 +1510,15 @@
       
         
           
-            
           
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记chapter3/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1776,40 +1654,16 @@
       
         
           
-            <h1><span id="netty-chapter2">netty chapter2</span></h1><h2><span id="传统的bio编程">传统的BIO编程</span></h2><p>网络编程的基本模式是c/s client/server。<br>实际处理的就是两个进程之间的通信问题</p>
-<p>其中server提供位置信息 ipaddress+port<br>客户端通过connect向server的port send request<br>通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p>
-<p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口<br>sokcet负责发起连接操作。<br>连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
-<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2><p>buffer是一个object 它包含一些要写入或者要读出的data</p>
-<p>NIO中所有data都是通过buffer处理</p>
-<p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p>
-<p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer<br>mappedbytebuffer<br>每一个都是buffer接口的instance 操作完全一样</p>
-<h2><span id="channel">channel</span></h2><p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
-<p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动<br>（如inputstream outputstream都是stream的instance 单方向）</p>
-<h2><span id="selector">selector</span></h2><p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，<br>会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
-<p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png" alt=""></p>
-<p>NIO server通信时序图</p>
-<ol>
-<li>打开serverSokcetChannel,用于监听客户端的connection,它是所有client connection的父管道</li>
-<li>绑定监听端口，设置connection为非阻塞模式</li>
-<li>创建reactor线程，创建selector并启动线程</li>
-<li>将serverSocketChannel注册到reactor线程的selector上，监听accept事件</li>
-<li>selector在thread run的无限循环体内轮询准备就绪的key</li>
-<li>selector监听到有新的客户端接入，处理新的接入请求，完成tcp三次握手，建立物理链路</li>
-<li>设置客户端链路为非阻塞模式</li>
-<li>将新接入的客户端注册到reactor线程的selector上，监听读操作，读取客户端发送的网络消息</li>
-<li>异步读取客户端请求消息到buffer</li>
-<li>对buffer进行编解码。如果有半包消息指针reset,继续读取后续的msg,将解码成功的消息封装成task,投递到业务threadpool中，进行业务逻辑编排</li>
-<li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li>
-<li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li>
-</ol>
-<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2><ol>
-<li>开发出高质量的NIO程序不简单</li>
-<li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li>
-<li>跟踪和检测困难</li>
-</ol>
-
-          
+          netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题
+其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/25/netty学习笔记chapter2/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
