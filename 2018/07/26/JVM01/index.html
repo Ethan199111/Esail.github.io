@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="The Structure of JVM2.1 the class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it incl">
+<meta name="description" content="The Structure of JVMthe class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it includes">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM01">
+<meta property="og:title" content="Java Virtual Machine Learning Notes">
 <meta property="og:url" content="http://www.yifanguo.top/2018/07/26/JVM01/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="The Structure of JVM2.1 the class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it incl">
+<meta property="og:description" content="The Structure of JVMthe class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it includes">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.yifanguo.top/2018/07/26/JVM01/theClassFile.png">
-<meta property="og:updated_time" content="2018-07-27T06:49:45.000Z">
+<meta property="og:updated_time" content="2018-07-27T07:04:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVM01">
-<meta name="twitter:description" content="The Structure of JVM2.1 the class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it incl">
+<meta name="twitter:title" content="Java Virtual Machine Learning Notes">
+<meta name="twitter:description" content="The Structure of JVMthe class file format Compiled code is in binary format  stored in a file known as the class file format it precisely defines the representation of a class or interface it includes">
 <meta name="twitter:image" content="http://www.yifanguo.top/2018/07/26/JVM01/theClassFile.png">
 
 
@@ -130,7 +130,7 @@
 
 
 
-  <title>JVM01 | Yifan Guo Personal Blog</title>
+  <title>Java Virtual Machine Learning Notes | Yifan Guo Personal Blog</title>
   
 
 
@@ -277,7 +277,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JVM01</h1>
+          <h1 class="post-title" itemprop="name headline">Java Virtual Machine Learning Notes</h1>
         
 
         <div class="post-meta">
@@ -345,13 +345,13 @@
       
 
       
-        <h1><span id="the-structure-of-jvm">The Structure of JVM</span></h1><h1><span id="21-the-class-file-format">2.1 the class file format</span></h1><ol>
+        <h1><span id="the-structure-of-jvm">The Structure of JVM</span></h1><h1><span id="the-class-file-format">the class file format</span></h1><ol>
 <li>Compiled code is in binary format </li>
 <li>stored in a file known as the class file format</li>
 <li>it precisely defines the representation of a class or interface</li>
 <li>it includes details such as byte ordering</li>
 </ol>
-<h1><span id="22-data-types">2.2 data types</span></h1><ol>
+<h1><span id="data-types">data types</span></h1><ol>
 <li>primitive types – primitive values</li>
 <li>reference types – reference values</li>
 <li>all type checking is done prior to run time, by compiler not JVM</li>
@@ -359,7 +359,7 @@
 <li>A reference to an object is considered to have JVM type reference</li>
 <li>values of type referecence can be thought of as pointers to objects</li>
 </ol>
-<h1><span id="23-primitive-types-and-values">2.3 primitive types and values</span></h1><ol>
+<h1><span id="primitive-types-and-values">primitive types and values</span></h1><ol>
 <li>the primitive data types supported by JVM are : numeric types , boolean types, returnAddress type</li>
 <li>numeric types consist of integral types and floating-pointing types</li>
 </ol>
@@ -681,7 +681,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">The Structure of JVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.1 the class file format</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">2.2 data types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">2.3 primitive types and values</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">numeric types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">floating-pointing types:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.3.</span> <span class="nav-text">boolean types true or false</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.4.</span> <span class="nav-text">returnAddress type</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Reference types and values</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Run-time data areas</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">the pc register</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">the JVM stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.3.</span> <span class="nav-text">HEAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.4.</span> <span class="nav-text">method area</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.5.</span> <span class="nav-text">Run-Time Constant Pool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.6.</span> <span class="nav-text">Native Method Stacks</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">Frame</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.1.</span> <span class="nav-text">local variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.2.</span> <span class="nav-text">operand stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.3.</span> <span class="nav-text">dynamic linking</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">Exceptions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.1.</span> <span class="nav-text">exception handler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.2.</span> <span class="nav-text">instruction set summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Object Creation and Manipulation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Synchironization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Compiling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">Synchironization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">the class file format</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">The Structure of JVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">the class file format</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">data types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">primitive types and values</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">numeric types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">floating-pointing types:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.3.</span> <span class="nav-text">boolean types true or false</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.4.</span> <span class="nav-text">returnAddress type</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Reference types and values</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Run-time data areas</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">the pc register</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">the JVM stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.3.</span> <span class="nav-text">HEAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.4.</span> <span class="nav-text">method area</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.5.</span> <span class="nav-text">Run-Time Constant Pool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.6.</span> <span class="nav-text">Native Method Stacks</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">Frame</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.1.</span> <span class="nav-text">local variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.2.</span> <span class="nav-text">operand stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.3.</span> <span class="nav-text">dynamic linking</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">Exceptions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.1.</span> <span class="nav-text">exception handler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.2.</span> <span class="nav-text">instruction set summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Object Creation and Manipulation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Synchironization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Compiling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">Synchironization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">the class file format</span></a></li></ol></div>
             
 
           </div>
@@ -849,7 +849,7 @@
         var disqus_config = function () {
           this.page.url = 'http://www.yifanguo.top/2018/07/26/JVM01/';
           this.page.identifier = '2018/07/26/JVM01/';
-          this.page.title = 'JVM01';
+          this.page.title = 'Java Virtual Machine Learning Notes';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
