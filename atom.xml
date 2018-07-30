@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-07-27T07:04:00.000Z</updated>
+  <updated>2018-07-30T04:51:49.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -17,11 +17,122 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>dubboRpc</title>
+    <link href="http://www.yifanguo.top/2018/07/29/dubboRpc/"/>
+    <id>http://www.yifanguo.top/2018/07/29/dubboRpc/</id>
+    <published>2018-07-30T04:51:28.000Z</published>
+    <updated>2018-07-30T04:51:49.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="rpc" scheme="http://www.yifanguo.top/tags/rpc/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>rxjava</title>
+    <link href="http://www.yifanguo.top/2018/07/29/rxjava/"/>
+    <id>http://www.yifanguo.top/2018/07/29/rxjava/</id>
+    <published>2018-07-30T03:56:42.000Z</published>
+    <updated>2018-07-30T04:23:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="backpressure">backpressure</span></h1><p>背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p><h1><span id="observer-pattern">Observer pattern</span></h1><p>RxJava 以观察者模式为骨架<br>Observable ( 被观察者 ) / Observer ( 观察者 )<br>Flowable （被观察者）/ Subscriber （观察者）</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;backpressure&quot;&gt;backpressure&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;observer
+      
+    
+    </summary>
+    
+    
+      <category term="reactive" scheme="http://www.yifanguo.top/tags/reactive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vertxDemos</title>
+    <link href="http://www.yifanguo.top/2018/07/29/vertxDemos/"/>
+    <id>http://www.yifanguo.top/2018/07/29/vertxDemos/</id>
+    <published>2018-07-30T02:53:32.000Z</published>
+    <updated>2018-07-30T02:53:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="几个vertx搭建的demo">几个vertx搭建的demo</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;几个vertx搭建的demo&quot;&gt;几个vertx搭建的demo&lt;/span&gt;&lt;/h1&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="reactive" scheme="http://www.yifanguo.top/tags/reactive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vertx.io</title>
+    <link href="http://www.yifanguo.top/2018/07/29/vertx-io/"/>
+    <id>http://www.yifanguo.top/2018/07/29/vertx-io/</id>
+    <published>2018-07-30T01:35:29.000Z</published>
+    <updated>2018-07-30T02:53:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="what-is-vertx">what is vertx</span></h1><p>vertx is a toolkit to build reactive and distributed system</p><h1><span id="reactive-system-principles">reactive system principles</span></h1><p>responsive, elastic , resilient, asynchronous message passing to interact</p><h1><span id="what-is-reactive">what is reactive</span></h1><p>Reactive programming—A development model focusing on the observation of data streams, reacting on changes, and propagating them</p><p>Reactive system—An architecture style used to build responsive and robust distributed systems based on asynchronous message-passing</p><p>Reactive streams is an initiative to provide a standard for asynchronous stream processing with back-pressure. It provides a minimal set of interfaces and protocols that describe the opera‐ tions and entities to achieve the asynchronous streams of data with nonblocking back-pressure. It does not define operators manipulat‐ ing the streams, and is mainly used as an interoperability layer. This initiative is supported by Netflix, Lightbend, and Red Hat, among others.</p><h1><span id="why-use-asynchronous-message-passing">why use asynchronous message-passing</span></h1><p>Using asynchronous message-passing interactions provides reactive systems with two critical properties:<br>• Elasticity—The ability to scale horizontally (scale out/in)<br>• Resilience—The ability to handle failure and recover</p><h1><span id="reactive-microservices">reactive microservices</span></h1><p>##Autonomy<br>They can adapt to the avail‐ ability or unavailability of the services surrounding them. </p><p>##Asynchronisity<br>A reactive microservice uses asynchronous message- passing to interact with its peers. It also receives messages and has the ability to produce responses to these messages.</p><p>• Resilience<br>Resilience is not only about managing failure, it’s also about self-healing</p><p>• Elasticity<br>a reactive microservice must be elastic, so the system can adapt to the number of instances to manage the load.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;what-is-vertx&quot;&gt;what is vertx&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;vertx is a toolkit to build reactive and distributed system&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;react
+      
+    
+    </summary>
+    
+    
+      <category term="reactive" scheme="http://www.yifanguo.top/tags/reactive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>concurrency</title>
+    <link href="http://www.yifanguo.top/2018/07/27/concurrency/"/>
+    <id>http://www.yifanguo.top/2018/07/27/concurrency/</id>
+    <published>2018-07-27T09:47:40.000Z</published>
+    <updated>2018-07-30T07:01:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[toc]</p><h1><span id="java-concurrent-package-api">Java Concurrent Package API</span></h1><h1><span id="synchronized和lock">synchronized和lock</span></h1><h2><span id="synchronized-的局限性">synchronized 的局限性</span></h2><p>synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如：</p><p>当线程尝试获取锁的时候，如果获取不到锁会一直阻塞。<br>如果获取锁的线程进入休眠或者阻塞，除非当前线程异常，否则其他线程尝试获取锁必须一直等待。</p><h2><span id="lock">Lock</span></h2><p>API</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void lock();</span><br><span class="line">void lockInterruptibly() throws InterruptedException;</span><br><span class="line">boolean tryLock();</span><br><span class="line">boolean tryLock(long time, TimeUnit unit) throws InterruptedException;</span><br><span class="line">void unlock();</span><br><span class="line">Condition newCondition();</span><br></pre></td></tr></table></figure><h2><span id="lock使用方式需要手动释放锁">lock使用方式，需要手动释放锁</span></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private Lock lock = new ReentrantLock();  可重入锁</span><br><span class="line"> </span><br><span class="line">public void test()&#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try&#123;</span><br><span class="line">        doSomeThing();</span><br><span class="line">    &#125;catch (Exception e)&#123;</span><br><span class="line">        // ignored</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2><span id="aqs">AQS</span></h2><p>AbstractQueuedSynchronizer简称AQS，是一个用于构建锁和同步容器的框架。事实上concurrent包内许多类都是基于AQS构建，例如ReentrantLock，Semaphore，CountDownLatch，ReentrantReadWriteLock，FutureTask等。AQS解决了在实现同步容器时设计的大量细节问题。</p><p>AQS使用一个FIFO的队列表示排队等待锁的线程，队列头节点称作“哨兵节点”或者“哑节点”，它不与任何线程关联。其他的节点与等待线程关联，每个节点维护一个等待状态waitStatus。如图</p><p><img src="aqs.png" alt=""></p><p>AQS中还有一个表示状态的字段state，例如ReentrantLocky用它表示线程重入锁的次数，Semaphore用它表示剩余的许可数量，FutureTask用它表示任务的状态。对state变量值的更新都采用CAS操作保证更新操作的原子性。</p><p>AbstractQueuedSynchronizer继承了AbstractOwnableSynchronizer，这个类只有一个变量：exclusiveOwnerThread，表示当前占用该锁的线程，并且提供了相应的get，set方法。</p><p>理解AQS可以帮助我们更好的理解JCU包中的同步容器。</p><h2><span id="lock的类型">lock的类型</span></h2><p>可重入锁。可重入锁是指同一个线程可以多次获取同一把锁。ReentrantLock和synchronized都是可重入锁。<br>可中断锁。可中断锁是指线程尝试获取锁的过程中，是否可以响应中断。synchronized是不可中断锁，而ReentrantLock则提供了中断功能。<br>公平锁与非公平锁。公平锁是指多个线程同时尝试获取同一把锁时，获取锁的顺序按照线程达到的顺序，而非公平锁则允许线程“插队”。synchronized是非公平锁，而ReentrantLock的默认实现是非公平锁，但是也可以设置为公平锁。<br>CAS操作(CompareAndSwap)。CAS操作简单的说就是比较并交换。CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。如果内存位置的值与预期原值相匹配，那么处理器会自动将该位置值更新为新值。否则，处理器不做任何操作。无论哪种情况，它都会在 CAS 指令之前返回该位置的值。CAS 有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。” Java并发包(java.util.concurrent)中大量使用了CAS操作,涉及到并发的地方都调用了sun.misc.Unsafe类方法进行CAS操作。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public ReentrantLock() &#123;</span><br><span class="line">    sync = new NonfairSync();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public ReentrantLock(boolean fair) &#123;</span><br><span class="line">    sync = fair ? new FairSync() : new NonfairSync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1><span id="copyonwritearraylist">CopyOnWriteArrayList</span></h1><h2><span id="from-oracle">from oracle</span></h2><p>A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array.</p><p>This is ordinarily too costly, but may be more efficient than alternatives when traversal operations vastly outnumber mutations, and is useful when you cannot or don’t want to synchronize traversals, yet need to preclude interference among concurrent threads. </p><h2><span id="from-google-serach">from google serach</span></h2><p>This is a very useful construct in the multi-threaded programs – when we want to iterate over a list in a thread-safe way without an explicit synchronization.</p><p>When we are using any of the modify methods – such as add() or remove() – the whole content of the CopyOnWriteArrayList is copied into the new internal copy.</p><h2><span id="when-to-use-it">when to use it</span></h2><p>dont want to synchronize the traversal operations </p><h2><span id="diff-with-readwritelock">diff with  ReadWriteLock</span></h2><p>CopyOnWriteArrayList is for safe traversals.</p><p>ReadWriteLock would allow multiple readers and still let the occasional writer perform the necessary modifications. </p><h2><span id="demo">demo</span></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.ConcurrentModificationException;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.concurrent.CopyOnWriteArrayList;</span><br><span class="line"></span><br><span class="line">public class CopyOnWriteArrayListDemo &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; empList = new ArrayList&lt;&gt;();</span><br><span class="line">        empList.add(&quot;yifan&quot;);</span><br><span class="line">        empList.add(&quot;guo&quot;);</span><br><span class="line">        empList.add(&quot;smith&quot;);</span><br><span class="line"></span><br><span class="line">        Iterator&lt;String&gt; empIter = empList.iterator();</span><br><span class="line"></span><br><span class="line">        while(empIter.hasNext()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(empIter.next());</span><br><span class="line">                if (!empList.contains(&quot;lala&quot;)) empList.add(&quot;lala&quot;);</span><br><span class="line">            &#125; catch (ConcurrentModificationException cme) &#123;</span><br><span class="line">                System.err.println(&quot;attempt to modifiy list during iteration&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; empList2 = new CopyOnWriteArrayList&lt;&gt;();</span><br><span class="line">        empList2.add(&quot;yifan&quot;);</span><br><span class="line">        empList2.add(&quot;guo&quot;);</span><br><span class="line">        empList2.add(&quot;smith&quot;);</span><br><span class="line">        empIter = empList2.iterator();</span><br><span class="line">        while (empIter.hasNext()) &#123;</span><br><span class="line">            System.out.println(empIter.next());</span><br><span class="line">            if (!empList2.contains(&quot;Tom Smith&quot;))</span><br><span class="line">                empList2.add(&quot;Tom Smith&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1><span id="transient">transient</span></h1><p>The transient keyword in Java is used to indicate that a field should not be serialized.</p><h2><span id="demo">demo</span></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line"></span><br><span class="line">public class demo implements Serializable &#123;</span><br><span class="line">    private String firstName;</span><br><span class="line">    private transient String middleName;</span><br><span class="line">    private String lastName;</span><br><span class="line"></span><br><span class="line">    public demo (String fName, String mName, String lName)&#123;</span><br><span class="line">        this.firstName = fName;</span><br><span class="line">        this.middleName = mName;</span><br><span class="line">        this.lastName = lName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString()&#123;</span><br><span class="line">        StringBuffer sb = new StringBuffer(40);</span><br><span class="line">        sb.append(&quot;First Name : &quot;);</span><br><span class="line">        sb.append(this.firstName);</span><br><span class="line">        sb.append(&quot;Middle Name : &quot;);</span><br><span class="line">        sb.append(this.middleName);</span><br><span class="line">        sb.append(&quot;Last Name : &quot;);</span><br><span class="line">        sb.append(this.lastName);</span><br><span class="line">        return sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[]) throws Exception &#123;</span><br><span class="line">        demo nameStore = new demo(&quot;Steve&quot;, &quot;Middle&quot;,&quot;Jobs&quot;);</span><br><span class="line">        ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(&quot;nameStore&quot;));</span><br><span class="line">        // writing to object</span><br><span class="line">        o.writeObject(nameStore);</span><br><span class="line">        o.close();</span><br><span class="line"></span><br><span class="line">        // reading from object</span><br><span class="line">        ObjectInputStream in = new ObjectInputStream(new FileInputStream(&quot;nameStore&quot;));</span><br><span class="line">        demo d = (demo)in.readObject();</span><br><span class="line">        System.out.println(d);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1><span id="reentrant-lock-可重入锁">Reentrant lock (可重入锁）</span></h1><p>synchronized 也是可重入锁</p><p>2.可中断锁</p><p>　　可中断锁：顾名思义，就是可以相应中断的锁。</p><p>　　在Java中，synchronized就不是可中断锁，而Lock是可中断锁。</p><p>　　如果某一线程A正在执行锁中的代码，另一线程B正在等待获取该锁，可能由于等待时间过长，线程B不想等待了，想先处理其他事情，我们可以让它中断自己或者在别的线程中中断它，这种就是可中断锁。</p><p>　　3.公平锁</p><p>　　公平锁即尽量以请求锁的顺序来获取锁。比如同是有多个线程在等待一个锁，当这个锁被释放时，等待时间最久的线程（最先请求的线程）会获得该所，这种就是公平锁。</p><p>　　非公平锁即无法保证锁的获取是按照请求锁的顺序进行的。这样就可能导致某个或者一些线程永远获取不到锁。</p><p>　　在Java中，synchronized就是非公平锁，它无法保证等待的线程获取锁的顺序。</p><p>而对于ReentrantLock和ReentrantReadWriteLock，它默认情况下是非公平锁，但是可以设置为公平锁。设置方法如下：ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);</p><h1><span id="readwritelock">ReadWriteLock</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;java-concurrent-package-api&quot;&gt;Java Concurrent Package API&lt;/span&gt;&lt;/h1&gt;&lt;h1&gt;&lt;span id=&quot;synchronized和lock&quot;&gt;synchronized
+      
+    
+    </summary>
+    
+    
+      <category term="concurrent" scheme="http://www.yifanguo.top/tags/concurrent/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java Virtual Machine Learning Notes</title>
     <link href="http://www.yifanguo.top/2018/07/26/JVM01/"/>
     <id>http://www.yifanguo.top/2018/07/26/JVM01/</id>
     <published>2018-07-27T01:36:22.000Z</published>
-    <updated>2018-07-27T07:04:00.000Z</updated>
+    <updated>2018-07-27T08:38:55.000Z</updated>
     
     <content type="html"><![CDATA[<h1><span id="the-structure-of-jvm">The Structure of JVM</span></h1><h1><span id="the-class-file-format">the class file format</span></h1><ol><li>Compiled code is in binary format </li><li>stored in a file known as the class file format</li><li>it precisely defines the representation of a class or interface</li><li>it includes details such as byte ordering</li></ol><h1><span id="data-types">data types</span></h1><ol><li>primitive types – primitive values</li><li>reference types – reference values</li><li>all type checking is done prior to run time, by compiler not JVM</li><li>An object is either a dynamically allocated class instance or an array</li><li>A reference to an object is considered to have JVM type reference</li><li>values of type referecence can be thought of as pointers to objects</li></ol><h1><span id="primitive-types-and-values">primitive types and values</span></h1><ol><li>the primitive data types supported by JVM are : numeric types , boolean types, returnAddress type</li><li>numeric types consist of integral types and floating-pointing types</li></ol><h2><span id="numeric-types">numeric types</span></h2><table><thead><tr><th style="text-align:left">type</th><th style="text-align:left">size</th><th style="text-align:left">range</th></tr></thead><tbody><tr><td style="text-align:left">byte</td><td style="text-align:left">8-bit</td><td style="text-align:left">-128 to 127</td></tr><tr><td style="text-align:left">short</td><td style="text-align:left">16 bit</td><td style="text-align:left">-32768 to 32767</td></tr><tr><td style="text-align:left">int</td><td style="text-align:left">32bit</td><td style="text-align:left">-2147483648 to 2147483647</td></tr><tr><td style="text-align:left">long</td><td style="text-align:left">64bit</td><td style="text-align:left"></td></tr><tr><td style="text-align:left">char</td><td style="text-align:left">16bit</td><td style="text-align:left">0 to 65535 inclusive</td></tr></tbody></table><p>default  char: the null code point (‘\u0000’)</p><h2><span id="floating-pointing-types">floating-pointing types:</span></h2><table><thead><tr><th style="text-align:left">type</th><th style="text-align:left">size</th></tr></thead><tbody><tr><td style="text-align:left">float</td><td style="text-align:left">32 bit</td></tr><tr><td style="text-align:left">double</td><td style="text-align:left">64 bit</td></tr></tbody></table><h2><span id="boolean-types-true-or-false">boolean types true or false</span></h2><p>Although the Java Virtual Machine defines a boolean type, it only provides very limited support for it. There are no Java Virtual Machine instructions solely dedicated to operations on boolean values. Instead, expressions in the Java programming language that operate on boolean values are compiled to use values of the Java Virtual Machine int data type.<br>The Java Virtual Machine does directly support boolean arrays. Its newarray instruction (§newarray) enables creation of boolean arrays. Arrays of type boolean are accessed and modified using the byte array instructions baload and bastore (§baload, §bastore).</p><h2><span id="returnaddress-type">returnAddress type</span></h2><p>The values of the returnAddress type are pointers to the opcodes of Java Virtual Machine instructions. Of the primitive types, only the returnAddress type is not directly associated with a Java programming language type.</p><p>The returnAddress type is used by the Java Virtual Machine’s jsr, ret, and jsr_w instructions (§jsr, §ret, §jsr_w).</p><p>The values of the returnAddress type are pointers to the opcodes(operation codes) of Java Virtual Machine instructions.</p><h1><span id="reference-types-and-values">Reference types and values</span></h1><p>There are three kinds of reference types:<br>class types,<br>array types,<br>and interface types. </p><p>Their values are references to dynamically created class instances, arrays, or class instances or arrays that implement interfaces, respectively.</p><p>The default value of a reference type is null.</p><h1><span id="run-time-data-areas">Run-time data areas</span></h1><p>The Java Virtual Machine defines various run-time data areas that are used during execution of a program. Some of these data areas are created on Java Virtual Machine start-up and are destroyed only when the Java Virtual Machine exits. Other data areas are per thread. Per-thread data areas are created when a thread is created and destroyed when the thread exits.</p><h2><span id="the-pc-register">the pc register</span></h2><ol><li>The Java Virtual Machine can support many threads of execution at once</li><li>each jvm thread has its own pc(program counter) register</li><li>At any point, each Java Virtual Machine thread is executing the code of a single method, namely the current method (§2.6) for that thread</li><li>if not native method,  pc contains the address of JVM instruction being executed</li><li>if native method, pc is undefined(null)</li></ol><h2><span id="the-jvm-stack">the JVM stack</span></h2><ol><li>each JVM thread has a private JVM stack</li><li>created as the same time as the thread</li><li>it holds local variables and partial results, and plays a part in method invocation and return</li></ol><p>• If the computation in a thread requires a larger Java Virtual Machine stack than is permitted, the Java Virtual Machine throws a <strong>StackOverflowError</strong>.</p><p>• If Java Virtual Machine stacks can be dynamically expanded, and expansion is attempted but insufficient memory can be made available to effect the expansion, or if insufficient memory can be made available to create the initial Java Virtual Machine stack for a new thread, the Java Virtual Machine throws an <strong>OutOfMemoryError</strong>.</p><h2><span id="heap">HEAP</span></h2><ol><li>heap is shared among all jvm threads</li><li>The heap is the run-time data area from which memory for all class instances and arrays is allocated.</li><li>created on virtual machine start-up. </li><li>heap storage for objects is reclaimed by GC</li><li>objects are never explicitly deallocated</li><li>The memory for the heap does not need to be contiguous.</li></ol><p>• If a computation requires more heap than can be made available by the automatic storage management system, the Java Virtual Machine throws an OutOfMemoryError.</p><h2><span id="method-area">method area</span></h2><ol><li><p>shared among all threads</p></li><li><p>stores per-class structures such as<br><strong>the run-time constant pool</strong><br><strong>field and method data</strong><br><strong>the code for methods and constructors</strong></p></li><li><p>created on jvm start-up</p></li><li>Although the method area is logically part of the heap, simple implementations may choose not to either garbage collect or compact it.</li></ol><p>• If memory in the method area cannot be made available to satisfy an allocation<br>request, the Java Virtual Machine throws an OutOfMemoryError.</p><h2><span id="run-time-constant-pool">Run-Time Constant Pool</span></h2><ol><li>A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file</li><li>the run-time constant pool for a class or interface is constructed when the class or interface is created (§5.3) by the Java Virtual Machine.</li><li>part of method area</li></ol><h2><span id="native-method-stacks">Native Method Stacks</span></h2><h1><span id="frame">Frame</span></h1><p>A frame is used to store data and partial results, as well as to perform dynamic linking, return values for methods, and dispatch exceptions.</p><p>A new frame is created each time a method is invoked. </p><p>A frame is destroyed when its method invocation completes, whether that completion is normal or abrupt (it throws an uncaught exception)</p><p>frames are allocated from the Java Virtual Machine stack (§2.5.2) of the thread creating the frame.</p><p>Each frame has its own array of local variables (§2.6.1), its own operand stack (§2.6.2), and a reference to the run- time constant pool (§2.5.5) of the class of the current method.</p><h2><span id="local-variable">local variable</span></h2><p>Each frame (§2.6) contains an array of variables known as its local variables.</p><p>Local variables are addressed by indexing.</p><p>The Java Virtual Machine uses local variables to pass parameters on method invocation. </p><h2><span id="operand-stacks">operand stacks</span></h2><p>The operand stack is empty when the frame that contains it is created. The Java Virtual Machine supplies instructions to load constants or values from local variables or fields onto the operand stack. Other Java Virtual Machine instructions take operands from the operand stack, operate on them, and push the result back onto the operand stack. The operand stack is also used to prepare parameters to be passed to methods and to receive method results.</p><h2><span id="dynamic-linking">dynamic linking</span></h2><p>Each frame (§2.6) contains a reference to the run-time constant pool (§2.5.5) for the type of the current method to support dynamic linking of the method code.</p><h1><span id="exceptions">Exceptions</span></h1><p>An exception in the Java Virtual Machine is represented by an instance of the class Throwable or one of its subclasses. </p><p>Throwing an exception results in an immediate nonlocal transfer of control from the point where the exception was thrown.</p><h2><span id="exception-handler">exception handler</span></h2><p>An exception handler specifies the range of offsets into the Java Virtual Machine code implementing the method for which the exception handler is active, describes the type of exception that the exception handler is able to handle, and specifies the location of the code that is to handle that exception</p><p>When an exception is thrown, the Java Virtual Machine searches for a matching exception handler in the current method. If a matching exception handler is found, the system branches to the exception handling code specified by the matched handler.</p><h2><span id="instruction-set-summary">instruction set summary</span></h2><p>A Java Virtual Machine instruction consists of a one-byte opcode specifying the operation to be performed, followed by zero or more operands supplying arguments or data that are used by the operation.</p><p> i for an int operation, l for long, s for short, b for byte, c for char, f for float, d for double, and a for reference.</p><p> Given the Java Virtual Machine’s one-byte opcode size, encoding types into opcodes places pressure on the design of its instruction set. </p><p> The only integer operations that can throw an exception are the integer divide instructions (idiv and ldiv) and the integer remainder instructions (irem and lrem), which throw an ArithmeticException if the divisor is zero.</p><h1><span id="object-creation-and-manipulation">Object Creation and Manipulation</span></h1><ol><li>both class instances and arrays are objects,</li><li>creates and manipulates class instances and arrays using distinct sets of instructions:</li><li>Create a new class instance: new.</li><li>Access fields of classes (static fields, known as class variables) and fields of class instances (non-static fields, known as instance variables): getstatic, putstatic, getfield, putfield.</li><li>Check properties of class instances or arrays: instanceof, checkcast.</li></ol><h1><span id="synchironization">Synchironization</span></h1><p>synchronization construct: the monitor.</p><p>When invoking a method for which ACC_SYNCHRONIZED is set, the executing thread enters a monitor, invokes the method itself, and exits the monitor whether the method invocation completes normally or abruptly. </p><p>During the time the executing thread owns the monitor, no other thread may enter it.</p><p>Synchronization of sequences of instructions is typically used to encode the synchronized block of the Java programming language.</p><p>The Java Virtual Machine supplies the monitorenter and monitorexit instructions to support such language constructs. </p><p>Note that the monitor entry and exit automatically performed by the Java Virtual Machine when invoking a synchronized method are considered to occur during the calling method’s invocation.</p><h1><span id="compiling">Compiling</span></h1><p>Compiler transfer java code into instruction set of the jvm</p><p>Just-in-time code generator(JIT)<br>Note that the term “compiler” is sometimes used when referring to a translator from the instruction set of a Java Virtual Machine to the instruction set of a specific CPU. </p><h1><span id="synchironization">Synchironization</span></h1><p>Synchronization in the Java Virtual Machine is implemented by monitor entry and exit</p><h1><span id="the-class-file-format">the class file format</span></h1><p><img src="theClassFile.png" alt=""></p>]]></content>
     
@@ -350,76 +461,6 @@
       
         &lt;h1&gt;&lt;span id=&quot;bootstrap&quot;&gt;Bootstrap&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;bootstrap makes it easy to bootstrap a channel to use for clients&lt;/p&gt;
 &lt;p&gt;link() for udp&lt;br&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>netty02</title>
-    <link href="http://www.yifanguo.top/2018/07/24/netty02/"/>
-    <id>http://www.yifanguo.top/2018/07/24/netty02/</id>
-    <published>2018-07-25T02:10:05.000Z</published>
-    <updated>2018-07-25T03:08:16.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="introduction">Introduction</span></h1><p>Netty is an asynchhronous event-driven network application framework<br>for rapid development of maintainable high performance protocal servers&amp;clients<br>–high-scalability protocol servers and clients.</p><p>Netty is an NIO client server framework that enables quick and easy development of network applications such as protocol servers and clients.</p><h1><span id="framework">framework</span></h1><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-24 19.12.41.png" alt=""></p><h1><span id="why-use-netty">why use Netty</span></h1><p>a general purpose protocal or its implementation sometimes does not scale very well</p><h1><span id="protocol">protocol</span></h1><p>Additionally, Netty provides out-of-the-box decoders which enables you to implement most protocols very easily and helps you avoid from ending up with a monolithic unmaintainable handler implementation. Please refer to the following packages for more detailed examples:</p><p>io.netty.example.factorial for a binary protocol, and<br>io.netty.example.telnet for a text line-based protocol.</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;introduction&quot;&gt;Introduction&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;Netty is an asynchhronous event-driven network application framework&lt;br&gt;for rapid dev
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>netty分析01 -- 简介</title>
-    <link href="http://www.yifanguo.top/2018/07/24/netty01/"/>
-    <id>http://www.yifanguo.top/2018/07/24/netty01/</id>
-    <published>2018-07-24T09:30:21.000Z</published>
-    <updated>2018-07-25T02:09:44.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="什么是nettywhat">什么是netty(what)</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p><p>传统HTTP服务器的原理</p><p>1.创建一个serversocket listen 一个端口</p><ol start="2"><li>client request ip-address/port</li><li>服务器使用accept获得一个来自client的socket连接对象</li><li>启动一个新的thread来处理连接</li><li>读socket 得到byte stream</li><li>解码协议，得到http request</li><li>处理http request, 得到一个结果，封装成http response</li><li>encoing ,把结果序列化 byte stream</li><li>写socket 把byte stream 发送给客户端</li><li>客户端循环第五步</li></ol><p>HTTP服务器之所以叫HTTP,因为encoding 和decoding都是使用HTTP协议<br><strong>使用netty可以定制编解码协议，实现自己特定协议的服务器</strong></p><p>NIO: non-blocking input/output operation 非阻塞io<br>BIO: blocking io<br><strong>netty是基于javaNIO封装的一套框架</strong></p><p>NIO如何做到非阻塞，event driven.只有event coming才启动线程处理，平常挂起避免资源浪费</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">while true &#123;</span><br><span class="line">events = takeEvents(fds)</span><br><span class="line">for event in events &#123;</span><br><span class="line">if event.isAcceptable &#123;</span><br><span class="line">doAccept()</span><br><span class="line"></span><br><span class="line">&#125; else if event.isReadable &#123;</span><br><span class="line">request = doRead()</span><br><span class="line">if request.isCompelete() &#123;</span><br><span class="line">doPrecess()</span><br><span class="line">&#125;</span><br><span class="line">&#125; else if event.isWriteable &#123;</span><br><span class="line">do write()</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>Netty 可以处理tcp也可以处理udp</p><h1><span id="netty-是什么">netty 是什么</span></h1><ol><li>本质：JBoss做的一个jar包</li><li>目的： 快速开发高性能，高可靠的网络服务器和客户端程序</li><li>优点：提供异步，事件驱动的网络应用程序框架和工具</li><li>通俗： 帮你处理socket</li></ol><h2><span id="应用">应用：</span></h2><p>RPC框架</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;什么是nettywhat&quot;&gt;什么是netty(what)&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持&lt;/p&gt;
-&lt;p&gt;传统HTTP服务器的原理&lt;/p&gt;
-&lt;p&gt;1.创建一个ser
-      
-    
-    </summary>
-    
-    
-      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>netty</title>
-    <link href="http://www.yifanguo.top/2018/07/24/netty00/"/>
-    <id>http://www.yifanguo.top/2018/07/24/netty00/</id>
-    <published>2018-07-24T09:12:16.000Z</published>
-    <updated>2018-07-24T09:20:40.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="netty简介">netty简介</span></h1><p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p><p>netty的所有IO操作都是异步非阻塞的<br>用过future-listener机制，用户可以方便的主动获取</p><p>采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程销毁，这就是典型的一请求一应答模型。该架构最大的问题就是不具备弹性伸缩能力，当并发访问量增加后，服务端的线程个数和并发访问数成线性正比，由于线程是JAVA虚拟机非常宝贵的系统资源，当线程数膨胀之后，系统的性能急剧下降，随着并发量的继续增加，可能会发生句柄溢出、线程堆栈溢出等问题，并导致服务器最终宕机</p><h1><span id="序列化方式问题java序列化存在如下几个典型问题">序列化方式问题：Java序列化存在如下几个典型问题：</span></h1><p>1) Java序列化机制是Java内部的一种对象编解码技术，无法跨语言使用；例如对于异构系统之间的对接，Java序列化后的码流需要能够通过其它语言反序列化成原始对象（副本），目前很难支持；</p><p>2) 相比于其它开源的序列化框架，Java序列化后的码流太大，无论是网络传输还是持久化到磁盘，都会导致额外的资源占用；</p><p>3) 序列化性能差（CPU资源占用高）。</p><p>线程模型问题：由于采用同步阻塞IO，这会导致每个TCP连接都占用1个线程，由于线程资源是JVM虚拟机非常宝贵的资源，当IO读写阻塞导致线程无法及时释放时，会导致系统性能急剧下降，严重的甚至会导致虚拟机无法创建新的线程。</p><h1><span id="高性能的三个主题">高性能的三个主题</span></h1><p>1) 传输：用什么样的通道将数据发送给对方，BIO、NIO或者AIO，IO模型在很大程度上决定了框架的性能。</p><p>2) 协议：采用什么样的通信协议，HTTP或者内部私有协议。协议的选择不同，性能模型也不同。相比于公有协议，内部私有协议的性能通常可以被设计的更优。</p><p>3) 线程：数据报如何读取？读取之后的编解码在哪个线程进行，编解码后的消息如何派发，Reactor线程模型的不同，对性能的影响也非常大。</p><h1><span id="netty高性能之道">Netty高性能之道</span></h1><h2><span id="异步非阻塞通信">异步非阻塞通信</span></h2><p>在IO编程过程中，当需要同时处理多个客户端接入请求时，可以利用多线程或者IO多路复用技术进行处理。IO多路复用技术通过把多个IO的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求。与传统的多线程/多进程模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;netty简介&quot;&gt;netty简介&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持&lt;/p&gt;
-&lt;p&gt;netty的所有IO操作都是异步非阻塞的&lt;br&gt;用过future-listener
       
     
     </summary>
