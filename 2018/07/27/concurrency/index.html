@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="[toc] Java Concurrent Package APIsynchronized和locksynchronized 的局限性synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如： 当线程尝试获取锁的时候，如果获取不到锁会一直阻塞。">
+<meta name="description" content="[toc] Java Concurrent Package APICAS(compare and set) – nonblockingAlgorithm来看下面的这个程序，多线程计数器 12345678public class MyApp&amp;#123;    private int count = 0;    public synchronized void upateVisitors()">
 <meta name="keywords" content="concurrent">
 <meta property="og:type" content="article">
 <meta property="og:title" content="concurrency">
 <meta property="og:url" content="http://www.yifanguo.top/2018/07/27/concurrency/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="[toc] Java Concurrent Package APIsynchronized和locksynchronized 的局限性synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如： 当线程尝试获取锁的时候，如果获取不到锁会一直阻塞。">
+<meta property="og:description" content="[toc] Java Concurrent Package APICAS(compare and set) – nonblockingAlgorithm来看下面的这个程序，多线程计数器 12345678public class MyApp&amp;#123;    private int count = 0;    public synchronized void upateVisitors()">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.yifanguo.top/2018/07/27/concurrency/aqs.png">
-<meta property="og:updated_time" content="2018-07-30T07:01:26.000Z">
+<meta property="og:updated_time" content="2018-07-30T07:59:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrency">
-<meta name="twitter:description" content="[toc] Java Concurrent Package APIsynchronized和locksynchronized 的局限性synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如： 当线程尝试获取锁的时候，如果获取不到锁会一直阻塞。">
+<meta name="twitter:description" content="[toc] Java Concurrent Package APICAS(compare and set) – nonblockingAlgorithm来看下面的这个程序，多线程计数器 12345678public class MyApp&amp;#123;    private int count = 0;    public synchronized void upateVisitors()">
 <meta name="twitter:image" content="http://www.yifanguo.top/2018/07/27/concurrency/aqs.png">
 
 
@@ -324,7 +324,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  7
+                  10
                 </span>
               
             </div>
@@ -346,7 +346,20 @@
 
       
         <p>[toc]</p>
-<h1><span id="java-concurrent-package-api">Java Concurrent Package API</span></h1><h1><span id="synchronized和lock">synchronized和lock</span></h1><h2><span id="synchronized-的局限性">synchronized 的局限性</span></h2><p>synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如：</p>
+<h1><span id="java-concurrent-package-api">Java Concurrent Package API</span></h1><h1><span id="cascompare-and-set-nonblockingalgorithm">CAS(compare and set) – nonblockingAlgorithm</span></h1><p>来看下面的这个程序，多线程计数器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyApp</span><br><span class="line">&#123;</span><br><span class="line">    private int count = 0;</span><br><span class="line">    public synchronized void upateVisitors() </span><br><span class="line">    &#123;</span><br><span class="line">       ++count; //increment the visitors count</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>保证了可见性，原子性，但是牺牲了delay和overhead</p>
+<h2><span id="is-multi-threading-really-worth-it">Is multi-threading really worth it?</span></h2><p>多线程的目的是最大限度的利用cpu资源</p>
+<p>超线程技术本质上是把进程的线程 映射到不同的cpu core上</p>
+<h2><span id="context-switch">context switch</span></h2><p>作业数往往大于机器的CPU数，然而一颗CPU同时只能执行一项任务，为了让用户感觉这些任务正在同时进行，操作系统的设计者巧妙地利用了时间片轮转的方式，CPU给每个任务都服务一定的时间，然后把当前任务的状态保存下来，在加载下一任务的状态后，继续服务下一任务。任务的状态保存及再加载，这段过程就叫做上下文切换</p>
+<h2><span id="single-thread-vs-multi-threads">single thread vs multi threads</span></h2><p>适合单线程的场景：单个线程的工作逻辑简单，而且速度非常快，比如从内存中读取某个值，或者从Hash表根据key获得某个value。Redis和Node.js这类程序都是单线程，适合单个线程简单快速的场景。</p>
+<p>适合多线程的场景：单个线程的工作逻辑复杂，等待时间较长或者需要消耗大量系统运算资源，比如需要从多个远程服务获得数据并计算，或者图像处理。</p>
+<h1><span id="synchronized-可重入锁">synchronized (可重入锁）</span></h1><p>每个object创建时都有一个monitor</p>
+<p>Synchronization is built around an internal entity known as the intrinsic lock or monitor lock. (The API specification often refers to this entity simply as a “monitor.”) </p>
+<h2><span id="locks-in-synchronized-methods">locks in synchronized methods</span></h2><p>when a thread invokes a synchronized method, it automatically acquires the instrinsic lock for that method’s object and releases it when the method returns</p>
+<h2><span id="重点">重点</span></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MsLunch &#123;</span><br><span class="line">    private long c1 = 0;</span><br><span class="line">    private long c2 = 0;</span><br><span class="line">    private Object lock1 = new Object();</span><br><span class="line">    private Object lock2 = new Object();</span><br><span class="line"></span><br><span class="line">    public void inc1() &#123;</span><br><span class="line">        synchronized(lock1) &#123;</span><br><span class="line">            c1++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void inc2() &#123;</span><br><span class="line">        synchronized(lock2) &#123;</span><br><span class="line">            c2++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="reentrant-synchronization">Reentrant Synchronization</span></h2><p>Recall that a thread cannot acquire a lock owned by another thread. But a thread can acquire a lock that it already owns. Allowing a thread to acquire the same lock more than once enables reentrant synchronization. This describes a situation where synchronized code, directly or indirectly, invokes a method that also contains synchronized code, and both sets of code use the same lock. Without reentrant synchronization, synchronized code would have to take many additional precautions to avoid having a thread cause itself to block.</p>
+<h1><span id="synchronized和lock">synchronized和lock</span></h1><h2><span id="synchronized-的局限性">synchronized 的局限性</span></h2><p>synchronized是java内置的关键字，它提供了一种独占的加锁方式。synchronized的获取和释放锁由JVM实现，用户不需要显示的释放锁，非常方便。然而synchronized也有一定的局限性，例如：</p>
 <p>当线程尝试获取锁的时候，如果获取不到锁会一直阻塞。<br>如果获取锁的线程进入休眠或者阻塞，除非当前线程异常，否则其他线程尝试获取锁必须一直等待。</p>
 <h2><span id="lock">Lock</span></h2><p>API</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void lock();</span><br><span class="line">void lockInterruptibly() throws InterruptedException;</span><br><span class="line">boolean tryLock();</span><br><span class="line">boolean tryLock(long time, TimeUnit unit) throws InterruptedException;</span><br><span class="line">void unlock();</span><br><span class="line">Condition newCondition();</span><br></pre></td></tr></table></figure>
@@ -512,7 +525,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -525,7 +538,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -565,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Java Concurrent Package API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">synchronized和lock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">synchronized 的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">Lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">lock使用方式，需要手动释放锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">lock的类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">CopyOnWriteArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">from oracle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">from google serach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">when to use it</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">diff with  ReadWriteLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.5.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">transient</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Reentrant lock (可重入锁）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">ReadWriteLock</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Java Concurrent Package API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CAS(compare and set) – nonblockingAlgorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">Is multi-threading really worth it?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">context switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">single thread vs multi threads</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">synchronized (可重入锁）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">locks in synchronized methods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">Reentrant Synchronization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">synchronized和lock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">synchronized 的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">Lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.3.</span> <span class="nav-text">lock使用方式，需要手动释放锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.4.</span> <span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.5.</span> <span class="nav-text">lock的类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">CopyOnWriteArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">from oracle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.2.</span> <span class="nav-text">from google serach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.3.</span> <span class="nav-text">when to use it</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.4.</span> <span class="nav-text">diff with  ReadWriteLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.5.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">transient</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">Reentrant lock (可重入锁）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">ReadWriteLock</span></a></li></ol></div>
             
 
           </div>
@@ -599,7 +612,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">8.2k</span>
+    <span title="Site words total count">12.1k</span>
   
 </div>
 

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="netty," />
+  <meta name="keywords" content="linux," />
 
 
 
@@ -81,15 +81,18 @@
 
 
 
-<meta name="keywords" content="netty">
+<meta name="description" content="Linux中常见同步机制设计原理-谈谈linux中常见并发访问的保护机制设计原理 自旋锁（spin lock）自旋锁是linux中使用非常频繁的锁，原理简单。当进程A申请锁成功后，进程B申请锁就会失败，但是不会调度，原地自旋。就在原地转到天昏地暗只为等到进程A释放锁。由于不会睡眠和调度的特性，在中断上下文中，数据的保护一般都是选择自旋锁。如果有多个进程去申请锁。当第一个申请锁成功的线程在释放的时候">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="netty学习笔记chapter3">
-<meta property="og:url" content="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/index.html">
+<meta property="og:title" content="linux_sychronization">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/30/linux-sychronization/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
+<meta property="og:description" content="Linux中常见同步机制设计原理-谈谈linux中常见并发访问的保护机制设计原理 自旋锁（spin lock）自旋锁是linux中使用非常频繁的锁，原理简单。当进程A申请锁成功后，进程B申请锁就会失败，但是不会调度，原地自旋。就在原地转到天昏地暗只为等到进程A释放锁。由于不会睡眠和调度的特性，在中断上下文中，数据的保护一般都是选择自旋锁。如果有多个进程去申请锁。当第一个申请锁成功的线程在释放的时候">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-25T09:41:07.000Z">
+<meta property="og:updated_time" content="2018-07-30T08:47:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="netty学习笔记chapter3">
+<meta name="twitter:title" content="linux_sychronization">
+<meta name="twitter:description" content="Linux中常见同步机制设计原理-谈谈linux中常见并发访问的保护机制设计原理 自旋锁（spin lock）自旋锁是linux中使用非常频繁的锁，原理简单。当进程A申请锁成功后，进程B申请锁就会失败，但是不会调度，原地自旋。就在原地转到天昏地暗只为等到进程A释放锁。由于不会睡眠和调度的特性，在中断上下文中，数据的保护一般都是选择自旋锁。如果有多个进程去申请锁。当第一个申请锁成功的线程在释放的时候">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/30/linux-sychronization/"/>
 
 
 
 
 
-  <title>netty学习笔记chapter3 | Yifan Guo Personal Blog</title>
+  <title>linux_sychronization | Yifan Guo Personal Blog</title>
   
 
 
@@ -255,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/30/linux-sychronization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -272,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">netty学习笔记chapter3</h1>
+          <h1 class="post-title" itemprop="name headline">linux_sychronization</h1>
         
 
         <div class="post-meta">
@@ -284,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-25T02:40:57-07:00">
-                2018-07-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-30T01:41:38-07:00">
+                2018-07-30
               </time>
             
 
@@ -319,7 +322,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  6
                 </span>
               
             </div>
@@ -340,7 +343,17 @@
       
 
       
-        
+        <h1><span id="linux中常见同步机制设计原理">Linux中常见同步机制设计原理</span></h1><p>-谈谈linux中常见并发访问的保护机制设计原理</p>
+<h1><span id="自旋锁spin-lock">自旋锁（spin lock）</span></h1><p>自旋锁是linux中使用非常频繁的锁，原理简单。当进程A申请锁成功后，进程B申请锁就会失败，但是不会调度，原地自旋。就在原地转到天昏地暗只为等到进程A释放锁。由于不会睡眠和调度的特性，在中断上下文中，数据的保护一般都是选择自旋锁。如果有多个进程去申请锁。当第一个申请锁成功的线程在释放的时候，其他进程是竞争的关系。因此是一种不公平。所以现在的linux采用的是排队机制。先到先得。谁先申请，谁就先得到锁</p>
+<h2><span id="next-and-owner">next and owner</span></h2><p>linux中针对每一个spin lock会有两个计数。分别是next和owner（初始值为0）。进程A申请锁时，会判断next和owner的值是否相等。如果相等就代表锁可以申请成功，否则原地自旋。直到owner和next的值相等才会退出自旋。假设进程A申请锁成功，然后会next加1。此时owner值为0，next值为1。进程B也申请锁，保存next得值到局部变量tmp（tmp = 1）中。由于next和owner值不相等，因此原地自旋读取owner的值，判断owner和tmp是否相等，直到相等退出自旋状态。当然next的值还是加1，变成2。进程A释放锁，此时会将owner的值加1，那么此时B进程的owner和tmp的值都是1，因此B进程获得锁。当B进程释放锁后，同样会将owner的值加1。最后owner和next都等于2，代表没有进程持有锁。next就是一个记录申请锁的次数，而owner是持有锁进程的计数值。</p>
+<h1><span id="信号量semaphore">信号量（semaphore）</span></h1><p>信号量（semaphore）是进程间通信处理同步互斥的机制。是在多线程环境下使用的一种措施，它负责协调各个进程，以保证他们能够正确、合理的使用公共资源。 它和spin lock最大的不同之处就是：无法获取信号量的进程可以睡眠，因此会导致系统调度。</p>
+<h2><span id="原理">原理</span></h2><p>信号量一般可以用来标记可用资源的个数。老规矩，还是举个例子。假设图书馆有2本《C语言从入门到放弃》书籍。A同学想学C语言，于是发现这本书特别的好。于是就去学校的图书馆借书，A同学成功的从图书馆借走一本。这时，A同学室友B同学发现A同学竟然在偷偷的学习武功秘籍（C语言）。于是，B同学也去借一本。此时，图书馆已经没有书了。C同学也想借这本书，可能是这本书太火了。图书馆管理员告诉C同学，图书馆这本书都被借走了。如果有同学换回来，会第一时间通知你。于是，管理员就把C同学的信息登记先来，以备后续通知C同学来借书。所以，C同学只能悲伤的走了（如果是自旋锁的原理的话，那么C同学将会端个小板凳坐在图书馆，一直要等到A同学或者B同学还书并借走）。</p>
+<h1><span id="读写锁read-write-lock">读写锁（read-write lock）</span></h1><p>不管是自旋锁还是信号量在同一时间只能有一个进程进入临界区。对于有些情况，我们是可以区分读写操作的。因此，我们希望对于读操作的进程可以并发进行。对于写操作只限于一个进程进入临界区。而这种同步机制就是读写锁。读写锁一般具有以下几种性质。<br>同一时间有且仅有一个写进程进入临界区。<br>在没有写进程进入临界区的时候，同时可以有多个读进程进入临界区。<br>读进程和写进程不可以同时进入临界区。<br>读写锁有两种，一种是信号量类型，另一种是spin lock类型。下面以spin lock类型讲解。</p>
+<p>##原理<br>老规矩，还是举个例子理解读写锁。我绞尽脑汁才想到一个比较贴切的例子。这个例子来源于生活。我发现公司一般都会有保洁阿姨打扫厕所。如果以男厕所为例的话，我觉得男士进入厕所就相当于读者进入临界区。因为可以有多个男士进厕所。而保洁阿姨进入男士厕所就相当于写者进入临界区。假设A男士发现保洁阿姨不在打扫厕所，就进入厕所。随后B和C同时也进入厕所。然后保洁阿姨准备打扫厕所，发现有男士在厕所里面，因此只能在门口等待。ABC都离开了厕所。保洁阿姨迅速进入厕所打扫。然后D男士去上厕所，发现保洁阿姨在里面。灰溜溜的出来了在门口等着。现在体会到了写者（保洁阿姨）具有排他性，读者（男士）可以并发进入临界区了吧。</p>
+<p>既然我们允许多个读者进入临界区，因此我们需要一个计数统计读者的个数。同时，由于写者永远只存在一个进入临界区，因此只需要一个bit标记是否有写进程进入临界区。所以，我们可以将两个计数合二为一。只需要1个unsigned int类型即可。最高位（bit31）代表是否有写者进入临界区，低31位（0~30bit）统计读者个数。</p>
+<h1><span id="互斥量mutex">互斥量（mutex）</span></h1><p>前文提到的semaphore在初始化count计数的时候，可以分为计数信号量和互斥信号量（二值信号量）。mutex和初始化计数为1的二值信号量有很大的相似之处。他们都可以用做资源互斥。但是mutex却有一个特殊的地方：只有持锁者才能解锁。但是，二值信号量却可以在一个进程中获取信号量，在另一个进程中释放信号量。如果是应用在嵌入式应用的RTOS，针对mutex的实现还会考虑优先级反转问题。</p>
+<p>原理<br>既然mutex是一种二值信号量，因此就不需要像semaphore那样需要一个count计数。由于mutex具有“持锁者才能解锁”的特点，所以我们需要一个变量owner记录持锁进程。释放锁的时候必须是同一个进程才能释放。当然也需要一个链表头，主要用来便利睡眠等待的进程。原理和semaphore及其相似，因此在代码上也有体现。</p>
+
       
     </div>
     
@@ -357,7 +370,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/netty/" rel="tag"># netty</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
           
         </div>
       
@@ -370,8 +383,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/25/netty学习笔记chapter2/" rel="next" title="netty学习笔记chapter2">
-                <i class="fa fa-chevron-left"></i> netty学习笔记chapter2
+              <a href="/2018/07/30/linux-kernel/" rel="next" title="linux_kernel">
+                <i class="fa fa-chevron-left"></i> linux_kernel
               </a>
             
           </div>
@@ -380,8 +393,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/25/netty学习笔记chapter4/" rel="prev" title="netty学习笔记chapter4">
-                netty学习笔记chapter4 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/30/unix/" rel="prev" title="unix network programming">
+                unix network programming <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -444,8 +457,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -507,6 +529,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Linux中常见同步机制设计原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">自旋锁（spin lock）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">next and owner</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">信号量（semaphore）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">读写锁（read-write lock）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">互斥量（mutex）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -667,9 +705,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/';
-          this.page.identifier = '2018/07/25/netty学习笔记chapter3/';
-          this.page.title = 'netty学习笔记chapter3';
+          this.page.url = 'http://www.yifanguo.top/2018/07/30/linux-sychronization/';
+          this.page.identifier = '2018/07/30/linux-sychronization/';
+          this.page.title = 'linux_sychronization';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
