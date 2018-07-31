@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="concurrent," />
+  <meta name="keywords" content="lock," />
 
 
 
@@ -81,20 +81,18 @@
 
 
 
-<meta name="description" content="Overall visibility gurantee happens-before gurantee  FunctionThe Java volatile keyword guarantees visibility of changes to variables across threads.  In a multithreaded application where the threads o">
-<meta name="keywords" content="concurrent">
+<meta name="description" content="[toc] 深入理解锁机制的实现CASUnsafe中有一个method compareAndSwapInt 实现的是无锁同步的机制我们看下它是如何实现的 123456789101112131415161718192021/***         * Compares the value of the integer field at the specified offset         * i">
+<meta name="keywords" content="lock">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java_concurrent_volatile">
-<meta property="og:url" content="http://www.yifanguo.top/2018/07/24/java-concurrent-volatile/index.html">
+<meta property="og:title" content="lock">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/30/lock/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="Overall visibility gurantee happens-before gurantee  FunctionThe Java volatile keyword guarantees visibility of changes to variables across threads.  In a multithreaded application where the threads o">
+<meta property="og:description" content="[toc] 深入理解锁机制的实现CASUnsafe中有一个method compareAndSwapInt 实现的是无锁同步的机制我们看下它是如何实现的 123456789101112131415161718192021/***         * Compares the value of the integer field at the specified offset         * i">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-24%2023.25.32.png">
-<meta property="og:updated_time" content="2018-07-25T06:36:02.000Z">
+<meta property="og:updated_time" content="2018-07-30T12:09:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java_concurrent_volatile">
-<meta name="twitter:description" content="Overall visibility gurantee happens-before gurantee  FunctionThe Java volatile keyword guarantees visibility of changes to variables across threads.  In a multithreaded application where the threads o">
-<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-24%2023.25.32.png">
+<meta name="twitter:title" content="lock">
+<meta name="twitter:description" content="[toc] 深入理解锁机制的实现CASUnsafe中有一个method compareAndSwapInt 实现的是无锁同步的机制我们看下它是如何实现的 123456789101112131415161718192021/***         * Compares the value of the integer field at the specified offset         * i">
 
 
 
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/2018/07/24/java-concurrent-volatile/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/30/lock/"/>
 
 
 
 
 
-  <title>java_concurrent_volatile | Yifan Guo Personal Blog</title>
+  <title>lock | Yifan Guo Personal Blog</title>
   
 
 
@@ -260,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/24/java-concurrent-volatile/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/30/lock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -277,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java_concurrent_volatile</h1>
+          <h1 class="post-title" itemprop="name headline">lock</h1>
         
 
         <div class="post-meta">
@@ -289,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T23:24:57-07:00">
-                2018-07-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-30T04:46:26-07:00">
+                2018-07-30
               </time>
             
 
@@ -324,7 +322,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3
+                  5
                 </span>
               
             </div>
@@ -345,19 +343,25 @@
       
 
       
-        <h1><span id="overall">Overall</span></h1><ol>
-<li>visibility gurantee</li>
-<li>happens-before gurantee</li>
-</ol>
-<h1><span id="function">Function</span></h1><p>The Java volatile keyword guarantees visibility of changes to variables across threads. </p>
-<p>In a multithreaded application where the threads operate on non-volatile variables, each thread may copy variables from main memory into a CPU cache while working on them, for performance reasons. If your computer contains more than one CPU, each thread may run on a different CPU. That means, that each thread may copy the variables into the CPU cache of different CPUs.</p>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-24 23.25.32.png" alt=""></p>
-<h1><span id="hapen-before">Hapen before</span></h1><p>To address the instruction reordering challenge, the Java volatile keyword gives a “happens-before” guarantee, in addition to the visibility guarantee. The happens-before guarantee guarantees that:</p>
-<p>Reads from and writes to other variables cannot be reordered to occur after a write to a volatile variable, if the reads / writes originally occurred before the write to the volatile variable.<br>The reads / writes before a write to a volatile variable are guaranteed to “happen before” the write to the volatile variable. Notice that it is still possible for e.g. reads / writes of other variables located after a write to a volatile to be reordered to occur before that write to the volatile. Just not the other way around. From after to before is allowed, but from before to after is not allowed.<br>Reads from and writes to other variables cannot be reordered to occur before a read of a volatile variable, if the reads / writes originally occurred after the read of the volatile variable. Notice that it is possible for reads of other variables that occur before the read of a volatile variable can be reordered to occur after the read of the volatile. Just not the other way around. From before to after is allowed, but from after to before is not allowed.</p>
-<h1><span id="when-to-use">when to use</span></h1><p>if two threads are both reading and writing to a shared variable, then using the volatile keyword for that is not enough. You need to use a synchronized in that case to guarantee that the reading and writing of the variable is atomic</p>
-<p>As an alternative to a synchronized block you could also use one of the many atomic data types found in the java.util.concurrent package. For instance, the AtomicLong or AtomicReference or one of the others.</p>
-<p>In case only one thread reads and writes the value of a volatile variable and other threads only read the variable, then the reading threads are guaranteed to see the latest value written to the volatile variable. Without making the variable volatile, this would not be guaranteed.</p>
-<h1><span id="performce">Performce</span></h1><p>Reading from and writing to main memory is more expensive than accessing the CPU cache. Accessing volatile variables also prevent instruction reordering which is a normal performance enhancement technique. Thus, you should only use volatile variables when you really need to enforce visibility of variables.</p>
+        <p>[toc]</p>
+<h1><span id="深入理解锁机制的实现">深入理解锁机制的实现</span></h1><h1><span id="cas">CAS</span></h1><p>Unsafe中有一个method compareAndSwapInt 实现的是无锁同步的机制<br>我们看下它是如何实现的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/***</span><br><span class="line">         * Compares the value of the integer field at the specified offset</span><br><span class="line">         * in the supplied object with the given expected value, and updates</span><br><span class="line">         * it if they match.  The operation of this method should be atomic,</span><br><span class="line">         * thus providing an uninterruptible way of updating an integer field.</span><br><span class="line">         * 在obj的offset位置比较integer field和期望的值，如果相同则更新。这个方法</span><br><span class="line">         * 的操作应该是原子的，因此提供了一种不可中断的方式更新integer field。</span><br><span class="line">         *</span><br><span class="line">         * @param obj the object containing the field to modify.</span><br><span class="line">         *            包含要修改field的对象</span><br><span class="line">         * @param offset the offset of the integer field within &lt;code&gt;obj&lt;/code&gt;.</span><br><span class="line">         *               &lt;code&gt;obj&lt;/code&gt;中整型field的偏移量</span><br><span class="line">         * @param expect the expected value of the field.</span><br><span class="line">         *               希望field中存在的值</span><br><span class="line">         * @param update the new value of the field if it equals &lt;code&gt;expect&lt;/code&gt;.</span><br><span class="line">         *           如果期望值expect与field的当前值相同，设置filed的值为这个新值</span><br><span class="line">         * @return true if the field was changed.</span><br><span class="line">         *                             如果field的值被更改</span><br><span class="line">         */</span><br><span class="line">         </span><br><span class="line">public final native boolean compareAndSwapInt(Object var1, long var2, int var4, int var5);</span><br></pre></td></tr></table></figure>
+<p>调用了JNI，也就是说有对应的unsafe.cpp的接口 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">UNSAFE_ENTRY(jboolean, Unsafe_CompareAndSwapInt(JNIEnv *env, jobject unsafe, jobject obj, jlong offset, jint e, jint x))</span><br><span class="line">  UnsafeWrapper(&quot;Unsafe_CompareAndSwapInt&quot;);</span><br><span class="line">  oop p = JNIHandles::resolve(obj);</span><br><span class="line">  //获取对象的变量的地址</span><br><span class="line">  jint* addr = (jint *) index_oop_from_field_offset_long(p, offset);</span><br><span class="line">  //调用Atomic操作</span><br><span class="line">  //进入atomic.hpp,大意就是先去获取一次结果，如果结果和现在不同，就直接返回，因为有其他人修改了；否则会一直尝试去修改。直到成功。</span><br><span class="line">  return (jint)(Atomic::cmpxchg(x, addr, e)) == e;</span><br><span class="line">UNSAFE_END</span><br></pre></td></tr></table></figure>
+<p>再来看atomic::cmpxchg这个方法实现，这是一个c++的库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">jbyte Atomic::cmpxchg(jbyte exchange_value, volatile jbyte* dest, jbyte compare_value) &#123;</span><br><span class="line">  assert(sizeof(jbyte) == 1, &quot;assumption.&quot;);</span><br><span class="line">  uintptr_t dest_addr = (uintptr_t)dest;</span><br><span class="line">  uintptr_t offset = dest_addr % sizeof(jint);</span><br><span class="line">  volatile jint* dest_int = (volatile jint*)(dest_addr - offset);</span><br><span class="line">  jint cur = *dest_int;</span><br><span class="line">  jbyte* cur_as_bytes = (jbyte*)(&amp;cur);</span><br><span class="line">  jint new_val = cur;</span><br><span class="line">  jbyte* new_val_as_bytes = (jbyte*)(&amp;new_val);</span><br><span class="line">  new_val_as_bytes[offset] = exchange_value;</span><br><span class="line">  while (cur_as_bytes[offset] == compare_value) &#123;</span><br><span class="line">    jint res = cmpxchg(new_val, dest_int, cur);</span><br><span class="line">    if (res == cur) break;</span><br><span class="line">    cur = res;</span><br><span class="line">    new_val = cur;</span><br><span class="line">    new_val_as_bytes[offset] = exchange_value;</span><br><span class="line">  &#125;</span><br><span class="line">  return cur_as_bytes[offset];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>jint* dest_int 做了volatile，意味着值不会从cpu cache中获取，会从主内存中获取</p>
+<p>CAS是Compare And Set的缩写。CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。</p>
+<h1><span id="x86">x86</span></h1><p>CAS保证了原子性，<br>原子性定义<br>Atomic Variables. The java.util.concurrent.atomic package defines classes that support atomic operations on single variables. All classes have get and set methods that work like reads and writes on volatile variables. That is, a set has a happens-before relationship with any subsequent get on the same variable.</p>
+<p>简单来说就是原子变量一旦开始操作就不会做context switch（切换到另一个线程），直到运行结束。</p>
+<h2><span id="什么情况下适合用atomic类">什么情况下适合用atomic类</span></h2><p>Atomic classes are designed primarily as building blocks for implementing non-blocking data structures and related infrastructure classes. The compareAndSet method is not a general replacement for locking. It applies only when critical updates for an object are confined to a single variable.</p>
+<p>那么在x86架构中是如何实现的</p>
+<h1><span id="m-threads-同时-sharedcounter">M threads 同时++ sharedCounter</span></h1><p>non-volatile version:<br>add    $0x10,%ecx</p>
+<p>volatile version:<br>mov    0xc(%r10),%r8d ; Load<br>inc    %r8d           ; Increment<br>mov    %r8d,0xc(%r10) ; Store<br>lock addl $0x0,(%rsp) ; StoreLoad Barrier</p>
+<p>makes every store before the lock addl visible to other processors, and ensures that every load after the lock addl gets at least the version visible at the time it is executed. In this case, volatile gives visibility, in that each of the processors immediately gets the version from the other processors after each increment.</p>
+<p>AtomicInteger version:</p>
+<p>mov    0xc(%r11),%eax       ; Load<br>mov    %eax,%r8d<br>inc    %r8d                 ; Increment<br>lock cmpxchg %r8d,0xc(%r11) ; Compare and exchange</p>
+<p>cmpxchg:<br>Compares the value in the EAX register with the destination operand. If the two values are equal, the source operand is loaded into the destination operand. Otherwise, the destination operand is loaded into the EAX register.</p>
 
       
     </div>
@@ -375,7 +379,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/concurrent/" rel="tag"># concurrent</a>
+            <a href="/tags/lock/" rel="tag"># lock</a>
           
         </div>
       
@@ -388,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/24/netty03/" rel="next" title="netty03--bootstrap">
-                <i class="fa fa-chevron-left"></i> netty03--bootstrap
+              <a href="/2018/07/30/unix/" rel="next" title="unix network programming">
+                <i class="fa fa-chevron-left"></i> unix network programming
               </a>
             
           </div>
@@ -398,8 +402,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/24/java-basic-cloneable/" rel="prev" title="java_basic_cloneable">
-                java_basic_cloneable <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/30/WhatEveryProgrammerShouldKnowAboutMemory/" rel="prev" title="WhatEveryProgrammerShouldKnowAboutMemory">
+                WhatEveryProgrammerShouldKnowAboutMemory <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -544,7 +548,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Overall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Hapen before</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">when to use</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Performce</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">深入理解锁机制的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">x86</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">什么情况下适合用atomic类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">M threads 同时++ sharedCounter</span></a></li></ol></div>
             
 
           </div>
@@ -710,9 +714,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2018/07/24/java-concurrent-volatile/';
-          this.page.identifier = '2018/07/24/java-concurrent-volatile/';
-          this.page.title = 'java_concurrent_volatile';
+          this.page.url = 'http://www.yifanguo.top/2018/07/30/lock/';
+          this.page.identifier = '2018/07/30/lock/';
+          this.page.title = 'lock';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
