@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="reactive," />
+  <meta name="keywords" content="concurrency," />
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="what is vertxvertx is a toolkit to build reactive and distributed system reactive system principlesresponsive, elastic , resilient, asynchronous message passing to interact what is reactiveReactive pr">
-<meta name="keywords" content="reactive">
+<meta name="description" content="AQS  AbstractQueuedSynchronizer 队列同步器AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。 AQS主要提供了如下一些方法： getState()">
+<meta name="keywords" content="concurrency">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vertx.io">
-<meta property="og:url" content="http://www.yifanguo.top/2018/07/29/vertx-io/index.html">
+<meta property="og:title" content="aqs">
+<meta property="og:url" content="http://www.yifanguo.top/2018/07/31/aqs/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="what is vertxvertx is a toolkit to build reactive and distributed system reactive system principlesresponsive, elastic , resilient, asynchronous message passing to interact what is reactiveReactive pr">
+<meta property="og:description" content="AQS  AbstractQueuedSynchronizer 队列同步器AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。 AQS主要提供了如下一些方法： getState()">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-30T02:53:10.000Z">
+<meta property="og:updated_time" content="2018-08-01T06:31:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vertx.io">
-<meta name="twitter:description" content="what is vertxvertx is a toolkit to build reactive and distributed system reactive system principlesresponsive, elastic , resilient, asynchronous message passing to interact what is reactiveReactive pr">
+<meta name="twitter:title" content="aqs">
+<meta name="twitter:description" content="AQS  AbstractQueuedSynchronizer 队列同步器AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。 AQS主要提供了如下一些方法： getState()">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/2018/07/29/vertx-io/"/>
+  <link rel="canonical" href="http://www.yifanguo.top/2018/07/31/aqs/"/>
 
 
 
 
 
-  <title>vertx.io | Yifan Guo Personal Blog</title>
+  <title>aqs | Yifan Guo Personal Blog</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/29/vertx-io/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/31/aqs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -275,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vertx.io</h1>
+          <h1 class="post-title" itemprop="name headline">aqs</h1>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-29T18:35:29-07:00">
-                2018-07-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T21:43:17-07:00">
+                2018-07-31
               </time>
             
 
@@ -322,7 +322,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  4
                 </span>
               
             </div>
@@ -343,16 +343,20 @@
       
 
       
-        <h1><span id="what-is-vertx">what is vertx</span></h1><p>vertx is a toolkit to build reactive and distributed system</p>
-<h1><span id="reactive-system-principles">reactive system principles</span></h1><p>responsive, elastic , resilient, asynchronous message passing to interact</p>
-<h1><span id="what-is-reactive">what is reactive</span></h1><p>Reactive programming—A development model focusing on the observation of data streams, reacting on changes, and propagating them</p>
-<p>Reactive system—An architecture style used to build responsive and robust distributed systems based on asynchronous message-passing</p>
-<p>Reactive streams is an initiative to provide a standard for asynchronous stream processing with back-pressure. It provides a minimal set of interfaces and protocols that describe the opera‐ tions and entities to achieve the asynchronous streams of data with nonblocking back-pressure. It does not define operators manipulat‐ ing the streams, and is mainly used as an interoperability layer. This initiative is supported by Netflix, Lightbend, and Red Hat, among others.</p>
-<h1><span id="why-use-asynchronous-message-passing">why use asynchronous message-passing</span></h1><p>Using asynchronous message-passing interactions provides reactive systems with two critical properties:<br>• Elasticity—The ability to scale horizontally (scale out/in)<br>• Resilience—The ability to handle failure and recover</p>
-<h1><span id="reactive-microservices">reactive microservices</span></h1><p>##Autonomy<br>They can adapt to the avail‐ ability or unavailability of the services surrounding them. </p>
-<p>##Asynchronisity<br>A reactive microservice uses asynchronous message- passing to interact with its peers. It also receives messages and has the ability to produce responses to these messages.</p>
-<p>• Resilience<br>Resilience is not only about managing failure, it’s also about self-healing</p>
-<p>• Elasticity<br>a reactive microservice must be elastic, so the system can adapt to the number of instances to manage the load.</p>
+        <h1><span id="aqs-abstractqueuedsynchronizer-队列同步器">AQS  AbstractQueuedSynchronizer 队列同步器</span></h1><p>AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。</p>
+<p>AQS主要提供了如下一些方法：</p>
+<p>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；<br>tryAcquire(int arg)：独占式获取同步状态，获取同步状态成功后，其他线程需要等待该线程释放同步状态才能获取同步状态；<br>tryRelease(int arg)：独占式释放同步状态；<br>tryAcquireShared(int arg)：共享式获取同步状态，返回值大于等于0则表示获取成功，否则获取失败；<br>tryReleaseShared(int arg)：共享式释放同步状态；<br>isHeldExclusively()：当前同步器是否在独占式模式下被线程占用，一般该方法表示是否被当前线程所独占；<br>acquire(int arg)：独占式获取同步状态，如果当前线程获取同步状态成功，则由该方法返回，否则，将会进入同步队列等待，该方法将会调用可重写的tryAcquire(int arg)方法；<br>acquireInterruptibly(int arg)：与acquire(int arg)相同，但是该方法响应中断，当前线程为获取到同步状态而进入到同步队列中，如果当前线程被中断，则该方法会抛出InterruptedException异常并返回；<br>tryAcquireNanos(int arg,long nanos)：超时获取同步状态，如果当前线程在nanos时间内没有获取到同步状态，那么将会返回false，已经获取则返回true；<br>acquireShared(int arg)：共享式获取同步状态，如果当前线程未获取到同步状态，将会进入同步队列等待，与独占式的主要区别是在同一时刻可以有多个线程获取到同步状态；<br>acquireSharedInterruptibly(int arg)：共享式获取同步状态，响应中断；<br>tryAcquireSharedNanos(int arg, long nanosTimeout)：共享式获取同步状态，增加超时限制；<br>release(int arg)：独占式释放同步状态，该方法会在释放同步状态之后，将同步队列中第一个节点包含的线程唤醒；<br>releaseShared(int arg)：共享式释放同步状态；</p>
+<h1><span id="clh-同步队列">CLH 同步队列</span></h1><p>CLH同步队列是一个FIFO双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
+<h1><span id="locksupport">LockSupport</span></h1><p>当需要阻塞或者唤起一个线程时 aqs都是调用lockSupport来执行<br>底层是通过unsafe来实现的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public native void park(boolean var1, long var2);</span><br><span class="line">public native void unpark(Object var1);</span><br></pre></td></tr></table></figure>
+<p>unpark函数为线程提供“许可(permit)”，线程调用park函数则等待“许可”。这个有点像信号量，但是这个“许可”是不能叠加的，“许可”是一次性的。</p>
+<p>比如线程B连续调用了三次unpark函数，当线程A调用park函数就使用掉这个“许可”，如果线程A再次调用park，则进入等待状态。</p>
+<p>注意，unpark函数可以先于park调用。比如线程B调用unpark函数，给线程A发了一个“许可”，那么当线程A调用park时，它发现已经有“许可”了，那么它会马上再继续运行。</p>
+<p>实际上，park函数即使没有“许可”，有时也会无理由地返回，这点等下再解析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Parker : public os::PlatformParker &#123;</span><br><span class="line">private:</span><br><span class="line">  volatile int _counter ;</span><br><span class="line">  ...</span><br><span class="line">public:</span><br><span class="line">  void park(bool isAbsolute, jlong time);</span><br><span class="line">  void unpark();</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">class PlatformParker : public CHeapObj&lt;mtInternal&gt; &#123;</span><br><span class="line">  protected:</span><br><span class="line">    pthread_mutex_t _mutex [1] ;</span><br><span class="line">    pthread_cond_t  _cond  [1] ;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到Parker类实际上用Posix的mutex，condition来实现的。<br>在Parker类里的_counter字段，就是用来记录所谓的“许可”的。</p>
+<p>当调用park时，先尝试直接能否直接拿到“许可”，即_counter&gt;0时，如果成功，则把_counter设置为0,并返回：</p>
+<h1><span id="parker类实际上用posix的mutexcondition来实现的">Parker类实际上用Posix的mutex，condition来实现的</span></h1><h1><span id="posix">Posix</span></h1><p>POSIX表示可移植操作系统接口（Portable Operating System Interface of UNIX，缩写为 POSIX ）</p>
 
       
     </div>
@@ -370,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/reactive/" rel="tag"># reactive</a>
+            <a href="/tags/concurrency/" rel="tag"># concurrency</a>
           
         </div>
       
@@ -383,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/27/concurrency/" rel="next" title="Java Concurrent Package API">
-                <i class="fa fa-chevron-left"></i> Java Concurrent Package API
+              <a href="/2018/07/30/Atomic/" rel="next" title="Atomic">
+                <i class="fa fa-chevron-left"></i> Atomic
               </a>
             
           </div>
@@ -392,10 +396,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/29/vertxDemos/" rel="prev" title="vertxDemos">
-                vertxDemos <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -539,7 +539,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">what is vertx</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">reactive system principles</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">what is reactive</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">why use asynchronous message-passing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">reactive microservices</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">AQS  AbstractQueuedSynchronizer 队列同步器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CLH 同步队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Parker类实际上用Posix的mutex，condition来实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Posix</span></a></li></ol></div>
             
 
           </div>
@@ -705,9 +705,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2018/07/29/vertx-io/';
-          this.page.identifier = '2018/07/29/vertx-io/';
-          this.page.title = 'vertx.io';
+          this.page.url = 'http://www.yifanguo.top/2018/07/31/aqs/';
+          this.page.identifier = '2018/07/31/aqs/';
+          this.page.title = 'aqs';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://www-yifanguo-top.disqus.com/embed.js';

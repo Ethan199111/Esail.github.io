@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-07-31T05:11:36.000Z</updated>
+  <updated>2018-08-01T06:31:05.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>aqs</title>
+    <link href="http://www.yifanguo.top/2018/07/31/aqs/"/>
+    <id>http://www.yifanguo.top/2018/07/31/aqs/</id>
+    <published>2018-08-01T04:43:17.000Z</published>
+    <updated>2018-08-01T06:31:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="aqs-abstractqueuedsynchronizer-队列同步器">AQS  AbstractQueuedSynchronizer 队列同步器</span></h1><p>AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。</p><p>AQS主要提供了如下一些方法：</p><p>getState()：返回同步状态的当前值；<br>setState(int newState)：设置当前同步状态；<br>compareAndSetState(int expect, int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性；<br>tryAcquire(int arg)：独占式获取同步状态，获取同步状态成功后，其他线程需要等待该线程释放同步状态才能获取同步状态；<br>tryRelease(int arg)：独占式释放同步状态；<br>tryAcquireShared(int arg)：共享式获取同步状态，返回值大于等于0则表示获取成功，否则获取失败；<br>tryReleaseShared(int arg)：共享式释放同步状态；<br>isHeldExclusively()：当前同步器是否在独占式模式下被线程占用，一般该方法表示是否被当前线程所独占；<br>acquire(int arg)：独占式获取同步状态，如果当前线程获取同步状态成功，则由该方法返回，否则，将会进入同步队列等待，该方法将会调用可重写的tryAcquire(int arg)方法；<br>acquireInterruptibly(int arg)：与acquire(int arg)相同，但是该方法响应中断，当前线程为获取到同步状态而进入到同步队列中，如果当前线程被中断，则该方法会抛出InterruptedException异常并返回；<br>tryAcquireNanos(int arg,long nanos)：超时获取同步状态，如果当前线程在nanos时间内没有获取到同步状态，那么将会返回false，已经获取则返回true；<br>acquireShared(int arg)：共享式获取同步状态，如果当前线程未获取到同步状态，将会进入同步队列等待，与独占式的主要区别是在同一时刻可以有多个线程获取到同步状态；<br>acquireSharedInterruptibly(int arg)：共享式获取同步状态，响应中断；<br>tryAcquireSharedNanos(int arg, long nanosTimeout)：共享式获取同步状态，增加超时限制；<br>release(int arg)：独占式释放同步状态，该方法会在释放同步状态之后，将同步队列中第一个节点包含的线程唤醒；<br>releaseShared(int arg)：共享式释放同步状态；</p><h1><span id="clh-同步队列">CLH 同步队列</span></h1><p>CLH同步队列是一个FIFO双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p><h1><span id="locksupport">LockSupport</span></h1><p>当需要阻塞或者唤起一个线程时 aqs都是调用lockSupport来执行<br>底层是通过unsafe来实现的</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public native void park(boolean var1, long var2);</span><br><span class="line">public native void unpark(Object var1);</span><br></pre></td></tr></table></figure><p>unpark函数为线程提供“许可(permit)”，线程调用park函数则等待“许可”。这个有点像信号量，但是这个“许可”是不能叠加的，“许可”是一次性的。</p><p>比如线程B连续调用了三次unpark函数，当线程A调用park函数就使用掉这个“许可”，如果线程A再次调用park，则进入等待状态。</p><p>注意，unpark函数可以先于park调用。比如线程B调用unpark函数，给线程A发了一个“许可”，那么当线程A调用park时，它发现已经有“许可”了，那么它会马上再继续运行。</p><p>实际上，park函数即使没有“许可”，有时也会无理由地返回，这点等下再解析。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Parker : public os::PlatformParker &#123;</span><br><span class="line">private:</span><br><span class="line">  volatile int _counter ;</span><br><span class="line">  ...</span><br><span class="line">public:</span><br><span class="line">  void park(bool isAbsolute, jlong time);</span><br><span class="line">  void unpark();</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">class PlatformParker : public CHeapObj&lt;mtInternal&gt; &#123;</span><br><span class="line">  protected:</span><br><span class="line">    pthread_mutex_t _mutex [1] ;</span><br><span class="line">    pthread_cond_t  _cond  [1] ;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>可以看到Parker类实际上用Posix的mutex，condition来实现的。<br>在Parker类里的_counter字段，就是用来记录所谓的“许可”的。</p><p>当调用park时，先尝试直接能否直接拿到“许可”，即_counter&gt;0时，如果成功，则把_counter设置为0,并返回：</p><h1><span id="parker类实际上用posix的mutexcondition来实现的">Parker类实际上用Posix的mutex，condition来实现的</span></h1><h1><span id="posix">Posix</span></h1><p>POSIX表示可移植操作系统接口（Portable Operating System Interface of UNIX，缩写为 POSIX ）</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;aqs-abstractqueuedsynchronizer-队列同步器&quot;&gt;AQS  AbstractQueuedSynchronizer 队列同步器&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线
+      
+    
+    </summary>
+    
+    
+      <category term="concurrency" scheme="http://www.yifanguo.top/tags/concurrency/"/>
+    
+  </entry>
   
   <entry>
     <title>Atomic</title>
@@ -443,22 +466,6 @@
       
         &lt;h1&gt;&lt;span id=&quot;netty-chapter4&quot;&gt;netty chapter4&lt;/span&gt;&lt;/h1&gt;&lt;p&gt;TCP底层并不了解上层业务数据的具体含义&lt;br&gt;它会根据tcp缓冲区的实际情况进行包的划分&lt;br&gt;所以一个完整的包可能会被tcp拆分成多个包进行发送&lt;br&gt;也有可
       
-    
-    </summary>
-    
-    
-      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>netty学习笔记chapter3</title>
-    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0chapter3/"/>
-    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记chapter3/</id>
-    <published>2018-07-25T09:40:57.000Z</published>
-    <updated>2018-07-25T09:41:07.000Z</updated>
-    
-    <summary type="html">
     
     </summary>
     
