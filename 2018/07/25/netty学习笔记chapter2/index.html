@@ -81,20 +81,18 @@
 
 
 
-<meta name="description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
+<meta name="description" content="netty chapter2 传统的BIO编程 网络编程的基本模式是c/s client/server。 实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port 客户端通过connect向server的port send request 通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server s">
 <meta name="keywords" content="netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty学习笔记chapter2">
 <meta property="og:url" content="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter2/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
+<meta property="og:description" content="netty chapter2 传统的BIO编程 网络编程的基本模式是c/s client/server。 实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port 客户端通过connect向server的port send request 通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server s">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2002.17.19.png">
 <meta property="og:updated_time" content="2018-07-25T09:39:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty学习笔记chapter2">
-<meta name="twitter:description" content="netty chapter2传统的BIO编程网络编程的基本模式是c/s client/server。实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port客户端通过connect向server的port send request通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server socket">
-<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2002.17.19.png">
+<meta name="twitter:description" content="netty chapter2 传统的BIO编程 网络编程的基本模式是c/s client/server。 实际处理的就是两个进程之间的通信问题 其中server提供位置信息 ipaddress+port 客户端通过connect向server的port send request 通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信 在基于传统同步阻塞模型开发中，server s">
 
 
 
@@ -345,18 +343,32 @@
       
 
       
-        <h1><span id="netty-chapter2">netty chapter2</span></h1><h2><span id="传统的bio编程">传统的BIO编程</span></h2><p>网络编程的基本模式是c/s client/server。<br>实际处理的就是两个进程之间的通信问题</p>
-<p>其中server提供位置信息 ipaddress+port<br>客户端通过connect向server的port send request<br>通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p>
-<p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口<br>sokcet负责发起连接操作。<br>连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
-<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2><p>buffer是一个object 它包含一些要写入或者要读出的data</p>
+        <h1><span id="netty-chapter2">netty chapter2</span></h1>
+<h2><span id="传统的bio编程">传统的BIO编程</span></h2>
+<p>网络编程的基本模式是c/s client/server。
+实际处理的就是两个进程之间的通信问题</p>
+<p>其中server提供位置信息 ipaddress+port
+客户端通过connect向server的port send request
+通过三次握手建立连接 如果连接成功，双方就可以通过socket 进行通信</p>
+<p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口
+sokcet负责发起连接操作。
+连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
+<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2>
+<p>buffer是一个object 它包含一些要写入或者要读出的data</p>
 <p>NIO中所有data都是通过buffer处理</p>
 <p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p>
-<p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer<br>mappedbytebuffer<br>每一个都是buffer接口的instance 操作完全一样</p>
-<h2><span id="channel">channel</span></h2><p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
-<p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动<br>（如inputstream outputstream都是stream的instance 单方向）</p>
-<h2><span id="selector">selector</span></h2><p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，<br>会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
+<p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer
+mappedbytebuffer
+每一个都是buffer接口的instance 操作完全一样</p>
+<h2><span id="channel">channel</span></h2>
+<p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
+<p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动
+（如inputstream outputstream都是stream的instance 单方向）</p>
+<h2><span id="selector">selector</span></h2>
+<p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，
+会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
 <p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png" alt=""></p>
+<p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-25 02.17.19.png)</p>
 <p>NIO server通信时序图</p>
 <ol>
 <li>打开serverSokcetChannel,用于监听客户端的connection,它是所有client connection的父管道</li>
@@ -372,7 +384,8 @@
 <li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li>
 <li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li>
 </ol>
-<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2><ol>
+<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2>
+<ol>
 <li>开发出高质量的NIO程序不简单</li>
 <li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li>
 <li>跟踪和检测困难</li>
@@ -510,7 +523,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -597,7 +610,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.3k</span>
+    <span title="Site words total count">27.0k</span>
   
 </div>
 

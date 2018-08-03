@@ -81,21 +81,17 @@
 
 
 
-<meta name="description" content="ByteBufferbytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
+<meta name="description" content="ByteBuffer bytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
 <meta property="og:type" content="website">
 <meta property="og:title" content="netty源码解读">
 <meta property="og:url" content="http://www.yifanguo.top/netty/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="ByteBufferbytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
+<meta property="og:description" content="ByteBuffer bytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2019.20.31.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2019.53.16.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2020.04.25.png">
 <meta property="og:updated_time" content="2018-07-26T03:24:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty源码解读">
-<meta name="twitter:description" content="ByteBufferbytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
-<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2019.20.31.png">
+<meta name="twitter:description" content="ByteBuffer bytebuffer的缺点： 123451. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（）">
 
 
 
@@ -266,33 +262,57 @@
       <div class="post-body">
         
         
-          <h1><span id="bytebuffer">ByteBuffer</span></h1><p>bytebuffer的缺点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception</span><br><span class="line"></span><br><span class="line">2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（） 使用者需要小心调用这些api</span><br><span class="line"></span><br><span class="line">3. bytebuffer的API功能有限，高级功能需要开发者自己实现</span><br></pre></td></tr></table></figure>
-<h1><span id="bytebuf的工作原理">ByteBuf的工作原理</span></h1><p>writeindex readindex<br>discardReadBytes会发生字节数组的内存复制 调用可以节省内存，但是降低性能。</p>
-<h1><span id="bytebuf实现">ByteBuf实现</span></h1><h2><span id="heapbytebuf">HeapByteBuf</span></h2><p>内存的分配和回收速度快，可以被jvm自动回收<br>缺点： 如果进行socket的i/o读写，需要额外做一次内存复制，将heap内存对应的buffer复制到内核channel中，性能会有一定成的下降</p>
-<h2><span id="directbytebuf-直接内存">DirectByteBuf 直接内存</span></h2><p>堆外内存，相比而言，它的分配和回收速度会慢一些，但是将它写入或者从socket channel中读取时，由于少了一次内存复制，速度比堆内存快</p>
-<p>i/o通信线程的wirte/read缓冲区使用directByteBuf<br>back-end的消息encoding和decoding用heapByteBuf</p>
-<h1><span id="内存回收">内存回收</span></h1><h2><span id="对象池bytebuf">对象池byteBuf</span></h2><p>可以循环使用创建的bytebuf, 提升内存使用率</p>
-<h1><span id="abstractbybuf">AbstractByBuf</span></h1><p>写操作<br>4M 以内 倍增， 64byte – 128byte<br>4M以后 步进，一次增加4MB</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public int calculateNewCapacity(int minNewCapacity, int maxCapacity) &#123;</span><br><span class="line">        if (minNewCapacity &lt; 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;minNewCapacity: &quot; + minNewCapacity + &quot; (expected: 0+)&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (minNewCapacity &gt; maxCapacity) &#123;</span><br><span class="line">            throw new IllegalArgumentException(String.format(</span><br><span class="line">                    &quot;minNewCapacity: %d (expected: not greater than maxCapacity(%d)&quot;,</span><br><span class="line">                    minNewCapacity, maxCapacity));</span><br><span class="line">        &#125;</span><br><span class="line">        final int threshold = CALCULATE_THRESHOLD; // 4 MiB page</span><br><span class="line"></span><br><span class="line">        if (minNewCapacity == threshold) &#123;</span><br><span class="line">            return threshold;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // If over threshold, do not double but just increase by threshold.</span><br><span class="line">        if (minNewCapacity &gt; threshold) &#123;</span><br><span class="line">            int newCapacity = minNewCapacity / threshold * threshold;</span><br><span class="line">            if (newCapacity &gt; maxCapacity - threshold) &#123;</span><br><span class="line">                newCapacity = maxCapacity;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                newCapacity += threshold;</span><br><span class="line">            &#125;</span><br><span class="line">            return newCapacity;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // Not over threshold. Double up to 4 MiB, starting from 64.</span><br><span class="line">        int newCapacity = 64;</span><br><span class="line">        while (newCapacity &lt; minNewCapacity) &#123;</span><br><span class="line">            newCapacity &lt;&lt;= 1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return Math.min(newCapacity, maxCapacity);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+          <h1><span id="bytebuffer">ByteBuffer</span></h1>
+<p>bytebuffer的缺点：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. bytebuffer长度固定，一旦分配完成，它的容量不能动态扩展和收缩，当需要编码的pojo object大于bytebuffer的容量时，不发生indexoutofbound exception</span><br><span class="line"></span><br><span class="line">2. bytebuffer 只有一个标识位置的指针position， 读写的时候需要manually 调用flip()和rewind（） 使用者需要小心调用这些api</span><br><span class="line"></span><br><span class="line">3. bytebuffer的API功能有限，高级功能需要开发者自己实现</span><br></pre></td></tr></table></figure></p>
+<h1><span id="bytebuf的工作原理">ByteBuf的工作原理</span></h1>
+<p>writeindex readindex
+discardReadBytes会发生字节数组的内存复制 调用可以节省内存，但是降低性能。</p>
+<h1><span id="bytebuf实现">ByteBuf实现</span></h1>
+<h2><span id="heapbytebuf">HeapByteBuf</span></h2>
+<p>内存的分配和回收速度快，可以被jvm自动回收
+缺点： 如果进行socket的i/o读写，需要额外做一次内存复制，将heap内存对应的buffer复制到内核channel中，性能会有一定成的下降</p>
+<h2><span id="directbytebuf-直接内存">DirectByteBuf 直接内存</span></h2>
+<p>堆外内存，相比而言，它的分配和回收速度会慢一些，但是将它写入或者从socket channel中读取时，由于少了一次内存复制，速度比堆内存快</p>
+<p>i/o通信线程的wirte/read缓冲区使用directByteBuf
+back-end的消息encoding和decoding用heapByteBuf</p>
+<h1><span id="内存回收">内存回收</span></h1>
+<h2><span id="对象池bytebuf">对象池byteBuf</span></h2>
+<p>可以循环使用创建的bytebuf, 提升内存使用率</p>
+<h1><span id="abstractbybuf">AbstractByBuf</span></h1>
+<p>写操作
+4M 以内 倍增， 64byte -- 128byte
+4M以后 步进，一次增加4MB</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public int calculateNewCapacity(int minNewCapacity, int maxCapacity) &#123;</span><br><span class="line">        if (minNewCapacity &lt; 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;minNewCapacity: &quot; + minNewCapacity + &quot; (expected: 0+)&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (minNewCapacity &gt; maxCapacity) &#123;</span><br><span class="line">            throw new IllegalArgumentException(String.format(</span><br><span class="line">                    &quot;minNewCapacity: %d (expected: not greater than maxCapacity(%d)&quot;,</span><br><span class="line">                    minNewCapacity, maxCapacity));</span><br><span class="line">        &#125;</span><br><span class="line">        final int threshold = CALCULATE_THRESHOLD; // 4 MiB page</span><br><span class="line"></span><br><span class="line">        if (minNewCapacity == threshold) &#123;</span><br><span class="line">            return threshold;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // If over threshold, do not double but just increase by threshold.</span><br><span class="line">        if (minNewCapacity &gt; threshold) &#123;</span><br><span class="line">            int newCapacity = minNewCapacity / threshold * threshold;</span><br><span class="line">            if (newCapacity &gt; maxCapacity - threshold) &#123;</span><br><span class="line">                newCapacity = maxCapacity;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                newCapacity += threshold;</span><br><span class="line">            &#125;</span><br><span class="line">            return newCapacity;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // Not over threshold. Double up to 4 MiB, starting from 64.</span><br><span class="line">        int newCapacity = 64;</span><br><span class="line">        while (newCapacity &lt; minNewCapacity) &#123;</span><br><span class="line">            newCapacity &lt;&lt;= 1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return Math.min(newCapacity, maxCapacity);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>CAS： compareAnsSet是由操作系统层面提供的原子操作</p>
-<h1><span id="pooledbytebuf内存池原理分析">PooledByteBuf内存池原理分析</span></h1><p>预先申请的那一块内存就被称为memory arena</p>
+<h1><span id="pooledbytebuf内存池原理分析">PooledByteBuf内存池原理分析</span></h1>
+<p>预先申请的那一块内存就被称为memory arena</p>
 <p>Poolarena</p>
 <p>poolChunk</p>
-<p>chunk用来组织和管理多个page内存分配和释放<br>chunk中的page被构建成一颗binary tree</p>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 19.20.31.png" alt=""></p>
-<p>page的大小是4 byte<br>chunk的大小是4*16 </p>
+<p>chunk用来组织和管理多个page内存分配和释放
+chunk中的page被构建成一颗binary tree</p>
+<p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-25 19.20.31.png)</p>
+<p>page的大小是4 byte
+chunk的大小是4*16</p>
 <p>对树的遍历采用dfs，但是对哪个字节点继续遍历是随机的</p>
-<h1><span id="channelpipeline-和-channelhandler">ChannelPipeline 和 ChannelHandler</span></h1><p>ChannelPipelin 和ChannelHandler机制类似于 servlet 和filter </p>
-<p>servlet filter<br>可以声明的方式插入到http请求响应的处理过程中，用于拦截请求和响应，以便能够查看 提取或以某种方式<br>操作正在客户端和服务器之间的交换数据。</p>
+<h1><span id="channelpipeline-和-channelhandler">ChannelPipeline 和 ChannelHandler</span></h1>
+<p>ChannelPipelin 和ChannelHandler机制类似于 servlet 和filter</p>
+<p>servlet filter
+可以声明的方式插入到http请求响应的处理过程中，用于拦截请求和响应，以便能够查看 提取或以某种方式
+操作正在客户端和服务器之间的交换数据。</p>
 <p>拦截器封装了业务定制逻辑，能够实现对web应用程序的预处理和事后处理</p>
-<h1><span id="架构">架构</span></h1><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 19.53.16.png" alt=""></p>
-<h1><span id="链路有效性检测">链路有效性检测</span></h1><p>由于长连接不需要每次发送消息都创建链路，也不需要在消息交互完成时关闭链路，因此相对于短连接性能更高</p>
+<h1><span id="架构">架构</span></h1>
+<p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-25 19.53.16.png)</p>
+<h1><span id="链路有效性检测">链路有效性检测</span></h1>
+<p>由于长连接不需要每次发送消息都创建链路，也不需要在消息交互完成时关闭链路，因此相对于短连接性能更高</p>
 <p>对于长连接，一旦链路建立成功便一直维系双方之间的链路，直到系统退出</p>
 <p>为了保证长连接的链路有效性，往往需要通过心跳机制周期性的进行链路检测</p>
-<p># </p>
-<h1><span id="java内存模型">java内存模型</span></h1><p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 20.04.25.png" alt=""></p>
-<h1><span id="cas">CAS</span></h1><p>互斥同步最主要的问题就是进行线程阻塞和唤醒所带来的性能的额外损耗，因此这种同步被称为阻塞同步<br>它属于一种悲观的并发策略，悲观锁</p>
+<h1><span id=""></span></h1>
+<h1><span id="java内存模型">java内存模型</span></h1>
+<p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-25 20.04.25.png)</p>
+<h1><span id="cas">CAS</span></h1>
+<p>互斥同步最主要的问题就是进行线程阻塞和唤醒所带来的性能的额外损耗，因此这种同步被称为阻塞同步
+它属于一种悲观的并发策略，悲观锁</p>
 <p>非阻塞同步 乐观锁</p>
 <p>java应用最广泛的非阻塞同步是CAS</p>
 
@@ -376,7 +396,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -429,7 +449,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">ByteBuffer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">ByteBuf的工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">ByteBuf实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">HeapByteBuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">DirectByteBuf 直接内存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">内存回收</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">对象池byteBuf</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">AbstractByBuf</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">PooledByteBuf内存池原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">ChannelPipeline 和 ChannelHandler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">链路有效性检测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">CAS</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">ByteBuffer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">ByteBuf的工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">ByteBuf实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">HeapByteBuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">DirectByteBuf 直接内存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">内存回收</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">对象池byteBuf</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">AbstractByBuf</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">PooledByteBuf内存池原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">ChannelPipeline 和 ChannelHandler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">链路有效性检测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">CAS</span></a></li></ol></div>
             
 
           </div>
@@ -463,7 +483,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.3k</span>
+    <span title="Site words total count">27.0k</span>
   
 </div>
 

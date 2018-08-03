@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="chapter 6java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣1 是否支持跨语言2 编码后的码流大小3 编解码的性能">
+<meta name="description" content="chapter 6 java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以 但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣 1 是否支持跨语言 2 编码后的码流大小 3 编">
 <meta name="keywords" content="netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty学习笔记Chapter6">
 <meta property="og:url" content="http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter6/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="chapter 6java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣1 是否支持跨语言2 编码后的码流大小3 编解码的性能">
+<meta property="og:description" content="chapter 6 java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以 但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣 1 是否支持跨语言 2 编码后的码流大小 3 编">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-07-25T15:21:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty学习笔记Chapter6">
-<meta name="twitter:description" content="chapter 6java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣1 是否支持跨语言2 编码后的码流大小3 编解码的性能">
+<meta name="twitter:description" content="chapter 6 java序列化的目的主要有两个：  网络传输 对象持久化  java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以 但是rpc很少使用java序列化来进行消息的encoding 和decoding 原因  无法跨语言 序列化后码流太大  评判编解码框架优劣 1 是否支持跨语言 2 编码后的码流大小 3 编">
 
 
 
@@ -343,26 +343,36 @@
       
 
       
-        <h1><span id="chapter-6">chapter 6</span></h1><p>java序列化的目的主要有两个：</p>
+        <h1><span id="chapter-6">chapter 6</span></h1>
+<p>java序列化的目的主要有两个：</p>
 <ol>
 <li>网络传输</li>
 <li>对象持久化</li>
 </ol>
-<p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以<br>但是rpc很少使用java序列化来进行消息的encoding 和decoding</p>
+<p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以
+但是rpc很少使用java序列化来进行消息的encoding 和decoding</p>
 <p>原因</p>
 <ol>
 <li>无法跨语言</li>
 <li>序列化后码流太大</li>
 </ol>
-<p>评判编解码框架优劣<br>1 是否支持跨语言<br>2 编码后的码流大小<br>3 编解码的性能<br>4 类库是否小巧，API使用是否方便<br>5 使用者需要手工快发的工作量和难度</p>
-<h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1><h2><span id="google的protobuf">Google的protobuf</span></h2><p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p>
+<p>评判编解码框架优劣
+1 是否支持跨语言
+2 编码后的码流大小
+3 编解码的性能
+4 类库是否小巧，API使用是否方便
+5 使用者需要手工快发的工作量和难度</p>
+<h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1>
+<h2><span id="google的protobuf">Google的protobuf</span></h2>
+<p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p>
 <ol>
 <li>结构化数据存储格式 xml json</li>
 <li>高效的encoding decoding性能</li>
 <li>语言无关，平台无关，扩展性好</li>
 <li>支持java c++ python</li>
 </ol>
-<h2><span id="facebook的thrift">Facebook的Thrift</span></h2><ol>
+<h2><span id="facebook的thrift">Facebook的Thrift</span></h2>
+<ol>
 <li>语言系统以及IDL编译器，负责由用户给定的IDL文件生成相应语言的接口代码</li>
 <li>Tprotocol: rpc协议层，可以选择多种不同的对象序列化方式 如json 和binary</li>
 <li>TTransport： RPC传输层，可以选择不同的传输层实现 如socket, NIO. memoryBuffer</li>
@@ -502,7 +512,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -589,7 +599,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.3k</span>
+    <span title="Site words total count">27.0k</span>
   
 </div>
 

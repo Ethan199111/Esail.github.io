@@ -81,20 +81,18 @@
 
 
 
-<meta name="description" content="netty chapter4TCP底层并不了解上层业务数据的具体含义它会根据tcp缓冲区的实际情况进行包的划分所以一个完整的包可能会被tcp拆分成多个包进行发送也有可能把多个小的包封装成一个大的数据包发送这就是tcp 粘包和拆包的问题 问题产生的原因 application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大于mtu进行">
+<meta name="description" content="netty chapter4 TCP底层并不了解上层业务数据的具体含义 它会根据tcp缓冲区的实际情况进行包的划分 所以一个完整的包可能会被tcp拆分成多个包进行发送 也有可能把多个小的包封装成一个大的数据包发送 这就是tcp 粘包和拆包的问题 问题产生的原因  application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大">
 <meta name="keywords" content="netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty学习笔记chapter4">
 <meta property="og:url" content="http://www.yifanguo.top/2018/07/25/netty学习笔记chapter4/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="netty chapter4TCP底层并不了解上层业务数据的具体含义它会根据tcp缓冲区的实际情况进行包的划分所以一个完整的包可能会被tcp拆分成多个包进行发送也有可能把多个小的包封装成一个大的数据包发送这就是tcp 粘包和拆包的问题 问题产生的原因 application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大于mtu进行">
+<meta property="og:description" content="netty chapter4 TCP底层并不了解上层业务数据的具体含义 它会根据tcp缓冲区的实际情况进行包的划分 所以一个完整的包可能会被tcp拆分成多个包进行发送 也有可能把多个小的包封装成一个大的数据包发送 这就是tcp 粘包和拆包的问题 问题产生的原因  application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2003.23.27.png">
 <meta property="og:updated_time" content="2018-07-25T10:30:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty学习笔记chapter4">
-<meta name="twitter:description" content="netty chapter4TCP底层并不了解上层业务数据的具体含义它会根据tcp缓冲区的实际情况进行包的划分所以一个完整的包可能会被tcp拆分成多个包进行发送也有可能把多个小的包封装成一个大的数据包发送这就是tcp 粘包和拆包的问题 问题产生的原因 application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大于mtu进行">
-<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/屏幕快照%202018-07-25%2003.23.27.png">
+<meta name="twitter:description" content="netty chapter4 TCP底层并不了解上层业务数据的具体含义 它会根据tcp缓冲区的实际情况进行包的划分 所以一个完整的包可能会被tcp拆分成多个包进行发送 也有可能把多个小的包封装成一个大的数据包发送 这就是tcp 粘包和拆包的问题 问题产生的原因  application write写入的字节大小大于socket发送缓冲区的大小 进行mss大小的tcp分段 以太网帧的payload大">
 
 
 
@@ -345,13 +343,19 @@
       
 
       
-        <h1><span id="netty-chapter4">netty chapter4</span></h1><p>TCP底层并不了解上层业务数据的具体含义<br>它会根据tcp缓冲区的实际情况进行包的划分<br>所以一个完整的包可能会被tcp拆分成多个包进行发送<br>也有可能把多个小的包封装成一个大的数据包发送<br>这就是tcp 粘包和拆包的问题</p>
-<h1><span id="问题产生的原因">问题产生的原因</span></h1><ol>
+        <h1><span id="netty-chapter4">netty chapter4</span></h1>
+<p>TCP底层并不了解上层业务数据的具体含义
+它会根据tcp缓冲区的实际情况进行包的划分
+所以一个完整的包可能会被tcp拆分成多个包进行发送
+也有可能把多个小的包封装成一个大的数据包发送
+这就是tcp 粘包和拆包的问题</p>
+<h1><span id="问题产生的原因">问题产生的原因</span></h1>
+<ol>
 <li>application write写入的字节大小大于socket发送缓冲区的大小</li>
 <li>进行mss大小的tcp分段</li>
 <li>以太网帧的payload大于mtu进行ip分片</li>
 </ol>
-<p><img src="/Users/yifanguo/Desktop/屏幕快照 2018-07-25 03.23.27.png" alt=""></p>
+<p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-25 03.23.27.png)</p>
 <p>这个问题只能通过上层的应用协议stack来解决</p>
 <ol>
 <li>消息定长，每个msg大小为固定的200byte,如果不够，空位补空格</li>
@@ -359,7 +363,8 @@
 <li>将消息分为消息头和消息体，消息头中包含表示消息总长度的字段，通常设计思路为消息头的第一个字段使用int32表示消息的总长度</li>
 <li>更复杂的应用层协议</li>
 </ol>
-<h1><span id="netty如何解决">netty如何解决</span></h1><p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>
+<h1><span id="netty如何解决">netty如何解决</span></h1>
+<p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>
 
       
     </div>
@@ -493,7 +498,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -580,7 +585,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.3k</span>
+    <span title="Site words total count">27.0k</span>
   
 </div>
 
