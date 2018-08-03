@@ -349,7 +349,7 @@
 
       
         <p>[toc]</p>
-<h1><span id="linux-kernel">linux kernel</span></h1>
+<h1 id="linux-kernel">linux kernel</h1>
 <ol>
 <li>
 <p>Process Scheduler，也称作进程管理、进程调度。负责管理CPU资源，以便让各个进程可以以尽量公平的方式访问CPU。</p>
@@ -367,7 +367,7 @@
 <p>IPC（Inter-Process Communication），进程间通信。IPC不管理任何的硬件，它主要负责Linux系统中进程之间的通信。</p>
 </li>
 </ol>
-<h1><span id="process-scheduler">Process Scheduler</span></h1>
+<h1 id="process-scheduler">Process Scheduler</h1>
 <p>进程调度是Linux内核中最重要的子系统，它主要提供对CPU的访问控制。因为在计算机中，CPU资源是有限的，而众多的应用程序都要使用CPU资源，所以需要“进程调度子系统”对CPU进行调度管理。</p>
 <p><img src="linux.png" alt=""></p>
 <ol>
@@ -384,7 +384,7 @@
 <p>System Call Interface，系统调用接口。进程调度子系统通过系统调用接口，将需要提供给用户空间的接口开放出去，同时屏蔽掉不需要用户空间程序关心的细节。</p>
 </li>
 </ol>
-<h1><span id="memory-manager">Memory Manager</span></h1>
+<h1 id="memory-manager">Memory Manager</h1>
 <p><img src="mm.png" alt=""></p>
 <ol>
 <li>
@@ -397,7 +397,7 @@
 <p>System Call Interface，系统调用接口。通过该接口，向用户空间程序应用程序提供内存的分配、释放，文件的map等功能。</p>
 </li>
 </ol>
-<h1><span id="虚拟文件系统virtual-filesystem-vfs">虚拟文件系统（Virtual Filesystem, VFS）</span></h1>
+<h1 id="虚拟文件系统virtual-filesystem-vfs">虚拟文件系统（Virtual Filesystem, VFS）</h1>
 <p><img src="vfs.png" alt=""></p>
 <ol>
 <li>
@@ -416,7 +416,7 @@
 <p>System Call Interface，系统调用接口，向用户空间提供访问文件系统和硬件设备的统一的接口。</p>
 </li>
 </ol>
-<h1><span id="网络子系统net">网络子系统（Net）</span></h1>
+<h1 id="网络子系统net">网络子系统（Net）</h1>
 <p><img src="net.png" alt=""></p>
 <ol>
 <li>
@@ -435,7 +435,7 @@
 <p>System Call interface，系统调用接口，向用户空间提供访问网络设备的统一的接口。</p>
 </li>
 </ol>
-<h1><span id="linux内核源代码的目录结构">Linux内核源代码的目录结构</span></h1>
+<h1 id="linux内核源代码的目录结构">Linux内核源代码的目录结构</h1>
 <ol>
 <li>
 <p>内核核心代码，包括第3章所描述的各个子系统和子模块，以及其它的支撑子系统，例如电源管理、Linux初始化等</p>
@@ -633,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">linux kernel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Process Scheduler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Memory Manager</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">虚拟文件系统（Virtual Filesystem, VFS）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">网络子系统（Net）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Linux内核源代码的目录结构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux-kernel"><span class="nav-number">1.</span> <span class="nav-text">linux kernel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#process-scheduler"><span class="nav-number">2.</span> <span class="nav-text">Process Scheduler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#memory-manager"><span class="nav-number">3.</span> <span class="nav-text">Memory Manager</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟文件系统virtual-filesystem-vfs"><span class="nav-number">4.</span> <span class="nav-text">虚拟文件系统（Virtual Filesystem, VFS）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络子系统net"><span class="nav-number">5.</span> <span class="nav-text">网络子系统（Net）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#linux内核源代码的目录结构"><span class="nav-number">6.</span> <span class="nav-text">Linux内核源代码的目录结构</span></a></li></ol></div>
             
 
           </div>

@@ -352,20 +352,20 @@
       
 
       
-        <h1><span id="超线程">超线程</span></h1>
+        <h1 id="超线程">超线程</h1>
 <p>refer: https://www.cnblogs.com/Amaranthus/archive/2013/07/09/3180036.html
 Hyper-threading enables a single processor core to be used for two or more concurrent executions with just a little extra hardware.</p>
-<h1><span id="现代计算机的架构">现代计算机的架构</span></h1>
+<h1 id="现代计算机的架构">现代计算机的架构</h1>
 <p>主要有两个部分组成，南北桥
 <img src="nsbridge.png" alt=""></p>
 <p>All CPUs (two in the previous example, but there can be more) are connected via a common bus (the Front Side Bus, FSB) to the Northbridge.</p>
 <p>所有的cpu都通过fsb连接到北桥 <strong>fsb已经被qpi淘汰</strong></p>
-<h2><span id="北桥">北桥</span></h2>
+<h2 id="北桥">北桥</h2>
 <p>The Northbridge contains, among other things, the memory controller, and its im- plementation determines the type of RAM chips used for the computer. Different types of RAM, such as DRAM, Rambus, and SDRAM, require different memory con- trollers.</p>
 <p>北桥包含了内存控制器，决定了RAM(random access memory)的类型</p>
 <p>To reach all other system devices, the Northbridge must communicate with the Southbridge.
 为了接触到其他的devices, 北桥必须和南桥通信</p>
-<h2><span id="南桥">南桥</span></h2>
+<h2 id="南桥">南桥</h2>
 <p>南桥又被称为  I/O bridge 通过一系列的bus和其他devices通信</p>
 <p>the PCI, PCI Express, SATA, and USB buses are of most importance, but PATA, IEEE 1394, serial, and par- allel ports are also supported by the Southbridge.</p>
 <p>However, today the PCI-E slots are all connected to the Southbridge.</p>
@@ -379,17 +379,17 @@ https://www.intel.com/content/www/us/en/io/quickpath-technology/quick-path-inter
 <p>QPI will be replaced by Intel UltraPath Interconnect (UPI) in future Skylake EX/EP Xeon processors based on LGA 3647 socket.[5]</p>
 <p>QPI也要被淘汰...</p>
 <p>the QuickPath Architecture assumes that the processors will have integrated memory controllers, and enables a non-uniform memory access (NUMA) architecture.</p>
-<h2><span id="all-communication-with-ram-must-pass-through-the-northbridge">All communication with RAM must pass through the Northbridge.</span></h2>
-<h2><span id="the-ram-has-only-a-single-port">The RAM has only a single port</span></h2>
-<h2><span id="communication-between-a-cpu-and-a-device-at-tached-to-the-southbridge-is-routed-through-the-northbridge">Communication between a CPU and a device at- tached to the Southbridge is routed through the Northbridge.</span></h2>
-<h1><span id="dma-direct-memory-access">DMA direct memory access</span></h1>
+<h2 id="all-communication-with-ram-must-pass-through-the-northbridge">All communication with RAM must pass through the Northbridge.</h2>
+<h2 id="the-ram-has-only-a-single-port">The RAM has only a single port</h2>
+<h2 id="communication-between-a-cpu-and-a-device-at-tached-to-the-southbridge-is-routed-through-the-northbridge">Communication between a CPU and a device at- tached to the Southbridge is routed through the Northbridge.</h2>
+<h1 id="dma-direct-memory-access">DMA direct memory access</h1>
 <p>DMA allows devices, with the help of the Northbridge, to store and receive data in RAM directly without the intervention of the CPU (and its inherent performance cost).</p>
 <p>it also creates contention for the bandwidth of the Northbridge as DMA requests compete with RAM access from the CPUs.</p>
 <ol>
 <li>DMA允许设备直接和RAM交互</li>
 <li>DMA会和CPU抢夺北桥带宽</li>
 </ol>
-<h1><span id="第二个bottleneck">第二个bottleneck</span></h1>
+<h1 id="第二个bottleneck">第二个bottleneck</h1>
 <p>recent RAM types require two sep- arate buses (or channels as they are called for DDR2, see page 8) which doubles the available bandwidth.</p>
 <p>北桥和RAM之间的总线所以出现了双通道（可以实现带宽加倍，内存访问在两个通道上交错分配）</p>
 <p>北桥自身不带内存控制器，而是连接到外部多个内存控制器上，好处是支持更多的内存，可以同时访问不同的内存区，降低了延迟，但是对北桥的内部带宽要求巨大。
@@ -403,19 +403,19 @@ Intel will have support for the Common System Interface (CSI) starting with the 
 <p><img src="imc.png" alt=""></p>
 <p>优点：不需要北桥庞大的带宽
 缺点：memory is not uniform ( numa- non uniform memroy architecture)</p>
-<h1><span id="ram-types">RAM types</span></h1>
+<h1 id="ram-types">RAM types</h1>
 <p>RAM主要分为2类静态RAM，动态RAM，前者速度快，代价搞，后者速度慢代价低</p>
 <p>SRAM 比DRAM 更贵</p>
-<h1><span id="static-ram">static RAM</span></h1>
+<h1 id="static-ram">static RAM</h1>
 <p><img src="SRAM.png" alt=""></p>
 <p>6个二极管组成的static dram</p>
 <p>They have two stable states, representing 0 and 1 respectively. The state is stable as long as power on Vdd is available.</p>
 <p><strong>这张图就充分说明了为什么断电RAM中的内容会消失</strong></p>
 <p>主要有6个晶体管组成，核心是4个晶体管M1-M4,他们有2个稳定状态分别代表0和1</p>
 <p>If access to the state of the cell is needed the word access line WL is raised. This makes the state of the cell imme- diately available for reading on BL and BL. If the cell state must be overwritten the BL and BL lines are first set to the desired values and then WL is raised. Since the outside drivers are stronger than the four transistors (M1 through M4) this allows the old state to be overwritten.</p>
-<h2><span id="sram的特点">SRAM的特点</span></h2>
+<h2 id="sram的特点">SRAM的特点</h2>
 <p>• one cell requires six transistors. There are variants with four transistors but they have disadvantages.• maintaining the state of the cell requires constant power.• the cell state is available for reading almost im- mediately once the word access line WL is raised. The signal is as rectangular (changing quickly be- tween the two binary states) as other transistor- controlled signals.• the cell state is stable, no refresh cycles are needed.</p>
-<h1><span id="dynamic-ram">Dynamic RAM</span></h1>
+<h1 id="dynamic-ram">Dynamic RAM</h1>
 <p><img src="dram.png" alt=""></p>
 <p>All it consists of is one transistor and one capacitor
 动态RAM只有一个晶体管和一个电容</p>
@@ -427,21 +427,21 @@ Intel will have support for the Common System Interface (CSI) starting with the 
 <li>To write to the cell the data line DL is appropriately set and then AL is raised for a time long enough to charge or drain the capacitor.</li>
 </ol>
 <p>disadvantages:</p>
-<h2><span id="readiing-the-cell-discharges-the-capacitor">readiing the cell discharges the capacitor</span></h2>
+<h2 id="readiing-the-cell-discharges-the-capacitor">readiing the cell discharges the capacitor</h2>
 <p>动态RAM优点是简单，但是缺点是由于读取状态时需要对电容器放电，所以这一过程不能无限重复，不得不在某个点上对它重新充电。更糟糕的是，为了容纳大量单元(现在一般在单个芯片上容纳10的9次方以上的RAM单元)，电容器的容量必须很小(0.000000000000001法拉以下)。这样，完整充电后大约持有几万个电子。即使电容器的电阻很大(若干兆欧姆)，仍然只需很短的时间就会耗光电荷，称为「泄漏」。</p>
 <p><strong>这种泄露就是现在的大部分DRAM芯片每隔64ms就必须进行一次刷新的原因。（附A关于三极管的输入输出特性</strong></p>
 <p>During the refresh cycle no access to the memory is possible since a refresh is simply a memory read operation where the result is discarded.</p>
 <p>For some workloads this overhead might stall up to 50% of the memory accesses</p>
-<h2><span id="a-second-problem-resulting-from-the-tiny-charge-is-that-the-information-read-from-the-cell-is-not-directly-usable">A second problem resulting from the tiny charge is that the information read from the cell is not directly usable.</span></h2>
+<h2 id="a-second-problem-resulting-from-the-tiny-charge-is-that-the-information-read-from-the-cell-is-not-directly-usable">A second problem resulting from the tiny charge is that the information read from the cell is not directly usable.</h2>
 <p>The data line must be connected to a sense amplifier which can distinguish between a stored 0 or 1 over the whole range of charges which still have to count as 1.</p>
-<h2><span id="a-third-problem-is-that-reading-a-cell-causes-the-charge-of-the-capacitor-to-be-depleted">A third problem is that reading a cell causes the charge of the capacitor to be depleted.</span></h2>
+<h2 id="a-third-problem-is-that-reading-a-cell-causes-the-charge-of-the-capacitor-to-be-depleted">A third problem is that reading a cell causes the charge of the capacitor to be depleted.</h2>
 <p>This means every read operation must be followed by an operation to recharge the capacitor.</p>
-<h2><span id="高能预警why-sram-is-faster-than-dram">高能预警，why sram is faster than dram</span></h2>
+<h2 id="高能预警why-sram-is-faster-than-dram">高能预警，why sram is faster than dram</h2>
 <p>Unlike the static RAM case where the output is immediately available when the word access line is raised, it will always take a bit of time until the capacitor discharges sufficiently. This delay severely limits how fast DRAM can be.</p>
 <p>因为DRAM把01状态保存在电容里，导致每次读都需要电容放电</p>
-<h2><span id="dram-优势-size">DRAM 优势 --size</span></h2>
+<h2 id="dram-优势-size">DRAM 优势 --size</h2>
 <p>The SRAM cells also need individual power for the transistors maintaining the state.</p>
-<h1><span id="dram-access">DRAM access</span></h1>
+<h1 id="dram-access">DRAM access</h1>
 <p>A program selects a memory location using a virtual address</p>
 <p>The processor translates this into a physical address and finally the memory controller selects the RAM chip corresponding to that address.</p>
 <p>Dynamic RAM Schematic</p>
@@ -449,24 +449,24 @@ Intel will have support for the Common System Interface (CSI) starting with the 
 <p>de-multiplexier
 <img src="demultiplexer" alt=""></p>
 <p>The memory controller must be able to address each RAM module (collection of RAM chips).</p>
-<h1><span id="sram-vs-dram">SRAM vs DRAM</span></h1>
+<h1 id="sram-vs-dram">SRAM vs DRAM</h1>
 <p>SRAM is currently used in CPU caches and on-die where the connections are small and fully under control of the CPU designer.</p>
-<h1><span id="dram-access-technical-details">DRAM Access Technical Details</span></h1>
+<h1 id="dram-access-technical-details">DRAM Access Technical Details</h1>
 <ol>
 <li>In the section introducing DRAM we saw that DRAM chips multiplex the addresses in order to save resources int the form of address pins.</li>
 <li>We also saw that access- ing DRAM cells takes time since the capacitors in those cells do not discharge instantaneously to produce a stable signal</li>
 <li>we also saw that DRAM cells must be refreshed.</li>
 </ol>
-<h1><span id="dram-sdram-and-its-successors-double-data-rate-dram-ddr">DRAM (SDRAM) and its successors Double Data Rate DRAM (DDR).</span></h1>
-<h1><span id="sdram-synchronous-dram">SDRAM - Synchronous DRAM</span></h1>
+<h1 id="dram-sdram-and-its-successors-double-data-rate-dram-ddr">DRAM (SDRAM) and its successors Double Data Rate DRAM (DDR).</h1>
+<h1 id="sdram-synchronous-dram">SDRAM - Synchronous DRAM</h1>
 <p>同步DRAM，顾名思义，是参照一个时间源工作的。由内存控制器提供一个时钟，时钟的频率决定了前端总线(FSB)的速度。以今天的SDRAM为例，每次数据传输包含64位，即8字节。所以FSB的传输速率应该是有效总线频率乘于8字节(对于4倍传输200MHz总线而言，传输速率为6.4GB/s)。听起来很高，但要知道这只是峰值速率，实际上无法达到的最高速率。我们将会看到，与RAM模块交流的协议有大量时间是处于非工作状态，不进行数据传输。我们必须对这些非工作时间有所了解，并尽量缩短它们，才能获得最佳的性能。</p>
-<h1><span id="221读访问协议">2.2.1读访问协议</span></h1>
+<h1 id="221读访问协议">2.2.1读访问协议</h1>
 <p>这里忽略了许多细节，我们只关注时钟频率、RAS与CAS信号、地址总线和数据总线。首先，内存控制器将行地址放在地址总线上，并降低RAS信号，读周期开始。所有信号都在时钟(CLK)的上升沿读取，因此，只要信号在读取的时间点上保持稳定，就算不是标准的方波也没有关系。设置行地址会促使RAM芯片锁住指定的行。</p>
 <p>CAS信号在tRCD(RAS到CAS时延)个时钟周期后发出。内存控制器将列地址放在地址总线上，降低CAS线。这里我们可以看到，地址的两个组成部分是怎么通过同一条总线传输的。</p>
 <p>既然数据的传输需要这么多的准备工作，仅仅传输一个字显然是太浪费了。因此，DRAM模块允许内存控制指定本次传输多少数据。可以是2、4或8个字。这样，就可以一次填满高速缓存的整条线，而不需要额外的RAS/CAS序列。另外，内存控制器还可以在不重置行选择的前提下发送新的CAS信号。这样，读取或写入连续的地址就可以变得非常快，因为不需要发送RAS信号，也不需要把行置为非激活状态(见下文)。</p>
 <p>在上图中，SDRAM的每个周期输出一个字的数据。这是第一代的SDRAM。而DDR可以在一个周期中输出两个字。这种做法可以减少传输时间，但无法降低时延。</p>
 <p><img src="address.png" alt=""></p>
-<h1><span id="222预充电和激活">2.2.2预充电和激活</span></h1>
+<h1 id="222预充电和激活">2.2.2预充电和激活</h1>
 <p>2.2.1中的图只是读取数据的一部分，还有以下部分：</p>
 <p>显示的是两次CAS信号的时序图。第一次的数据在CL周期后准备就绪。图中的例子里，是在SDRAM上，用两个周期传输了两个字的数据。如果换成DDR的话，则可以传输4个字。即使是在一个命令速率为1的DRAM模块上，也无法立即发出预充电命令，而要等数据传输完成。在上图中，即为两个周期。刚好与CL相同，但只是巧合而已。预充电信号并没有专用线，某些实现是用同时降低写使能(WE)线和RAS线的方式来触发。</p>
 <p>发出预充电信命令后，还需等待tRP(行预充电时间)个周期之后才能使行被选中。在图2.9中，这个时间(紫色部分)大部分与内存传输的时间(淡蓝色部分)重合。不错。但tRP大于传输时间，因此下一个RAS信号只能等待一个周期。</p>
@@ -478,9 +478,9 @@ x 3 RAS-to-CAS时延(t RCD)
 y 2 RAS预充电时间(t RP)
 z 8 激活到预充电时间(t RAS)
 T T1 命令速率</p>
-<h1><span id="223重充电">2.2.3重充电</span></h1>
+<h1 id="223重充电">2.2.3重充电</h1>
 <p>充电对内存是性能最大的影响，根据JEDEC规范，DRAM单元必须保持每64ms刷新一次我们在解读性能参数时有必要知道，它也是DRAM生命周期的一个部分。如果系统需要读取某个重要的字，而刚好它所在的行正在刷新，那么处理器将会被延迟很长一段时间。刷新的具体耗时取决于DRAM模块本身。</p>
-<h1><span id="225-结论">2.2.5 结论</span></h1>
+<h1 id="225-结论">2.2.5 结论</h1>
 <p>通过本节，大家应该了解到访问DRAM的过程并不是一个快速的过程。至少与处理器的速度相比，或与处理器访问寄存器及缓存的速度相比，DRAM的访问不算快。大家还需要记住CPU和内存的频率是不同的。Intel Core 2处理器运行在2.933GHz，而1.066GHz FSB有11:1的时钟比率(注: 1.066GHz的总线为四泵总线)。那么，内存总线上延迟一个周期意味着处理器延迟11个周期。绝大多数机器使用的DRAM更慢，因此延迟更大。
 前文中读命令的时序图表明，DRAM模块可以支持高速数据传输。每个完整行可以被毫无延迟地传输。数据总线可以100%被占。对DDR而言，意味着每个周期传输2个64位字。对于DDR2-800模块和双通道而言，意味着12.8GB/s的速率。</p>
 <p>但是，除非是特殊设计，DRAM的访问并不总是串行的。访问不连续的内存区意味着需要预充电和RAS信号。于是，各种速度开始慢下来，DRAM模块急需帮助。预充电的时间越短，数据传输所受的惩罚越小。</p>
@@ -488,7 +488,7 @@ T T1 命令速率</p>
 <p>2.3主存的其他用户
 除了CPU外，系统中还有其它一些组件也可以访问主存。高性能网卡或大规模存储控制器是无法承受通过CPU来传输数据的，它们一般直接对内存进行读写(直接内存访问，DMA)。在图2.1中可以看到，它们可以通过南桥和北桥直接访问内存。另外，其它总线，比如USB等也需要FSB带宽，即使它们并不使用DMA，但南桥仍要通过FSB连接到北桥。</p>
 <p>DMA当然有很大的优点，但也意味着FSB带宽会有更多的竞争。在有大量DMA流量的情况下，CPU在访问内存时必然会有更大的延迟。我们可以用一些硬件来解决这个问题。例如，通过图2.3中的架构，我们可以挑选不受DMA影响的节点，让它们的内存为我们的计算服务。还可以在每个节点上连接一个南桥，将FSB的负荷均匀地分担到每个节点上。</p>
-<h1><span id="what-programmer-can-do">what programmer can do</span></h1>
+<h1 id="what-programmer-can-do">what programmer can do</h1>
 
       
     </div>
@@ -675,7 +675,7 @@ T T1 命令速率</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">超线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">现代计算机的架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">北桥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">南桥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">All communication with RAM must pass through the Northbridge.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">The RAM has only a single port</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">Communication between a CPU and a device at- tached to the Southbridge is routed through the Northbridge.</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">DMA direct memory access</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">第二个bottleneck</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">RAM types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">static RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">SRAM的特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">Dynamic RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.1.</span> <span class="nav-text">readiing the cell discharges the capacitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.2.</span> <span class="nav-text">A second problem resulting from the tiny charge is that the information read from the cell is not directly usable.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.3.</span> <span class="nav-text">A third problem is that reading a cell causes the charge of the capacitor to be depleted.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.4.</span> <span class="nav-text">高能预警，why sram is faster than dram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.5.</span> <span class="nav-text">DRAM 优势 --size</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">DRAM access</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">SRAM vs DRAM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">DRAM Access Technical Details</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">DRAM (SDRAM) and its successors Double Data Rate DRAM (DDR).</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">SDRAM - Synchronous DRAM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">2.2.1读访问协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">14.</span> <span class="nav-text">2.2.2预充电和激活</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">15.</span> <span class="nav-text">2.2.3重充电</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">16.</span> <span class="nav-text">2.2.5 结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">17.</span> <span class="nav-text">what programmer can do</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#超线程"><span class="nav-number">1.</span> <span class="nav-text">超线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#现代计算机的架构"><span class="nav-number">2.</span> <span class="nav-text">现代计算机的架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#北桥"><span class="nav-number">2.1.</span> <span class="nav-text">北桥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#南桥"><span class="nav-number">2.2.</span> <span class="nav-text">南桥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#all-communication-with-ram-must-pass-through-the-northbridge"><span class="nav-number">2.3.</span> <span class="nav-text">All communication with RAM must pass through the Northbridge.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-ram-has-only-a-single-port"><span class="nav-number">2.4.</span> <span class="nav-text">The RAM has only a single port</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#communication-between-a-cpu-and-a-device-at-tached-to-the-southbridge-is-routed-through-the-northbridge"><span class="nav-number">2.5.</span> <span class="nav-text">Communication between a CPU and a device at- tached to the Southbridge is routed through the Northbridge.</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dma-direct-memory-access"><span class="nav-number">3.</span> <span class="nav-text">DMA direct memory access</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二个bottleneck"><span class="nav-number">4.</span> <span class="nav-text">第二个bottleneck</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ram-types"><span class="nav-number">5.</span> <span class="nav-text">RAM types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#static-ram"><span class="nav-number">6.</span> <span class="nav-text">static RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sram的特点"><span class="nav-number">6.1.</span> <span class="nav-text">SRAM的特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dynamic-ram"><span class="nav-number">7.</span> <span class="nav-text">Dynamic RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#readiing-the-cell-discharges-the-capacitor"><span class="nav-number">7.1.</span> <span class="nav-text">readiing the cell discharges the capacitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-second-problem-resulting-from-the-tiny-charge-is-that-the-information-read-from-the-cell-is-not-directly-usable"><span class="nav-number">7.2.</span> <span class="nav-text">A second problem resulting from the tiny charge is that the information read from the cell is not directly usable.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-third-problem-is-that-reading-a-cell-causes-the-charge-of-the-capacitor-to-be-depleted"><span class="nav-number">7.3.</span> <span class="nav-text">A third problem is that reading a cell causes the charge of the capacitor to be depleted.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高能预警why-sram-is-faster-than-dram"><span class="nav-number">7.4.</span> <span class="nav-text">高能预警，why sram is faster than dram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dram-优势-size"><span class="nav-number">7.5.</span> <span class="nav-text">DRAM 优势 --size</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dram-access"><span class="nav-number">8.</span> <span class="nav-text">DRAM access</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sram-vs-dram"><span class="nav-number">9.</span> <span class="nav-text">SRAM vs DRAM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dram-access-technical-details"><span class="nav-number">10.</span> <span class="nav-text">DRAM Access Technical Details</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dram-sdram-and-its-successors-double-data-rate-dram-ddr"><span class="nav-number">11.</span> <span class="nav-text">DRAM (SDRAM) and its successors Double Data Rate DRAM (DDR).</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sdram-synchronous-dram"><span class="nav-number">12.</span> <span class="nav-text">SDRAM - Synchronous DRAM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#221读访问协议"><span class="nav-number">13.</span> <span class="nav-text">2.2.1读访问协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#222预充电和激活"><span class="nav-number">14.</span> <span class="nav-text">2.2.2预充电和激活</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#223重充电"><span class="nav-number">15.</span> <span class="nav-text">2.2.3重充电</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#225-结论"><span class="nav-number">16.</span> <span class="nav-text">2.2.5 结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#what-programmer-can-do"><span class="nav-number">17.</span> <span class="nav-text">what programmer can do</span></a></li></ol></div>
             
 
           </div>

@@ -343,12 +343,12 @@
       
 
       
-        <h1><span id="netty简介">netty简介</span></h1>
+        <h1 id="netty简介">netty简介</h1>
 <p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
 <p>netty的所有IO操作都是异步非阻塞的
 用过future-listener机制，用户可以方便的主动获取</p>
 <p>采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，接收到客户端连接之后为客户端连接创建一个新的线程处理请求消息，处理完成之后，返回应答消息给客户端，线程销毁，这就是典型的一请求一应答模型。该架构最大的问题就是不具备弹性伸缩能力，当并发访问量增加后，服务端的线程个数和并发访问数成线性正比，由于线程是JAVA虚拟机非常宝贵的系统资源，当线程数膨胀之后，系统的性能急剧下降，随着并发量的继续增加，可能会发生句柄溢出、线程堆栈溢出等问题，并导致服务器最终宕机</p>
-<h1><span id="序列化方式问题java序列化存在如下几个典型问题">序列化方式问题：Java序列化存在如下几个典型问题：</span></h1>
+<h1 id="序列化方式问题java序列化存在如下几个典型问题">序列化方式问题：Java序列化存在如下几个典型问题：</h1>
 <ol>
 <li>
 <p>Java序列化机制是Java内部的一种对象编解码技术，无法跨语言使用；例如对于异构系统之间的对接，Java序列化后的码流需要能够通过其它语言反序列化成原始对象（副本），目前很难支持；</p>
@@ -361,7 +361,7 @@
 </li>
 </ol>
 <p>线程模型问题：由于采用同步阻塞IO，这会导致每个TCP连接都占用1个线程，由于线程资源是JVM虚拟机非常宝贵的资源，当IO读写阻塞导致线程无法及时释放时，会导致系统性能急剧下降，严重的甚至会导致虚拟机无法创建新的线程。</p>
-<h1><span id="高性能的三个主题">高性能的三个主题</span></h1>
+<h1 id="高性能的三个主题">高性能的三个主题</h1>
 <ol>
 <li>
 <p>传输：用什么样的通道将数据发送给对方，BIO、NIO或者AIO，IO模型在很大程度上决定了框架的性能。</p>
@@ -373,8 +373,8 @@
 <p>线程：数据报如何读取？读取之后的编解码在哪个线程进行，编解码后的消息如何派发，Reactor线程模型的不同，对性能的影响也非常大。</p>
 </li>
 </ol>
-<h1><span id="netty高性能之道">Netty高性能之道</span></h1>
-<h2><span id="异步非阻塞通信">异步非阻塞通信</span></h2>
+<h1 id="netty高性能之道">Netty高性能之道</h1>
+<h2 id="异步非阻塞通信">异步非阻塞通信</h2>
 <p>在IO编程过程中，当需要同时处理多个客户端接入请求时，可以利用多线程或者IO多路复用技术进行处理。IO多路复用技术通过把多个IO的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求。与传统的多线程/多进程模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源。</p>
 
       
@@ -558,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">netty简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">序列化方式问题：Java序列化存在如下几个典型问题：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">高性能的三个主题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Netty高性能之道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">异步非阻塞通信</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#netty简介"><span class="nav-number">1.</span> <span class="nav-text">netty简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化方式问题java序列化存在如下几个典型问题"><span class="nav-number">2.</span> <span class="nav-text">序列化方式问题：Java序列化存在如下几个典型问题：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高性能的三个主题"><span class="nav-number">3.</span> <span class="nav-text">高性能的三个主题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#netty高性能之道"><span class="nav-number">4.</span> <span class="nav-text">Netty高性能之道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#异步非阻塞通信"><span class="nav-number">4.1.</span> <span class="nav-text">异步非阻塞通信</span></a></li></ol></li></ol></div>
             
 
           </div>

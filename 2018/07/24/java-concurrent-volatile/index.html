@@ -343,25 +343,25 @@
       
 
       
-        <h1><span id="overall">Overall</span></h1>
+        <h1 id="overall">Overall</h1>
 <ol>
 <li>visibility gurantee</li>
 <li>happens-before gurantee</li>
 </ol>
-<h1><span id="function">Function</span></h1>
+<h1 id="function">Function</h1>
 <p>The Java volatile keyword guarantees visibility of changes to variables across threads.</p>
 <p>In a multithreaded application where the threads operate on non-volatile variables, each thread may copy variables from main memory into a CPU cache while working on them, for performance reasons. If your computer contains more than one CPU, each thread may run on a different CPU. That means, that each thread may copy the variables into the CPU cache of different CPUs.</p>
 <p>![](/Users/yifanguo/Desktop/屏幕快照 2018-07-24 23.25.32.png)</p>
-<h1><span id="hapen-before">Hapen before</span></h1>
+<h1 id="hapen-before">Hapen before</h1>
 <p>To address the instruction reordering challenge, the Java volatile keyword gives a &quot;happens-before&quot; guarantee, in addition to the visibility guarantee. The happens-before guarantee guarantees that:</p>
 <p>Reads from and writes to other variables cannot be reordered to occur after a write to a volatile variable, if the reads / writes originally occurred before the write to the volatile variable.
 The reads / writes before a write to a volatile variable are guaranteed to &quot;happen before&quot; the write to the volatile variable. Notice that it is still possible for e.g. reads / writes of other variables located after a write to a volatile to be reordered to occur before that write to the volatile. Just not the other way around. From after to before is allowed, but from before to after is not allowed.
 Reads from and writes to other variables cannot be reordered to occur before a read of a volatile variable, if the reads / writes originally occurred after the read of the volatile variable. Notice that it is possible for reads of other variables that occur before the read of a volatile variable can be reordered to occur after the read of the volatile. Just not the other way around. From before to after is allowed, but from after to before is not allowed.</p>
-<h1><span id="when-to-use">when to use</span></h1>
+<h1 id="when-to-use">when to use</h1>
 <p>if two threads are both reading and writing to a shared variable, then using the volatile keyword for that is not enough. You need to use a synchronized in that case to guarantee that the reading and writing of the variable is atomic</p>
 <p>As an alternative to a synchronized block you could also use one of the many atomic data types found in the java.util.concurrent package. For instance, the AtomicLong or AtomicReference or one of the others.</p>
 <p>In case only one thread reads and writes the value of a volatile variable and other threads only read the variable, then the reading threads are guaranteed to see the latest value written to the volatile variable. Without making the variable volatile, this would not be guaranteed.</p>
-<h1><span id="performce">Performce</span></h1>
+<h1 id="performce">Performce</h1>
 <p>Reading from and writing to main memory is more expensive than accessing the CPU cache. Accessing volatile variables also prevent instruction reordering which is a normal performance enhancement technique. Thus, you should only use volatile variables when you really need to enforce visibility of variables.</p>
 
       
@@ -549,7 +549,7 @@ Reads from and writes to other variables cannot be reordered to occur before a r
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Overall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Hapen before</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">when to use</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Performce</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overall"><span class="nav-number">1.</span> <span class="nav-text">Overall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#function"><span class="nav-number">2.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hapen-before"><span class="nav-number">3.</span> <span class="nav-text">Hapen before</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#when-to-use"><span class="nav-number">4.</span> <span class="nav-text">when to use</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#performce"><span class="nav-number">5.</span> <span class="nav-text">Performce</span></a></li></ol></div>
             
 
           </div>

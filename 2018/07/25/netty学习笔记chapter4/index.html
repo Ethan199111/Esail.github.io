@@ -343,13 +343,13 @@
       
 
       
-        <h1><span id="netty-chapter4">netty chapter4</span></h1>
+        <h1 id="netty-chapter4">netty chapter4</h1>
 <p>TCP底层并不了解上层业务数据的具体含义
 它会根据tcp缓冲区的实际情况进行包的划分
 所以一个完整的包可能会被tcp拆分成多个包进行发送
 也有可能把多个小的包封装成一个大的数据包发送
 这就是tcp 粘包和拆包的问题</p>
-<h1><span id="问题产生的原因">问题产生的原因</span></h1>
+<h1 id="问题产生的原因">问题产生的原因</h1>
 <ol>
 <li>application write写入的字节大小大于socket发送缓冲区的大小</li>
 <li>进行mss大小的tcp分段</li>
@@ -363,7 +363,7 @@
 <li>将消息分为消息头和消息体，消息头中包含表示消息总长度的字段，通常设计思路为消息头的第一个字段使用int32表示消息的总长度</li>
 <li>更复杂的应用层协议</li>
 </ol>
-<h1><span id="netty如何解决">netty如何解决</span></h1>
+<h1 id="netty如何解决">netty如何解决</h1>
 <p>LinebasedFrameDecoder + Stringdecoder 文本格式的解码器</p>
 
       
@@ -551,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">netty chapter4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">问题产生的原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">netty如何解决</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#netty-chapter4"><span class="nav-number">1.</span> <span class="nav-text">netty chapter4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题产生的原因"><span class="nav-number">2.</span> <span class="nav-text">问题产生的原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#netty如何解决"><span class="nav-number">3.</span> <span class="nav-text">netty如何解决</span></a></li></ol></div>
             
 
           </div>

@@ -343,8 +343,8 @@
       
 
       
-        <h1><span id="netty-chapter2">netty chapter2</span></h1>
-<h2><span id="传统的bio编程">传统的BIO编程</span></h2>
+        <h1 id="netty-chapter2">netty chapter2</h1>
+<h2 id="传统的bio编程">传统的BIO编程</h2>
 <p>网络编程的基本模式是c/s client/server。
 实际处理的就是两个进程之间的通信问题</p>
 <p>其中server提供位置信息 ipaddress+port
@@ -353,18 +353,18 @@
 <p>在基于传统同步阻塞模型开发中，server socket负责绑定ip地址，启动监听端口
 sokcet负责发起连接操作。
 连接成功之后，双方通过输入和输出流进行同步阻塞式通信</p>
-<h2><span id="buffer-缓冲区">Buffer 缓冲区</span></h2>
+<h2 id="buffer-缓冲区">Buffer 缓冲区</h2>
 <p>buffer是一个object 它包含一些要写入或者要读出的data</p>
 <p>NIO中所有data都是通过buffer处理</p>
 <p>buffer实质上是一个数组，通常是一个字节数组bytebuffer</p>
 <p>bytebuffer, charbuffer, doublebuffer, floatbuffer, intbuffer, longbuffer, shortbuffer
 mappedbytebuffer
 每一个都是buffer接口的instance 操作完全一样</p>
-<h2><span id="channel">channel</span></h2>
+<h2 id="channel">channel</h2>
 <p>channel是一个通道，它就像自来水管一样，网络数据通过channel读取和写入</p>
 <p>channel和stream不同之处在于 通道是双向的，流只是在一个方向上移动
 （如inputstream outputstream都是stream的instance 单方向）</p>
-<h2><span id="selector">selector</span></h2>
+<h2 id="selector">selector</h2>
 <p>selector会不断轮询注册在其上的channel,如果某个channel上面发生读或者写事件，这个channel就处于就绪状态，
 会被selector轮询出来，然后通过selectionKey可以获取就绪channel的集合，进行后续的i/o操作</p>
 <p>只需要一个线程负责selector（使用epoll)的轮询就可以接入成千上万的客户端</p>
@@ -384,7 +384,7 @@ mappedbytebuffer
 <li>将pojo对象encode成bytebuffer,调用socketchannel的异步write接口，将消息异步发送给客户端</li>
 <li>如果发送区tcp缓冲区满，会导致写半包，此时，需要注册监听写操作位，循环写，直到整包消息写入tcp缓冲区。</li>
 </ol>
-<h2><span id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</span></h2>
+<h2 id="为什么选择netty而不是自己开发nio">为什么选择netty而不是自己开发NIO</h2>
 <ol>
 <li>开发出高质量的NIO程序不简单</li>
 <li>NIO服务器需要能够handle 网络的闪断，客户端重复接入，客户端安全认证，消息的编解码，半包读写等情况</li>
@@ -576,7 +576,7 @@ mappedbytebuffer
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">netty chapter2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">传统的BIO编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">Buffer 缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">selector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">为什么选择netty而不是自己开发NIO</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#netty-chapter2"><span class="nav-number">1.</span> <span class="nav-text">netty chapter2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统的bio编程"><span class="nav-number">1.1.</span> <span class="nav-text">传统的BIO编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#buffer-缓冲区"><span class="nav-number">1.2.</span> <span class="nav-text">Buffer 缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#channel"><span class="nav-number">1.3.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selector"><span class="nav-number">1.4.</span> <span class="nav-text">selector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择netty而不是自己开发nio"><span class="nav-number">1.5.</span> <span class="nav-text">为什么选择netty而不是自己开发NIO</span></a></li></ol></li></ol></div>
             
 
           </div>
