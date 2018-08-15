@@ -342,31 +342,31 @@
       
 
       
-        <h1 id="chapter-01-java-io">chapter 01 --java i/o</h1>
-<h2 id="io-多路复用技术">i/o 多路复用技术</h2>
+        <h1><span id="chapter-01-java-io">chapter 01 --java i/o</span></h1>
+<h2><span id="io-多路复用技术">i/o 多路复用技术</span></h2>
 <p>i/o多路复用技术通过把多个i/o的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求</p>
 <p>和传统的多线程相比：
 1: i/o多路复用的最大优势是系统开销小，不需要创建新的额外的线程或进程
 2：服务器需要同时处理多个处于监听状态或者多个连接状态的套接字
 3: 服务器需要同时处理多种网络协议套接字</p>
-<h2 id="epoll-vs-select">epoll vs select</h2>
+<h2><span id="epoll-vs-select">epoll vs select</span></h2>
 <p>select最大的缺陷就是单个进程所打开的FD有一定限制，它由FD_SETSIZE设置，默认值是1024.
 对于那些需要支持上万个tcp connection的服务器来说太少了</p>
 <p>我们可以选择多进程的方案（传统的apache方案）来解决这个问题。</p>
 <p>但是进程间交换数据非常麻烦，对于java来说，由于没有共享内存，需要通过socket通信或者其他方式进行数据同步。</p>
 <p>epoll没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024</p>
 <p>cat /proc/sys/fs/file -max查看，这个值和系统内存关系比较大</p>
-<h2 id="io效率不会随着fd数目的增加而线性下降">i/o效率不会随着fd数目的增加而线性下降</h2>
+<h2><span id="io效率不会随着fd数目的增加而线性下降">i/o效率不会随着fd数目的增加而线性下降</span></h2>
 <p>传统的select/poll的另一个致命弱点： socket集合很大，由于网络延时或者链路空闲，任一时刻只有少部分的socket是活跃的。</p>
 <p>但是select/poll每次调用都会线性扫描全部的集合，导致效率呈现线性下降。</p>
 <p>epoll不存在这个问题，它只会对活跃的socket进行操作</p>
 <p>epoll是根据每个fd上面的callback函数实现的，只有活跃的socket才主动调用callback函数，其他idle状态的socket则不会</p>
-<h2 id="使用mmap加速内核与用户空间的消息传递">使用mmap加速内核与用户空间的消息传递</h2>
+<h2><span id="使用mmap加速内核与用户空间的消息传递">使用mmap加速内核与用户空间的消息传递</span></h2>
 <ol>
 <li>select, poll 还是epoll都需要内核把FD消息通知给用户空间</li>
 <li>epoll 是通过内核和用户空间mmap同一个内存来实现，避免不必要的内存复制</li>
 </ol>
-<h1 id="jdk14-nio以jsr-51的身份正式发布">JDK1.4 NIO以JSR-51的身份正式发布</h1>
+<h1><span id="jdk14-nio以jsr-51的身份正式发布">JDK1.4 NIO以JSR-51的身份正式发布</span></h1>
 <ol>
 <li>进行异步i/o操作的缓冲区bytebuffer</li>
 <li>--------------管道pipe</li>
@@ -503,7 +503,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -516,7 +516,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -556,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-01-java-io"><span class="nav-number">1.</span> <span class="nav-text">chapter 01 --java i/o</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#io-多路复用技术"><span class="nav-number">1.1.</span> <span class="nav-text">i/o 多路复用技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll-vs-select"><span class="nav-number">1.2.</span> <span class="nav-text">epoll vs select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#io效率不会随着fd数目的增加而线性下降"><span class="nav-number">1.3.</span> <span class="nav-text">i/o效率不会随着fd数目的增加而线性下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用mmap加速内核与用户空间的消息传递"><span class="nav-number">1.4.</span> <span class="nav-text">使用mmap加速内核与用户空间的消息传递</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jdk14-nio以jsr-51的身份正式发布"><span class="nav-number">2.</span> <span class="nav-text">JDK1.4 NIO以JSR-51的身份正式发布</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">chapter 01 --java i/o</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">i/o 多路复用技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">epoll vs select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">i/o效率不会随着fd数目的增加而线性下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">使用mmap加速内核与用户空间的消息传递</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">JDK1.4 NIO以JSR-51的身份正式发布</span></a></li></ol></div>
             
 
           </div>
@@ -616,6 +616,15 @@
       </div>
     
 
+    
+
+    
+      <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize("");
+        }
+      </script>
     
 
   </div>

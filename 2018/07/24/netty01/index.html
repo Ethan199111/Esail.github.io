@@ -343,7 +343,7 @@
       
 
       
-        <h1 id="什么是nettywhat">什么是netty(what)</h1>
+        <h1><span id="什么是nettywhat">什么是netty(what)</span></h1>
 <p>Netty 是一个高性能，异步事件驱动的NIO框架，它提供了对TCP,UDP和文件传输的支持</p>
 <p>传统HTTP服务器的原理</p>
 <p>1.创建一个serversocket listen 一个端口</p>
@@ -366,14 +366,14 @@ BIO: blocking io
 <p>NIO如何做到非阻塞，event driven.只有event coming才启动线程处理，平常挂起避免资源浪费</p>
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">while true &#123;</span><br><span class="line">	events = takeEvents(fds)</span><br><span class="line">	for event in events &#123;</span><br><span class="line">		if event.isAcceptable &#123;</span><br><span class="line">			doAccept()</span><br><span class="line">			</span><br><span class="line">		&#125; else if event.isReadable &#123;</span><br><span class="line">			request = doRead()</span><br><span class="line">			if request.isCompelete() &#123;</span><br><span class="line">				doPrecess()</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else if event.isWriteable &#123;</span><br><span class="line">			do write()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Netty 可以处理tcp也可以处理udp</p>
-<h1 id="netty-是什么">netty 是什么</h1>
+<h1><span id="netty-是什么">netty 是什么</span></h1>
 <ol>
 <li>本质：JBoss做的一个jar包</li>
 <li>目的： 快速开发高性能，高可靠的网络服务器和客户端程序</li>
 <li>优点：提供异步，事件驱动的网络应用程序框架和工具</li>
 <li>通俗： 帮你处理socket</li>
 </ol>
-<h2 id="应用">应用：</h2>
+<h2><span id="应用">应用：</span></h2>
 <p>RPC框架</p>
 
       
@@ -508,7 +508,7 @@ BIO: blocking io
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -521,7 +521,7 @@ BIO: blocking io
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -561,7 +561,7 @@ BIO: blocking io
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是nettywhat"><span class="nav-number">1.</span> <span class="nav-text">什么是netty(what)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#netty-是什么"><span class="nav-number">2.</span> <span class="nav-text">netty 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">2.1.</span> <span class="nav-text">应用：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">什么是netty(what)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">netty 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">应用：</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -621,6 +621,15 @@ BIO: blocking io
       </div>
     
 
+    
+
+    
+      <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize("");
+        }
+      </script>
     
 
   </div>

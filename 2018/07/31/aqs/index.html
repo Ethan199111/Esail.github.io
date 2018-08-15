@@ -343,7 +343,7 @@
       
 
       
-        <h1 id="aqs-abstractqueuedsynchronizer-队列同步器">AQS  AbstractQueuedSynchronizer 队列同步器</h1>
+        <h1><span id="aqs-abstractqueuedsynchronizer-队列同步器">AQS  AbstractQueuedSynchronizer 队列同步器</span></h1>
 <p>AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。</p>
 <p>AQS主要提供了如下一些方法：</p>
 <p>getState()：返回同步状态的当前值；
@@ -362,9 +362,9 @@ acquireSharedInterruptibly(int arg)：共享式获取同步状态，响应中断
 tryAcquireSharedNanos(int arg, long nanosTimeout)：共享式获取同步状态，增加超时限制；
 release(int arg)：独占式释放同步状态，该方法会在释放同步状态之后，将同步队列中第一个节点包含的线程唤醒；
 releaseShared(int arg)：共享式释放同步状态；</p>
-<h1 id="clh-同步队列">CLH 同步队列</h1>
+<h1><span id="clh-同步队列">CLH 同步队列</span></h1>
 <p>CLH同步队列是一个FIFO双向队列，AQS依赖它来完成同步状态的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。</p>
-<h1 id="locksupport">LockSupport</h1>
+<h1><span id="locksupport">LockSupport</span></h1>
 <p>当需要阻塞或者唤起一个线程时 aqs都是调用lockSupport来执行
 底层是通过unsafe来实现的</p>
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public native void park(boolean var1, long var2);</span><br><span class="line">public native void unpark(Object var1);</span><br></pre></td></tr></table></figure></p>
@@ -376,8 +376,8 @@ releaseShared(int arg)：共享式释放同步状态；</p>
 <p>可以看到Parker类实际上用Posix的mutex，condition来实现的。
 在Parker类里的_counter字段，就是用来记录所谓的“许可”的。</p>
 <p>当调用park时，先尝试直接能否直接拿到“许可”，即_counter&gt;0时，如果成功，则把_counter设置为0,并返回：</p>
-<h1 id="parker类实际上用posix的mutexcondition来实现的">Parker类实际上用Posix的mutex，condition来实现的</h1>
-<h1 id="posix">Posix</h1>
+<h1><span id="parker类实际上用posix的mutexcondition来实现的">Parker类实际上用Posix的mutex，condition来实现的</span></h1>
+<h1><span id="posix">Posix</span></h1>
 <p>POSIX表示可移植操作系统接口（Portable Operating System Interface of UNIX，缩写为 POSIX ）</p>
 
       
@@ -512,7 +512,7 @@ releaseShared(int arg)：共享式释放同步状态；</p>
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -525,7 +525,7 @@ releaseShared(int arg)：共享式释放同步状态；</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -565,7 +565,7 @@ releaseShared(int arg)：共享式释放同步状态；</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#aqs-abstractqueuedsynchronizer-队列同步器"><span class="nav-number">1.</span> <span class="nav-text">AQS  AbstractQueuedSynchronizer 队列同步器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#clh-同步队列"><span class="nav-number">2.</span> <span class="nav-text">CLH 同步队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#locksupport"><span class="nav-number">3.</span> <span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#parker类实际上用posix的mutexcondition来实现的"><span class="nav-number">4.</span> <span class="nav-text">Parker类实际上用Posix的mutex，condition来实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#posix"><span class="nav-number">5.</span> <span class="nav-text">Posix</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">AQS  AbstractQueuedSynchronizer 队列同步器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CLH 同步队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Parker类实际上用Posix的mutex，condition来实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Posix</span></a></li></ol></div>
             
 
           </div>
@@ -625,6 +625,15 @@ releaseShared(int arg)：共享式释放同步状态；</p>
       </div>
     
 
+    
+
+    
+      <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize("");
+        }
+      </script>
     
 
   </div>

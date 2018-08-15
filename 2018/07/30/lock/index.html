@@ -344,8 +344,8 @@
 
       
         <p>[toc]</p>
-<h1 id="深入理解锁机制的实现">深入理解锁机制的实现</h1>
-<h1 id="cas">CAS</h1>
+<h1><span id="深入理解锁机制的实现">深入理解锁机制的实现</span></h1>
+<h1><span id="cas">CAS</span></h1>
 <p>Unsafe中有一个method compareAndSwapInt 实现的是无锁同步的机制
 我们看下它是如何实现的</p>
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/***</span><br><span class="line">         * Compares the value of the integer field at the specified offset</span><br><span class="line">         * in the supplied object with the given expected value, and updates</span><br><span class="line">         * it if they match.  The operation of this method should be atomic,</span><br><span class="line">         * thus providing an uninterruptible way of updating an integer field.</span><br><span class="line">         * 在obj的offset位置比较integer field和期望的值，如果相同则更新。这个方法</span><br><span class="line">         * 的操作应该是原子的，因此提供了一种不可中断的方式更新integer field。</span><br><span class="line">         *</span><br><span class="line">         * @param obj the object containing the field to modify.</span><br><span class="line">         *            包含要修改field的对象</span><br><span class="line">         * @param offset the offset of the integer field within &lt;code&gt;obj&lt;/code&gt;.</span><br><span class="line">         *               &lt;code&gt;obj&lt;/code&gt;中整型field的偏移量</span><br><span class="line">         * @param expect the expected value of the field.</span><br><span class="line">         *               希望field中存在的值</span><br><span class="line">         * @param update the new value of the field if it equals &lt;code&gt;expect&lt;/code&gt;.</span><br><span class="line">         *           如果期望值expect与field的当前值相同，设置filed的值为这个新值</span><br><span class="line">         * @return true if the field was changed.</span><br><span class="line">         *                             如果field的值被更改</span><br><span class="line">         */</span><br><span class="line">         </span><br><span class="line">public final native boolean compareAndSwapInt(Object var1, long var2, int var4, int var5);</span><br></pre></td></tr></table></figure></p>
@@ -355,15 +355,15 @@
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">jbyte Atomic::cmpxchg(jbyte exchange_value, volatile jbyte* dest, jbyte compare_value) &#123;</span><br><span class="line">  assert(sizeof(jbyte) == 1, &quot;assumption.&quot;);</span><br><span class="line">  uintptr_t dest_addr = (uintptr_t)dest;</span><br><span class="line">  uintptr_t offset = dest_addr % sizeof(jint);</span><br><span class="line">  volatile jint* dest_int = (volatile jint*)(dest_addr - offset);</span><br><span class="line">  jint cur = *dest_int;</span><br><span class="line">  jbyte* cur_as_bytes = (jbyte*)(&amp;cur);</span><br><span class="line">  jint new_val = cur;</span><br><span class="line">  jbyte* new_val_as_bytes = (jbyte*)(&amp;new_val);</span><br><span class="line">  new_val_as_bytes[offset] = exchange_value;</span><br><span class="line">  while (cur_as_bytes[offset] == compare_value) &#123;</span><br><span class="line">    jint res = cmpxchg(new_val, dest_int, cur);</span><br><span class="line">    if (res == cur) break;</span><br><span class="line">    cur = res;</span><br><span class="line">    new_val = cur;</span><br><span class="line">    new_val_as_bytes[offset] = exchange_value;</span><br><span class="line">  &#125;</span><br><span class="line">  return cur_as_bytes[offset];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>jint* dest_int 做了volatile，意味着值不会从cpu cache中获取，会从主内存中获取</p>
 <p>CAS是Compare And Set的缩写。CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。</p>
-<h1 id="x86">x86</h1>
+<h1><span id="x86">x86</span></h1>
 <p>CAS保证了原子性，
 原子性定义
 Atomic Variables. The java.util.concurrent.atomic package defines classes that support atomic operations on single variables. All classes have get and set methods that work like reads and writes on volatile variables. That is, a set has a happens-before relationship with any subsequent get on the same variable.</p>
 <p>简单来说就是原子变量一旦开始操作就不会做context switch（切换到另一个线程），直到运行结束。</p>
-<h2 id="什么情况下适合用atomic类">什么情况下适合用atomic类</h2>
+<h2><span id="什么情况下适合用atomic类">什么情况下适合用atomic类</span></h2>
 <p>Atomic classes are designed primarily as building blocks for implementing non-blocking data structures and related infrastructure classes. The compareAndSet method is not a general replacement for locking. It applies only when critical updates for an object are confined to a single variable.</p>
 <p>那么在x86架构中是如何实现的</p>
-<h1 id="m-threads-同时-sharedcounter">M threads 同时++ sharedCounter</h1>
+<h1><span id="m-threads-同时-sharedcounter">M threads 同时++ sharedCounter</span></h1>
 <p>non-volatile version:
 add    $0x10,%ecx</p>
 <p>volatile version:
@@ -512,7 +512,7 @@ Compares the value in the EAX register with the destination operand. If the two 
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -525,7 +525,7 @@ Compares the value in the EAX register with the destination operand. If the two 
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -565,7 +565,7 @@ Compares the value in the EAX register with the destination operand. If the two 
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解锁机制的实现"><span class="nav-number">1.</span> <span class="nav-text">深入理解锁机制的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cas"><span class="nav-number">2.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x86"><span class="nav-number">3.</span> <span class="nav-text">x86</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么情况下适合用atomic类"><span class="nav-number">3.1.</span> <span class="nav-text">什么情况下适合用atomic类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#m-threads-同时-sharedcounter"><span class="nav-number">4.</span> <span class="nav-text">M threads 同时++ sharedCounter</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">深入理解锁机制的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">x86</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">什么情况下适合用atomic类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">M threads 同时++ sharedCounter</span></a></li></ol></div>
             
 
           </div>
@@ -625,6 +625,15 @@ Compares the value in the EAX register with the destination operand. If the two 
       </div>
     
 
+    
+
+    
+      <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize("");
+        }
+      </script>
     
 
   </div>

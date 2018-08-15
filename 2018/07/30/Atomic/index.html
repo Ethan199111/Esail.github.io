@@ -343,9 +343,9 @@
       
 
       
-        <h1 id="atomicity-optimizations">Atomicity Optimizations</h1>
+        <h1><span id="atomicity-optimizations">Atomicity Optimizations</span></h1>
 <p>If multiple threads modify the same memory location concurrently, processors do not guarantee any specific result.</p>
-<h1 id="lock">Lock</h1>
+<h1><span id="lock">Lock</span></h1>
 <p>Load Lock/Store Conditional (LL/SC)41 The LL/SC operations work as a pair where the special load instruction is used to start an transaction and the final store will only succeed if the location has not been modified in the meantime. The store oper- ation indicates success or failure, so the program can repeat its efforts if necessary.</p>
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int curval;int newval;do &#123;  curval = LL(var);  newval = curval + addend;&#125; while (SC(var, newval));</span><br></pre></td></tr></table></figure></p>
 <p>#CAS</p>
@@ -484,7 +484,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -497,7 +497,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -537,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#atomicity-optimizations"><span class="nav-number">1.</span> <span class="nav-text">Atomicity Optimizations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lock"><span class="nav-number">2.</span> <span class="nav-text">Lock</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Atomicity Optimizations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Lock</span></a></li></ol></div>
             
 
           </div>
@@ -597,6 +597,15 @@
       </div>
     
 
+    
+
+    
+      <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize("");
+        }
+      </script>
     
 
   </div>
