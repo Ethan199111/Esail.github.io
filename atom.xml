@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-08-13T12:08:23.000Z</updated>
+  <updated>2018-08-22T10:32:08.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://www.yifanguo.top/2018/08/22/Machine%20learning-%20crash%20course/"/>
+    <id>http://www.yifanguo.top/2018/08/22/Machine learning- crash course/</id>
+    <published>2018-08-22T10:32:08.000Z</published>
+    <updated>2018-08-22T10:32:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[toc]</p><h1><span id="machine-learning-crash-course">Machine learning- crash course</span></h1><h2><span id="framing">Framing</span></h2><h3><span id="label">Label</span></h3><p>A label is the thing we're predicting—the y variable in simple linear regression</p><ul><li>label is the true thing we are predicting: y<ul><li>the y variable in basic linear regression</li></ul></li><li>Labeled example has {features, label} (x,y)<ul><li>used to train the model</li></ul></li><li>unlabeled example has {features, ?} :(x,?)<ul><li>used for making predictions on new data</li></ul></li><li>model maps examples to predicted labels&quot; y'<ul><li>defined by internal parameters, which are learned</li></ul></li></ul><h3><span id="supervised-machine-learning">(supervised) machine learning</span></h3><p>ML systems learn how to combine input to produce useful predictions on never-before-seen data.</p><h3><span id="models">Models</span></h3><p>Training means creating or learning the model. That is, you show the model labeled examples and enable the model to gradually learn the relationships between features and label.</p><p>Inference means applying the trained model to unlabeled examples. That is, you use the trained model to make useful predictions (y'). For example, during inference, you can predict medianHouseValue for new unlabeled examples.</p><h3><span id="regression-vs-classification">Regression vs. classification</span></h3><p>A regression model predicts continuous values. For example, regression models make predictions that answer questions like the following:</p><p>What is the value of a house in California?</p><p>What is the probability that a user will click on this ad?</p><p>A classification model predicts discrete values. For example, classification models make predictions that answer questions like the following:</p><p>Is a given email message spam or not spam?</p><p>Is this an image of a dog, a cat, or a hamster?</p><h3><span id="feature">feature</span></h3><p>good fetures are concrete and quantifiable</p><h2><span id="empirical-risk-minimization-erm">empirical risk minimization ERM</span></h2><p>Loss is the penalty for a bad prediction</p><h2><span id="squared-loss">squared loss</span></h2><p>squared loss (also known as L2 loss)</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">= the square of the difference between the label and the prediction</span><br><span class="line">  = (observation - prediction(x))2</span><br><span class="line">  = (y - y&apos;)2</span><br></pre></td></tr></table></figure></p><h2><span id="mean-square-error-mse">Mean square error MSE</span></h2><p>Mean square error (MSE) is the average squared loss per example over the whole dataset. To calculate MSE, sum up all the squared losses for individual examples and then divide by the number of examples:</p><h1><span id="reducing-loss">Reducing loss</span></h1><h2><span id="coverged-收敛">coverged 收敛</span></h2><p>Usually, you iterate until overall loss stops changing or at least changes extremely slowly. When that happens, we say that the model has converged.</p><h3><span id="convex-凸面的">convex 凸面的</span></h3><p>Regression problems yield convex loss vs weight plots</p><p>Convex problems have only one minimum; that is, only one place where the slope is exactly 0. That minimum is where the loss function converges.</p><h2><span id="gradient-descent">gradient descent</span></h2><p>the gradient is a vector of partial derivatives with respect to the weights</p><p>In machine learning, gradients are used in gradient descent. We often have a loss function of many variables that we are trying to minimize, and we try to do this by following the negative of the gradient of the function.</p><h2><span id="learning-rate">Learning rate</span></h2><p>As noted, the gradient vector has both a direction and a magnitude(大小）</p><p>Gradient descent algorithms multiply the gradient by a scalar known as the learning rate (also sometimes called step size) to determine the next point. For example, if the gradient magnitude is 2.5 and the learning rate is 0.01, then the gradient descent algorithm will pick the next point 0.025 away from the previous point.</p><h2><span id="batch">batch</span></h2><p>In gradient descent, a batch is the total number of examples you use to calculate the gradient in a single iteration.</p><h2><span id="sgd-stochastic-gradient-descent-随机梯度下降">SGD  Stochastic Gradient Descent 随机梯度下降</span></h2><p>Stochastic gradient descent (SGD) takes this idea to the extreme--it uses only a single example (a batch size of 1) per iteration. Given enough iterations, SGD works but is very noisy. The term &quot;stochastic&quot; indicates that the one example comprising each batch is chosen at random.</p><h2><span id="mini-batch-stochastic-gradient-descent-mini-batch-sgd">Mini-batch stochastic gradient descent (mini-batch SGD)</span></h2><p>is a compromise between full-batch iteration and SGD. A mini-batch is typically between 10 and 1,000 examples, chosen at random. Mini-batch SGD reduces the amount of noise in SGD but is still more efficient than full-batch.</p><p>#PandaDataFrame, which you can imagine as a relational data table, with rows and named columns.Series, which is a single column. A DataFrame contains one or more Series and a name for each Series.</p><p>#Generalization 泛化</p><h2><span id="overfitting-过拟合">overfitting  过拟合</span></h2><p>An overfit model gets a low loss during training but does a poor job predicting new data</p><p>The fundamental tension of machine learning is between fitting our data well, but also fitting the data as simply as possible.</p><p>Empirically 经验化</p><h2><span id="splitting-data-unexpected-high-accurate-rate">splitting data -- unexpected high accurate rate</span></h2><p>For example, consider a model that predicts whether an email is spam, using the subject line, email body, and sender's email address as features. We apportion the data into training and test sets, with an 80-20 split. After training, the model achieves 99% precision on both the training set and the test set. We'd expect a lower precision on the test set, so we take another look at the data and discover that many of the examples in the test set are duplicates of examples in the training set (we neglected to scrub duplicate entries for the same spam email from our input database before splitting the data). We've inadvertently trained on some of our test data, and as a result, we're no longer accurately measuring how well our model generalizes to new data.</p><h2><span id="overfitting">overfitting</span></h2><p>Yes indeed! The more often we evaluate on a given test set, the more we are at risk for implicitly overfitting to that one test set. We'll look at a better protocol next.</p><h2><span id="train-test">Train-Test</span></h2><p>Training set, validation set, test setif teset set metric is pool, a good signal of overfitting the validation set.</p><h1><span id="feature-enginerring">Feature Enginerring</span></h1><p>That is, one way developers hone a model is by adding and improving its features.</p><p>Feature engineering means transforming raw data into a feature vector. Expect to spend significant time doing feature engineering.</p><h2><span id="properties-of-good-feature">properties of good feature</span></h2><h2><span id="sparse-representation-稀疏表示">Sparse Representation 稀疏表示</span></h2><p>A representation of a tensor that only stores nonzero elements.</p><p>Feature sparsity refers to the sparsity of a feature vector; model sparsity refers to the sparsity of the model weights.</p><h1><span id="feature-crosses-特征交叉">Feature Crosses 特征交叉</span></h1><h1><span id="regularization-正则化-解决overfitting">Regularization 正则化 解决overfitting</span></h1><p>two ways:-- early stopping-- Penalizing the model complexity</p><p>how to define complexityprefer smaller weights</p><p>we'll now minimize loss+complexity, which is called structural risk minimization:</p><h2><span id="l2-regularization">L2 Regularization</span></h2><p>We can quantify complexity using the L2 regularization formula, which defines the regularization term as the sum of the squares of all the feature weight</p><h2><span id="regularization-rate-lamda">regularization rate -- lamda</span></h2><p>If your lambda value is too high, your model will be simple, but you run the risk of underfitting your data.</p><h1><span id="logistic-regression">Logistic Regression</span></h1><p>calibrated 校正</p><p>regularization is super important for logistic regression</p><p>Two strategies are especially useful:L2 regularization (aka L2 weight decay) - penalizes huge weights.Early stopping - limiting training steps or learning rate.</p><h1><span id="classification">Classification</span></h1><p>Sometimes, we use logistic regression for the probability outputs -- this is a regression in (0, 1)Other times, we'll threshold the value for a discrete binary classificationChoice of threshold is an important choice, and can be tuned</p><ul><li><p>PrecissionWhat proportion of positive identifications was actually correct?</p></li><li><p>RecallWhat proportion of actual positives was identified correctly?</p></li></ul><h2><span id="roc-curve-receiver-operating-characteristic-curve">ROC curve receiver operating characteristic curve</span></h2><p>is a graph showing the performance of a classification model at all classification thresholds. This curve plots two parameters:</p><h2><span id="auc-area-under-the-roc-curve">AUC area under the roc curve</span></h2><p>predication bias</p><p>Don't fix bias with a calibration layer, fix it in the model.</p><h2><span id="classification-threshold-decision-threshold">classification threshold -- decision threshold</span></h2><p>in order to map a logistic regression value to a binary category, you must define a classification threshold (also called the decision threshold). A value above that threshold indicates &quot;spam&quot;; a value below indicates &quot;not spam.&quot;</p><h1><span id="regularization-sparsity">Regularization: Sparsity</span></h1><p>Caveat: Sparse feature crosses may significantly increase feature spacePossible issues:Model size (RAM) may become huge&quot;Noise&quot; coefficients (causes overfitting)</p><p>Sparse vectors often contain many dimensions. Creating a feature cross results in even more dimensions. Given such high-dimensional feature vectors, model size may become huge and require huge amounts of RAM.</p><h2><span id="l1-regularization">L1 Regularization</span></h2><p>L1 vs L2 regularization.L2 and L1 penalize weights differently:</p><p>L2 penalizes weight^2.L1 penalizes |weight|.Consequently, L2 and L1 have different derivatives:</p><p>The derivative of L2 is 2 * weight.The derivative of L1 is k (a constant, whose value is independent of weight).</p><h1><span id="neural-nets-神经网络">Neural Nets 神经网络</span></h1><h2><span id="activation-function">activation function</span></h2><p>To model a nonlinear problem, we can directly introduce a nonlinearity. We can pipe each hidden layer node through a nonlinear function.</p><p>In the model represented by the following graph, the value of each node in Hidden Layer 1 is transformed by a nonlinear function before being passed on to the weighted sums of the next layer. This nonlinear function is called the activation function.</p><h2><span id="back-propgation">back propgation</span></h2><h1><span id="multi-class-neural-nets-多类别神经网络">Multi-class Neural Nets 多类别神经网络</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;machine-learning-crash-course&quot;&gt;Machine learning- crash course&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;framing&quot;&gt;Framing&lt;/span&gt;&lt;/
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>python_tutorial</title>
@@ -451,35 +474,6 @@ Hyper-threading enables a si
       
         &lt;h1&gt;&lt;span id=&quot;chapter8&quot;&gt;Chapter8&lt;/span&gt;&lt;/h1&gt;
 
-      
-    
-    </summary>
-    
-    
-      <category term="netty" scheme="http://www.yifanguo.top/tags/netty/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>netty学习笔记Chapter6</title>
-    <link href="http://www.yifanguo.top/2018/07/25/netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0Chapter6/"/>
-    <id>http://www.yifanguo.top/2018/07/25/netty学习笔记Chapter6/</id>
-    <published>2018-07-25T11:36:24.000Z</published>
-    <updated>2018-07-25T15:21:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="chapter-6">chapter 6</span></h1><p>java序列化的目的主要有两个：</p><ol><li>网络传输</li><li>对象持久化</li></ol><p>java序列化从jdk1.1就已经提供，只需要implements java.io.Serializable并生成序列id就可以但是rpc很少使用java序列化来进行消息的encoding 和decoding</p><p>原因</p><ol><li>无法跨语言</li><li>序列化后码流太大</li></ol><p>评判编解码框架优劣1 是否支持跨语言2 编码后的码流大小3 编解码的性能4 类库是否小巧，API使用是否方便5 使用者需要手工快发的工作量和难度</p><h1><span id="业界主流的编解码框架">业界主流的编解码框架</span></h1><h2><span id="google的protobuf">Google的protobuf</span></h2><p>它将数据结构以.proto文件进行描述，通过代码生成工具可以生成对应数据结构的pojo对象和protobuf相关的方法和属性</p><ol><li>结构化数据存储格式 xml json</li><li>高效的encoding decoding性能</li><li>语言无关，平台无关，扩展性好</li><li>支持java c++ python</li></ol><h2><span id="facebook的thrift">Facebook的Thrift</span></h2><ol><li>语言系统以及IDL编译器，负责由用户给定的IDL文件生成相应语言的接口代码</li><li>Tprotocol: rpc协议层，可以选择多种不同的对象序列化方式 如json 和binary</li><li>TTransport： RPC传输层，可以选择不同的传输层实现 如socket, NIO. memoryBuffer</li><li>TProcessor: 做为协议层和用户提供的服务实现之间的纽带，负责调用服务实现的接口</li><li>TServer: 聚合TProtocol, TTransport, TProcessor等对象</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;chapter-6&quot;&gt;chapter 6&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;java序列化的目的主要有两个：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;网络传输&lt;/li&gt;
-&lt;li&gt;对象持久化&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;java序列化从jdk1.1就已经提供，只需要imp
       
     
     </summary>
