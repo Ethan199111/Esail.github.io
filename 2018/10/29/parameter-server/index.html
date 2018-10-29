@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="参数服务器," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Yifan Guo Personal Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="[toc] parameter server技术内幕 深入解析parameter server架构设计与实现原理 第一章 回顾分布式机器学习的历史进程 1.背景 自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中">
+<meta name="keywords" content="参数服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="parameter_server">
+<meta property="og:url" content="http://www.yifanguo.top/2018/10/29/parameter-server/index.html">
+<meta property="og:site_name" content="Yifan Guo Personal Blog">
+<meta property="og:description" content="[toc] parameter server技术内幕 深入解析parameter server架构设计与实现原理 第一章 回顾分布式机器学习的历史进程 1.背景 自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/sdp.png">
+<meta property="og:updated_time" content="2018-10-29T11:08:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="parameter_server">
+<meta name="twitter:description" content="[toc] parameter server技术内幕 深入解析parameter server架构设计与实现原理 第一章 回顾分布式机器学习的历史进程 1.背景 自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中">
+<meta name="twitter:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/sdp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yifanguo.top/2018/10/29/parameter-server/"/>
+
+
+
+
+
+  <title>parameter_server | Yifan Guo Personal Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/esail" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yifan Guo Personal Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-http">
+          <a href="/http/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            http
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-netty">
+          <a href="/netty/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            netty
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/10/29/parameter-server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan Guo Personal Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">parameter_server</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-29T03:53:51-07:00">
+                2018-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<h1><span id="parameter-server技术内幕">parameter server技术内幕</span></h1>
+<p>深入解析parameter server架构设计与实现原理</p>
+<h1><span id="第一章-回顾分布式机器学习的历史进程">第一章 回顾分布式机器学习的历史进程</span></h1>
+<h2><span id="1背景">1.背景</span></h2>
+<p>自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中遇到的架构方面的问题做一个系统的梳理。</p>
+<p>有了 GFS 我们有能力积累海量的数据样本，比如在线广告的曝光和点击数据，天然具有正负样本的特性，累积一两个月往往就能轻松获得百亿、千亿级的训练样本。这样海量的样本如何存储？用什么样的模型可以学习海量样本中有用的 pattern？这些问题不止是工程问题，也值得每个做算法的同学去深入思考。</p>
+<h3><span id="11-简单模型-or-复杂模型">1.1 简单模型 or 复杂模型</span></h3>
+<p>在深度学习概念提出之前，算法工程师手头能用的工具其实并不多，就 LR、SVM、感知机等寥寥可数、相对固定的若干个模型和算法；那时候要解决一个实际的问题，算法工程师更多的工作主要是在特征工程方面。而特征工程本身并没有很系统化的指导理论（至少目前没有看到系统介绍特征工程的书籍），所以很多时候特征的构造技法显得光怪陆离，是否有用也取决于问题本身、数据样本、模型以及运气。</p>
+<p>在特征工程作为算法工程师主要工作内容的时候，构造新特征的尝试往往很大部分都不能在实际工作中发挥作用。据我了解，国内几家大公司在特征构造方面的成功率在后期一般不会超过 20%。也就是 80% 的新构造特征往往并没什么正向提升效果。如果给这种方式起一个名字的话，大概是简单模型 + 复杂特征。简单模型说的是算法比如 LR、SVM 本身并不复杂，参数和表达能力基本呈现一种线性关系，易于理解。复杂特征则是指特征工程方面不断尝试使用各种奇技淫巧构造的可能有用、可能没用的特征，这部分特征的构造方式可能会有各种 trick，比如窗口滑动、离散化、归一化、开方、平方、笛卡尔积、多重笛卡尔积等等；顺便提一句，因为特征工程本身并没有特别系统的理论和总结，所以初入行的同学想要构造特征就需要多读 paper，特别是和自己业务场景一样或类似的场景的 paper，从里面学习作者分析、理解数据的方法以及对应的构造特征的技法；久而久之，有望形成自己的知识体系。</p>
+<p>深度学习概念提出以后，人们发现通过深度神经网络可以进行一定程度的表示学习（representation learning）。例如在图像领域，通过 CNN 提取图像 feature 并在此基础上进行分类的方法，一举打破了之前算法的天花板，而且是以极大的差距打破。这给所有算法工程师带来了新的思路，既然深度学习本身有提取特征的能力，干嘛还要苦哈哈的自己去做人工特征设计呢？</p>
+<p>深度学习虽然一定程度上缓解了特征工程的压力，但这里要强调两点：</p>
+<ol>
+<li>
+<p>缓解并不等于彻底解决，除了图像这种特定领域，在个性化推荐等领域，深度学习目前还没有完全取得绝对的优势。究其原因，可能还是数据自身内在结构的问题，使得在其他领域目前还没有发现类似图像+CNN 这样的完美 comple。</p>
+</li>
+<li>
+<p>深度学习在缓解特征工程的同时，也带来了模型复杂、不可解释的问题。算法工程师在网络结构设计方面一样要花很多心思来提升效果。概括起来，深度学习代表的简单特征 + 复杂模型是解决实际问题的另一种方式。</p>
+</li>
+</ol>
+<p>两种模式孰优孰劣还难有定论，以点击率预测为例，在计算广告领域往往以海量特征 +LR 为主流，根据 VC 维理论，LR 的表达能力和特征个数成正比，因此海量的 feature 也完全可以使 LR 拥有足够的描述能力。而在个性化推荐领域，深度学习刚刚萌芽，目前 google play 采用了 WDL 的结构 [1]，youtube 采用了双重 DNN 的结构 [2]。</p>
+<p>不管是那种模式，当模型足够庞大的时候，都会出现模型参数一台机器无法存放的情况。比如百亿级 feature 的 LR 对应的权重 w 有好几十个 G，这在很多单机上存储都是困难的，大规模神经网络则更复杂，不仅难以单机存储，而且参数和参数之间还有逻辑上的强依赖；要对超大规模的模型进行训练势必要借用分布式系统的技法，本文主要是系统总结这方面的一些思路。</p>
+<h3><span id="12-数据并行-vs-模型并行">1.2 数据并行 vs 模型并行</span></h3>
+<p>数据并行和模型并行是理解大规模机器学习框架的基础概念，其缘起未深究，第一次看到是在姐夫（Jeff Dean）的 blog 里，当时匆匆一瞥，以为自己懂了。多年以后，再次开始调研这个问题的时候才想起长者的教训，年轻人啊，还是图样，图森破。如果你和我一样曾经忽略过这个概念，今天不妨复习一下。</p>
+<p>这两个概念在 [3] 中沐帅曾经给出了一个非常直观而经典的解释，可惜不知道什么原因，当我想引用时却发现已经被删除了。我在这里简单介绍下这个比喻：如果要修两栋楼，有一个工程队，怎么操作？第一个方案是将人分成两组，分别盖楼，盖好了就装修；第二种做法是一组人盖楼，等第一栋楼盖好，另一组装修第一栋，然后第一组继续盖第二栋楼，改完以后等装修队装修第二栋楼。乍一看，第二种方法似乎并行度并不高，但第一种方案需要每个工程人员都拥有“盖楼”和“装修”两种能力，而第二个方案只需要每个人拥有其中一种能力即可。第一个方案和数据并行类似，第二个方案则道出了模型并行的精髓。</p>
+<p>数据并行理解起来比较简单，当样本比较多的时候，为了使用所有样本来训练模型，我们不妨把数据分布到不同的机器上，然后每台机器都来对模型参数进行迭代，如下图所示。</p>
+<p><img src="sdp.png" alt=""></p>
+<p>图片取材于 TensorFlow 的 paper[4]，图中 ABC 代表三台不同的机器，上面存储着不同的样本，模型 P 在各台机器上计算对应的增量，然后在参数存储的机器上进行汇总和更新，这就是数据并行。先忽略 synchronous，这是同步机制相关的概念，在第三节会有专门介绍。</p>
+<p>数据并行概念简单，而且不依赖于具体的模型，因此数据并行机制可以作为框架的一种基础功能，对所有算法都生效。与之不同的是，模型并行因为参数间存在依赖关系（其实数据并行参数更新也可能会依赖所有的参数，但区别在于往往是依赖于上一个迭代的全量参数。而模型并行往往是同一个迭代内的参数之间有强依赖关系，比如 DNN 网络的不同层之间的参数依照 BP 算法形成的先后依赖），无法类比数据并行这样直接将模型参数分片而破坏其依赖关系，所以模型并行不仅要对模型分片，同时需要调度器来控制参数间的依赖关系。而每个模型的依赖关系往往并不同，所以模型并行的调度器因模型而异，较难做到完全通用。关于这个问题，CMU 的 Erix Xing 在 [5] 中有所介绍，感兴趣的可以参考。</p>
+<p>模型并行的问题定义可以参考姐夫的 [6]，这篇 paper 也是 tensorflow 的前身相关的总结，其中如下图：</p>
+<h1><span id="第二章-参数服务器设计理念与基本架构">第二章 参数服务器设计理念与基本架构</span></h1>
+<h1><span id="第三章-pslite的分析">第三章 pslite的分析</span></h1>
+<h1><span id="第四章-tensorflow-ps分析">第四章 tensorflow ps分析</span></h1>
+<h1><span id="第五章-angel-ps分析">第五章 angel ps分析</span></h1>
+<h1><span id="第六章-实现参数服务器">第六章 实现参数服务器</span></h1>
+<h1><span id="第七章-调度框架的简要分析">第七章 调度框架的简要分析</span></h1>
+<h1><span id="第八章-对参数服务器的思考和展望">第八章 对参数服务器的思考和展望</span></h1>
+<h1><span id="引用">引用</span></h1>
+<ol>
+<li>Wide &amp; Deep Learning for Recommender Systems</li>
+<li>Deep Neural Networks for YouTube Recommendations</li>
+<li>https://www.zhihu.com/question/53851014</li>
+<li>TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems</li>
+<li>http://www.jianshu.com/p/00736aa21dc8</li>
+<li>Large Scale Distributed Deep Networks</li>
+<li>MapReduce: Simplified Data Processing on Large Clusters</li>
+<li>Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing</li>
+<li>https://www.zhihu.com/question/55119470</li>
+<li>KunPeng: Parameter Server based Distributed Learning Systems and Its Applications in Alibaba and Ant Financial</li>
+<li>An Architecture for Parallel Topic Models</li>
+<li>Scaling Distributed Machine Learning with the Parameter Server</li>
+<li>Piccolo: Building fast, distributed pro- grams with partitioned tables</li>
+<li>More Effective Distributed ML via a Stale Synchronous Parallel Parameter Server</li>
+<li>Angel-A Flexible and Powerful Parameter Server；黄明 ppt</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/参数服务器/" rel="tag"># 参数服务器</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/23/在线最优化求解/" rel="next" title="在线最优化求解">
+                <i class="fa fa-chevron-left"></i> 在线最优化求解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/timg.jpeg"
+                alt="Yifan Guo" />
+            
+              <p class="site-author-name" itemprop="name">Yifan Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">parameter server技术内幕</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">第一章 回顾分布式机器学习的历史进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">1.背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 简单模型 or 复杂模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 数据并行 vs 模型并行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">第二章 参数服务器设计理念与基本架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">第三章 pslite的分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">第四章 tensorflow ps分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">第五章 angel ps分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">第六章 实现参数服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">第七章 调度框架的简要分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">第八章 对参数服务器的思考和展望</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">引用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yifan Guo</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">37.1k</span>
+  
+
+  
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+  
+
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.yifanguo.top/2018/10/29/parameter-server/';
+          this.page.identifier = '2018/10/29/parameter-server/';
+          this.page.title = 'parameter_server';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

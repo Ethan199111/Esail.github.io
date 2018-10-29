@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-10-22T11:50:57.000Z</updated>
+  <updated>2018-10-29T11:08:02.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,6 +15,81 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>parameter_server</title>
+    <link href="http://www.yifanguo.top/2018/10/29/parameter-server/"/>
+    <id>http://www.yifanguo.top/2018/10/29/parameter-server/</id>
+    <published>2018-10-29T10:53:51.000Z</published>
+    <updated>2018-10-29T11:08:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[toc]</p><h1><span id="parameter-server技术内幕">parameter server技术内幕</span></h1><p>深入解析parameter server架构设计与实现原理</p><h1><span id="第一章-回顾分布式机器学习的历史进程">第一章 回顾分布式机器学习的历史进程</span></h1><h2><span id="1背景">1.背景</span></h2><p>自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中遇到的架构方面的问题做一个系统的梳理。</p><p>有了 GFS 我们有能力积累海量的数据样本，比如在线广告的曝光和点击数据，天然具有正负样本的特性，累积一两个月往往就能轻松获得百亿、千亿级的训练样本。这样海量的样本如何存储？用什么样的模型可以学习海量样本中有用的 pattern？这些问题不止是工程问题，也值得每个做算法的同学去深入思考。</p><h3><span id="11-简单模型-or-复杂模型">1.1 简单模型 or 复杂模型</span></h3><p>在深度学习概念提出之前，算法工程师手头能用的工具其实并不多，就 LR、SVM、感知机等寥寥可数、相对固定的若干个模型和算法；那时候要解决一个实际的问题，算法工程师更多的工作主要是在特征工程方面。而特征工程本身并没有很系统化的指导理论（至少目前没有看到系统介绍特征工程的书籍），所以很多时候特征的构造技法显得光怪陆离，是否有用也取决于问题本身、数据样本、模型以及运气。</p><p>在特征工程作为算法工程师主要工作内容的时候，构造新特征的尝试往往很大部分都不能在实际工作中发挥作用。据我了解，国内几家大公司在特征构造方面的成功率在后期一般不会超过 20%。也就是 80% 的新构造特征往往并没什么正向提升效果。如果给这种方式起一个名字的话，大概是简单模型 + 复杂特征。简单模型说的是算法比如 LR、SVM 本身并不复杂，参数和表达能力基本呈现一种线性关系，易于理解。复杂特征则是指特征工程方面不断尝试使用各种奇技淫巧构造的可能有用、可能没用的特征，这部分特征的构造方式可能会有各种 trick，比如窗口滑动、离散化、归一化、开方、平方、笛卡尔积、多重笛卡尔积等等；顺便提一句，因为特征工程本身并没有特别系统的理论和总结，所以初入行的同学想要构造特征就需要多读 paper，特别是和自己业务场景一样或类似的场景的 paper，从里面学习作者分析、理解数据的方法以及对应的构造特征的技法；久而久之，有望形成自己的知识体系。</p><p>深度学习概念提出以后，人们发现通过深度神经网络可以进行一定程度的表示学习（representation learning）。例如在图像领域，通过 CNN 提取图像 feature 并在此基础上进行分类的方法，一举打破了之前算法的天花板，而且是以极大的差距打破。这给所有算法工程师带来了新的思路，既然深度学习本身有提取特征的能力，干嘛还要苦哈哈的自己去做人工特征设计呢？</p><p>深度学习虽然一定程度上缓解了特征工程的压力，但这里要强调两点：</p><ol><li><p>缓解并不等于彻底解决，除了图像这种特定领域，在个性化推荐等领域，深度学习目前还没有完全取得绝对的优势。究其原因，可能还是数据自身内在结构的问题，使得在其他领域目前还没有发现类似图像+CNN 这样的完美 comple。</p></li><li><p>深度学习在缓解特征工程的同时，也带来了模型复杂、不可解释的问题。算法工程师在网络结构设计方面一样要花很多心思来提升效果。概括起来，深度学习代表的简单特征 + 复杂模型是解决实际问题的另一种方式。</p></li></ol><p>两种模式孰优孰劣还难有定论，以点击率预测为例，在计算广告领域往往以海量特征 +LR 为主流，根据 VC 维理论，LR 的表达能力和特征个数成正比，因此海量的 feature 也完全可以使 LR 拥有足够的描述能力。而在个性化推荐领域，深度学习刚刚萌芽，目前 google play 采用了 WDL 的结构 [1]，youtube 采用了双重 DNN 的结构 [2]。</p><p>不管是那种模式，当模型足够庞大的时候，都会出现模型参数一台机器无法存放的情况。比如百亿级 feature 的 LR 对应的权重 w 有好几十个 G，这在很多单机上存储都是困难的，大规模神经网络则更复杂，不仅难以单机存储，而且参数和参数之间还有逻辑上的强依赖；要对超大规模的模型进行训练势必要借用分布式系统的技法，本文主要是系统总结这方面的一些思路。</p><h3><span id="12-数据并行-vs-模型并行">1.2 数据并行 vs 模型并行</span></h3><p>数据并行和模型并行是理解大规模机器学习框架的基础概念，其缘起未深究，第一次看到是在姐夫（Jeff Dean）的 blog 里，当时匆匆一瞥，以为自己懂了。多年以后，再次开始调研这个问题的时候才想起长者的教训，年轻人啊，还是图样，图森破。如果你和我一样曾经忽略过这个概念，今天不妨复习一下。</p><p>这两个概念在 [3] 中沐帅曾经给出了一个非常直观而经典的解释，可惜不知道什么原因，当我想引用时却发现已经被删除了。我在这里简单介绍下这个比喻：如果要修两栋楼，有一个工程队，怎么操作？第一个方案是将人分成两组，分别盖楼，盖好了就装修；第二种做法是一组人盖楼，等第一栋楼盖好，另一组装修第一栋，然后第一组继续盖第二栋楼，改完以后等装修队装修第二栋楼。乍一看，第二种方法似乎并行度并不高，但第一种方案需要每个工程人员都拥有“盖楼”和“装修”两种能力，而第二个方案只需要每个人拥有其中一种能力即可。第一个方案和数据并行类似，第二个方案则道出了模型并行的精髓。</p><p>数据并行理解起来比较简单，当样本比较多的时候，为了使用所有样本来训练模型，我们不妨把数据分布到不同的机器上，然后每台机器都来对模型参数进行迭代，如下图所示。</p><p><img src="sdp.png" alt=""></p><p>图片取材于 TensorFlow 的 paper[4]，图中 ABC 代表三台不同的机器，上面存储着不同的样本，模型 P 在各台机器上计算对应的增量，然后在参数存储的机器上进行汇总和更新，这就是数据并行。先忽略 synchronous，这是同步机制相关的概念，在第三节会有专门介绍。</p><p>数据并行概念简单，而且不依赖于具体的模型，因此数据并行机制可以作为框架的一种基础功能，对所有算法都生效。与之不同的是，模型并行因为参数间存在依赖关系（其实数据并行参数更新也可能会依赖所有的参数，但区别在于往往是依赖于上一个迭代的全量参数。而模型并行往往是同一个迭代内的参数之间有强依赖关系，比如 DNN 网络的不同层之间的参数依照 BP 算法形成的先后依赖），无法类比数据并行这样直接将模型参数分片而破坏其依赖关系，所以模型并行不仅要对模型分片，同时需要调度器来控制参数间的依赖关系。而每个模型的依赖关系往往并不同，所以模型并行的调度器因模型而异，较难做到完全通用。关于这个问题，CMU 的 Erix Xing 在 [5] 中有所介绍，感兴趣的可以参考。</p><p>模型并行的问题定义可以参考姐夫的 [6]，这篇 paper 也是 tensorflow 的前身相关的总结，其中如下图：</p><h1><span id="第二章-参数服务器设计理念与基本架构">第二章 参数服务器设计理念与基本架构</span></h1><h1><span id="第三章-pslite的分析">第三章 pslite的分析</span></h1><h1><span id="第四章-tensorflow-ps分析">第四章 tensorflow ps分析</span></h1><h1><span id="第五章-angel-ps分析">第五章 angel ps分析</span></h1><h1><span id="第六章-实现参数服务器">第六章 实现参数服务器</span></h1><h1><span id="第七章-调度框架的简要分析">第七章 调度框架的简要分析</span></h1><h1><span id="第八章-对参数服务器的思考和展望">第八章 对参数服务器的思考和展望</span></h1><h1><span id="引用">引用</span></h1><ol><li>Wide &amp; Deep Learning for Recommender Systems</li><li>Deep Neural Networks for YouTube Recommendations</li><li>https://www.zhihu.com/question/53851014</li><li>TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems</li><li>http://www.jianshu.com/p/00736aa21dc8</li><li>Large Scale Distributed Deep Networks</li><li>MapReduce: Simplified Data Processing on Large Clusters</li><li>Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing</li><li>https://www.zhihu.com/question/55119470</li><li>KunPeng: Parameter Server based Distributed Learning Systems and Its Applications in Alibaba and Ant Financial</li><li>An Architecture for Parallel Topic Models</li><li>Scaling Distributed Machine Learning with the Parameter Server</li><li>Piccolo: Building fast, distributed pro- grams with partitioned tables</li><li>More Effective Distributed ML via a Stale Synchronous Parallel Parameter Server</li><li>Angel-A Flexible and Powerful Parameter Server；黄明 ppt</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;parameter-server技术内幕&quot;&gt;parameter server技术内幕&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;深入解析parameter server架构设计与实现原理&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;第一章-回顾分
+      
+    
+    </summary>
+    
+    
+      <category term="参数服务器" scheme="http://www.yifanguo.top/tags/%E5%8F%82%E6%95%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在线最优化求解</title>
+    <link href="http://www.yifanguo.top/2018/10/23/%E5%9C%A8%E7%BA%BF%E6%9C%80%E4%BC%98%E5%8C%96%E6%B1%82%E8%A7%A3/"/>
+    <id>http://www.yifanguo.top/2018/10/23/在线最优化求解/</id>
+    <published>2018-10-23T09:09:32.000Z</published>
+    <updated>2018-10-24T02:00:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>SGD或L-BFGS</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;SGD或L-BFGS&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="online learning" scheme="http://www.yifanguo.top/tags/online-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ftrl</title>
+    <link href="http://www.yifanguo.top/2018/10/23/ftrl/"/>
+    <id>http://www.yifanguo.top/2018/10/23/ftrl/</id>
+    <published>2018-10-23T09:01:48.000Z</published>
+    <updated>2018-10-23T09:08:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="ftrl-follow-the-regularized-leader">FTRL -- Follow the Regularized Leader</span></h1><h1><span id="背景">背景</span></h1><p>在工业界，越来越多的业务需要大规模机器学习，不单参与训练的数据量大，模型特征量的规模也大。例如点击率预估，训练数据量在TB量级，特征量在亿这个量级，业内常用LR（Logistic Regression）和FM（Factorization Machines）为点击率预估建模。对LR、FM这类模型的参数学习，传统的学习算法是batch learning算法，它无法有效地处理大规模的数据集，也无法有效地处理大规模的在线数据流。这时，有效且高效的online learning算法显得尤为重要。</p><pre><code>   SGD算法[1]是常用的online learning算法，它能学习出不错的模型，但学出的模型不是稀疏的。为此，学术界和工业界都在研究这样一种online learning算法，它能学习出有效的且稀疏的模型。FTRL（Follow the Regularized Leader）算法正是这样一种算法，它由Google的H. Brendan McMahan在2010年提出的[2]，后来在2011年发表了一篇关于FTRL和AOGD、FOBOS、RDA比较的论文[3]，2013年又和Gary Holt, D. Sculley, Michael Young等人发表了一篇关于FTRL工程化实现的论文[4]。如论文[4]的内容所述，FTRL算法融合了RDA算法能产生稀疏模型的特性和SGD算法能产生更有效模型的特性。它在处理诸如LR之类的带非光滑正则化项（例如1范数，做模型复杂度控制和稀疏化）的凸优化问题上性能非常出色，国内各大互联网公司都已将该算法应用到实际产品中。   文章[5]是篇很好的介绍FTRL算法的中文资料，从TG算法、FOBOS算法开始，到RDA算法，最后到FTRL算法，一脉相承，而且各个算法都有推导过程，值得认真体会。   这篇文章不会赘述文章[5]中的内容，而是介绍FTRL算法与SGD算法之间存在的另一种联系。这个联系在网络上似乎没有文章介绍，可能是因为这个细节不那么重要，但倘若了解了此细节，能更好的体会到FTRL算法为啥跟SGD算法有联系。</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;span id=&quot;ftrl-follow-the-regularized-leader&quot;&gt;FTRL -- Follow the Regularized Leader&lt;/span&gt;&lt;/h1&gt;
+&lt;h1&gt;&lt;span id=&quot;背景&quot;&gt;背景&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;在工业界
+      
+    
+    </summary>
+    
+    
+      <category term="ftrl" scheme="http://www.yifanguo.top/tags/ftrl/"/>
+    
+  </entry>
   
   <entry>
     <title>socket</title>
@@ -420,71 +495,6 @@ Hyper-threading enables a si
     
     
       <category term="linux" scheme="http://www.yifanguo.top/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>dubboRpc</title>
-    <link href="http://www.yifanguo.top/2018/07/29/dubboRpc/"/>
-    <id>http://www.yifanguo.top/2018/07/29/dubboRpc/</id>
-    <published>2018-07-30T04:51:28.000Z</published>
-    <updated>2018-07-30T04:51:49.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="rpc" scheme="http://www.yifanguo.top/tags/rpc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>rxjava</title>
-    <link href="http://www.yifanguo.top/2018/07/29/rxjava/"/>
-    <id>http://www.yifanguo.top/2018/07/29/rxjava/</id>
-    <published>2018-07-30T03:56:42.000Z</published>
-    <updated>2018-07-30T04:23:16.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="backpressure">backpressure</span></h1><p>背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p><h1><span id="observer-pattern">Observer pattern</span></h1><p>RxJava 以观察者模式为骨架Observable ( 被观察者 ) / Observer ( 观察者 )Flowable （被观察者）/ Subscriber （观察者）</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;backpressure&quot;&gt;backpressure&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;observe
-      
-    
-    </summary>
-    
-    
-      <category term="reactive" scheme="http://www.yifanguo.top/tags/reactive/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>vertxDemos</title>
-    <link href="http://www.yifanguo.top/2018/07/29/vertxDemos/"/>
-    <id>http://www.yifanguo.top/2018/07/29/vertxDemos/</id>
-    <published>2018-07-30T02:53:32.000Z</published>
-    <updated>2018-07-30T02:53:55.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="几个vertx搭建的demo">几个vertx搭建的demo</span></h1>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;几个vertx搭建的demo&quot;&gt;几个vertx搭建的demo&lt;/span&gt;&lt;/h1&gt;
-
-      
-    
-    </summary>
-    
-    
-      <category term="reactive" scheme="http://www.yifanguo.top/tags/reactive/"/>
     
   </entry>
   
