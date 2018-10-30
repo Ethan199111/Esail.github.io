@@ -89,30 +89,30 @@
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
 <meta property="og:description" content="[toc] parameter server技术内幕 深入解析parameter server架构设计与实现原理 第一章 回顾分布式机器学习的历史进程 1.背景 自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/sdp.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps_2.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps_3.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/mr.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/spark.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/mpi.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h1.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h2.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h3.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h4.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/asp.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/bsp.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ssp.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/snl.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h3.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/dsd.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/dsd1.png">
-<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/css.png">
-<meta property="og:updated_time" content="2018-10-30T02:25:59.000Z">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/sdp.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/tf_ps.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/tf_ps_2.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/tf_ps_3.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/mr.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/spark.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/mpi.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ps_h1.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ps_h2.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ps_h3.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ps_h4.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/asp.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/bsp.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ssp.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/snl.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/ps_h3.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/dsd.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/dsd1.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/css.png">
+<meta property="og:updated_time" content="2018-10-30T02:32:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="parameter_server">
 <meta name="twitter:description" content="[toc] parameter server技术内幕 深入解析parameter server架构设计与实现原理 第一章 回顾分布式机器学习的历史进程 1.背景 自从 google 发表著名的 GFS、MapReduce、BigTable 三篇 paper 以后，互联网正式迎来了大数据时代。大数据的显著特点是大，哪里都大的大。本篇主要针对 volume 大的数据时，使用机器学习来进行数据处理过程中">
-<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/sdp.png">
+<meta name="twitter:image" content="http://www.yifanguo.top/2018/10/29/parameter-server/sdp.png">
 
 
 
@@ -389,34 +389,34 @@
 <p>数据并行和模型并行是理解大规模机器学习框架的基础概念，其缘起未深究，第一次看到是在姐夫（Jeff Dean）的 blog 里，当时匆匆一瞥，以为自己懂了。多年以后，再次开始调研这个问题的时候才想起长者的教训，年轻人啊，还是图样，图森破。如果你和我一样曾经忽略过这个概念，今天不妨复习一下。</p>
 <p>这两个概念在 [3] 中沐帅曾经给出了一个非常直观而经典的解释，可惜不知道什么原因，当我想引用时却发现已经被删除了。我在这里简单介绍下这个比喻：如果要修两栋楼，有一个工程队，怎么操作？第一个方案是将人分成两组，分别盖楼，盖好了就装修；第二种做法是一组人盖楼，等第一栋楼盖好，另一组装修第一栋，然后第一组继续盖第二栋楼，改完以后等装修队装修第二栋楼。乍一看，第二种方法似乎并行度并不高，但第一种方案需要每个工程人员都拥有“盖楼”和“装修”两种能力，而第二个方案只需要每个人拥有其中一种能力即可。第一个方案和数据并行类似，第二个方案则道出了模型并行的精髓。</p>
 <p>数据并行理解起来比较简单，当样本比较多的时候，为了使用所有样本来训练模型，我们不妨把数据分布到不同的机器上，然后每台机器都来对模型参数进行迭代，如下图所示。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/sdp.png" alt=""></p>
+<p><img src="sdp.png" alt=""></p>
 <p>图片取材于 TensorFlow 的 paper[4]，图中 ABC 代表三台不同的机器，上面存储着不同的样本，模型 P 在各台机器上计算对应的增量，然后在参数存储的机器上进行汇总和更新，这就是数据并行。先忽略 synchronous，这是同步机制相关的概念，在第三节会有专门介绍。</p>
 <p>数据并行概念简单，而且不依赖于具体的模型，因此数据并行机制可以作为框架的一种基础功能，对所有算法都生效。与之不同的是，模型并行因为参数间存在依赖关系（其实数据并行参数更新也可能会依赖所有的参数，但区别在于往往是依赖于上一个迭代的全量参数。而模型并行往往是同一个迭代内的参数之间有强依赖关系，比如 DNN 网络的不同层之间的参数依照 BP 算法形成的先后依赖），无法类比数据并行这样直接将模型参数分片而破坏其依赖关系，所以模型并行不仅要对模型分片，同时需要调度器来控制参数间的依赖关系。而每个模型的依赖关系往往并不同，所以模型并行的调度器因模型而异，较难做到完全通用。关于这个问题，CMU 的 Erix Xing 在 [5] 中有所介绍，感兴趣的可以参考。</p>
 <p>模型并行的问题定义可以参考姐夫的 [6]，这篇 paper 也是 tensorflow 的前身相关的总结，其中如下图：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps.png" alt=""></p>
+<p><img src="tf_ps.png" alt=""></p>
 <p>解释了模型并行的物理图景，当一个超大神经网络无法存储在一台机器上时，我们可以切割网络存到不同的机器上，但是为了保持不同参数分片之间的依赖，如图中粗黑线的部分，则需要在不同的机器之间进行 concurrent 控制；同一个机器内部的参数依赖，即图中细黑线部分在机器内即可完成控制。</p>
 <p>黑线部分如何有效控制呢？如下图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps_2.png" alt=""></p>
+<p><img src="tf_ps_2.png" alt=""></p>
 <p>在将模型切分到不同机器以后，我们将参数和样本一起在不同机器间流转，图中 ABC 代表模型的不同部分的参数；假设 C 依赖 B，B 依赖 A，机器 1 上得到 A 的一个迭代后，将 A 和必要的样本信息一起传到机器 2，机器 2 根据 A 和样本对 P2 更新得到，以此类推；当机器 2 计算 B 的时候，机器 1 可以展开 A 的第二个迭代的计算。了解 CPU 流水线操作的同学一定感到熟悉，是的，模型并行是通过数据流水线来实现并行的。想想那个盖楼的第二种方案，就能理解模型并行的精髓了。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/tf_ps_3.png" alt=""></p>
+<p><img src="tf_ps_3.png" alt=""></p>
 <p>上图则是对控制模型参数依赖的调度器的一个示意图，实际框架中一般都会用 DAG（有向无环图）调度技术来实现类似功能，未深入研究，以后有机会再补充说明。</p>
 <p>理解了数据并行和模型并行对后面参数服务器的理解至关重要，但现在让我先荡开一笔，简单介绍下并行计算框架的一些背景信息。</p>
 <h2><span id="2并行算法演进">2.并行算法演进</span></h2>
 <h3><span id="21-mapreduce-路线">2.1 MapReduce 路线</span></h3>
 <p>从函数式编程中受到启发，Google 发布了 MapReduce[7] 的分布式计算方式；通过将任务切分成多个叠加的 Map+Reduce 任务，来完成复杂的计算任务，示意图如下：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/mr.png" alt=""></p>
+<p><img src="mr.png" alt=""></p>
 <p>MapReduce 的主要问题有两个，一是原语的语义过于低级，直接使用其来写复杂算法，开发量比较大；另一个问题是依赖于磁盘进行数据传递，性能跟不上业务需求。</p>
 <p>为了解决 MapReduce 的两个问题，Matei 在 [8] 中提出了一种新的数据结构 RDD，并构建了 Spark 框架。Spark 框架在 MR 语义之上封装了 DAG 调度器，极大降低了算法使用的门槛。较长时间内 Spark 几乎可以说是大规模机器学习的代表，直至后来沐帅的参数服务器进一步开拓了大规模机器学习的领域以后，Spark 才暴露出一点点不足。如下图：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/spark.png" alt=""></p>
+<p><img src="spark.png" alt=""></p>
 <p>从图中可以看出，Spark 框架以 Driver 为核心，任务调度和参数汇总都在 Driver，而 Driver 是单机结构，所以 Spark 的瓶颈非常明显，就在 Driver 这里。当模型规模大到一台机器存不下的时候，Spark 就无法正常运行了。所以从今天的眼光来看，Spark 只能称为一个中等规模的机器学习框架。</p>
 <p>MapReduce 不仅是一个框架，还是一种思想，Google 开创性的工作为我们找到了大数据分析的一个可行方向，时至今日，仍不过时。只是逐渐从业务层下沉到底层语义应该处于的框架下层。</p>
 <h3><span id="22-mpi">2.2 MPI</span></h3>
 <p>沐帅在 [9] 中对 MPI 的前景做了简要介绍；和 Spark 不同，MPI 是类似 socket 的一种系统通信 API，只是支持了消息广播等功能。因为对 MPI 研究不深入，这里简单介绍下优点和缺点吧。优点是系统级支持，性能杠杠的；缺点也比较多，一是和 MR 一样因为原语过于低级，用 MPI 写算法，往往代码量比较大；另一方面是基于 MPI 的集群，如果某个任务失败，往往需要重启整个集群，而 MPI 集群的任务成功率并不高。阿里在 [10] 中给出了下图：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/mpi.png" alt=""></p>
+<p><img src="mpi.png" alt=""></p>
 <p>从图中可以看出，MPI 作业失败的几率接近五成。MPI 也并不是完全没有可取之处，正如沐帅所说，在超算集群上还是有场景的。对于工业届依赖于云计算、依赖于 commodity 计算机来说，则显得性价比不够高。当然如果在参数服务器的框架下，对单组 worker 再使用 MPI 未尝不是个好的尝试，[10] 的鲲鹏系统正是这么设计的。</p>
 <h2><span id="3-参数服务器演进">3. 参数服务器演进</span></h2>
 <p>沐帅在 [12] 中将参数服务器的历史划分为三个阶段，第一代参数服务器萌芽于沐帅的导师 Smola 的 [11]，如下图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h1.png" alt=""></p>
+<p><img src="ps_h1.png" alt=""></p>
 <p>这个工作中仅仅引入 memcached 来存放 key-value 数据，不同的处理进程并行对其进行处理。[13] 中也有类似的想法，第二代参数服务器叫 application-specific 参数服务器，主要针对特定应用而开发，其中最典型的代表应该是 TensorFlow 的前身 [6]。</p>
 <p>第三代参数服务器，也即是通用参数服务器框架是由百度少帅李沐正式提出的，和前两代不同，第三代参数服务器从设计上就是作为一个通用大规模机器学习框架来定位的。要摆脱具体应用、算法的束缚，做一个通用的大规模机器学习框架，首先就要定义好框架的功能；而所谓框架，往往就是把大量重复的、琐碎的、做了一次就不想再来第二次的脏活、累活进行良好而优雅的封装，让使用框架的人可以只关注于自己的核心逻辑。第三代参数服务器要对那些功能进行封装呢？沐帅总结了这几点，我照搬如下：</p>
 <p>1）高效的网络通信：因为不管是模型还是样本都十分巨大，因此对网络通信的高效支持以及高配的网络设备都是大规模机器学习系统不可缺少的；</p>
@@ -425,29 +425,29 @@
 <p>4）容灾容错：大规模集群协作进行计算任务的时候，出现 Straggler 或者机器故障是非常常见的事，因此系统设计本身就要考虑到应对；没有故障的时候，也可能因为对任务时效性要求的变化而随时更改集群的机器配置。这也需要框架能在不影响任务的情况下能做到机器的热插拔。</p>
 <p>5）易用性：主要针对使用框架进行算法调优的工程师而言，显然，一个难用的框架是没有生命力的。</p>
 <p>在正式介绍第三代参数服务器的主要技术之前，先从另一个角度来看下大规模机器学习框架的演进。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h2.png" alt=""></p>
+<p><img src="ps_h2.png" alt=""></p>
 <p>这张图可以看出，在参数服务器出来之前，人们已经做了多方面的并行尝试，不过往往只是针对某个特定算法或特定领域，比如 YahooLDA 是针对 LDA 算法的。当模型参数突破十亿以后，则可以看出参数服务器一统江湖，再无敌手。</p>
 <p>首先我们看看第三代参数服务器的基本架构。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h3.png" alt=""></p>
+<p><img src="ps_h3.png" alt=""></p>
 <p>上图的 resource manager 可以先放一放，因为实际系统中这部分往往是复用现有的资源管理系统，比如 yarn 或者 mesos；底下的 training data 毋庸置疑的需要类似 GFS 的分布式文件系统的支持；剩下的部分就是参数服务器的核心组件了。</p>
 <p>图中画了一个 server group 和三个 worker group；实际应用中往往也是类似，server group 用一个，而 worker group 按需配置；server manager 是 server group 中的管理节点，一般不会有什么逻辑，只有当有 server node 加入或退出的时候，为了维持一致性哈希而做一些调整。</p>
 <p>Worker group 中的 task schedule 则是一个简单的任务协调器，一个具体任务运行的时候，task schedule 负责通知每个 worker 加载自己对应的数据，然后去 server node 上拉取一个要更新的参数分片，用本地数据样本计算参数分片对应的变化量，然后同步给 server node；server node 在收到本机负责的参数分片对应的所有 worker 的更新后，对参数分片做一次 update。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h4.png" alt=""></p>
+<p><img src="ps_h4.png" alt=""></p>
 <p>如图所示，不同的 worker 同时并行运算的时候，可能因为网络、机器配置等外界原因，导致不同的 worker 的进度是不一样的，如何控制 worker 的同步机制是一个比较重要的课题。详见下节分解。</p>
 <h2><span id="32-同步协议">3.2 同步协议</span></h2>
 <p>本节假设读者已经对随机梯度优化算法比较熟悉，如果不熟悉的同学请参考吴恩达经典课程机器学习中对 SGD 的介绍，或者我之前多次推荐过的书籍《最优化导论》。</p>
 <p>我们先看一个单机算法的运行过程，假设一个模型的参数切分成三个分片 k1，k2，k3；比如你可以假设是一个逻辑回归算法的权重向量被分成三段。我们将训练样本集合也切分成三个分片 s1，s2，s3；在单机运行的情况下，我们假设运行的序列是（k1，s1）、（k2，s1）、（k3、s1）、（k1、s2）、（k2、s2）、（k3、s2）……看明白了吗？就是假设先用 s1 中的样本一次对参数分片 k1、k2、k3 进行训练，然后换 s2；这就是典型的单机运行的情况，而我们知道这样的运行序列最后算法会收敛。</p>
 <p>现在我们开始并行化，假设 k1、k2、k3 分布在三个 server node 上，s1、s2、s3 分布在三个 worker 上，这时候如果我们还要保持之前的计算顺序，则会变成怎样？work1 计算的时候，work2 和 worker3 只能等待，同样 worker2 计算的时候，worker1 和 work3 都得等待，以此类推；可以看出这样的并行化并没有提升性能；但是也算简单解决了超大规模模型的存储问题。</p>
 <p>为了解决性能的问题，业界开始探索这里的一致性模型，最先出来的版本是前面提到的 [11] 中的 ASP 模式，就是完全不顾 worker 之间的顺序，每个 worker 按照自己的节奏走，跑完一个迭代就 update，然后继续，这应该是大规模机器学习中的 freestyle 了，如图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/asp.png" alt="">
+<p><img src="asp.png" alt="">
 ASP 的优势是最大限度利用了集群的计算能力，所有的 worker 所在的机器都不用等待，但缺点也显而易见，除了少数几个模型，比如 LDA，ASP 协议可能导致模型无法收敛。也就是 SGD 彻底跑飞了，梯度不知道飞到哪里去了。</p>
 <p>在 ASP 之后提出了另一种相对极端的同步协议 BSP，Spark 用的就是这种方式，如图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/bsp.png" alt=""></p>
+<p><img src="bsp.png" alt=""></p>
 <p>每个 worker 都必须在同一个迭代运行，只有一个迭代任务所有的 worker 都完成了，才会进行一次 worker 和 server 之间的同步和分片更新。这个算法和严格一直的算法非常类似，区别仅仅在于单机版本的 batch size 在 BSP 的时候变成了有所有 worker 的单个 batch size 求和得到的总的 butch size 替换。毫无疑问，BSP 的模式和单机串行因为仅仅是 batch size 的区别，所以在模型收敛性上是完全一样的。同时，因为每个 worker 在一个周期内是可以并行计算的，所以有了一定的并行能力。</p>
 <p>以此协议为基础的 Spark 在很长时间内成为机器学习领域实际的霸主，不是没有理由的。此种协议的缺陷之处在于，整个 worker group 的性能由其中最慢的 worker 决定；这个 worker 一般称为 straggler。读过 GFS 文章的同学应该都知道 straggler 的存在是非常普遍的现象。</p>
 <p>能否将 ASP 和 BSP 做一下折中呢？答案当然是可以的，这就是目前我认为最好的同步协议 SSP；SSP 的思路其实很简单，既然 ASP 是允许不同 worker 之间的迭代次数间隔任意大，而 BSP 则只允许为 0，那我是否可以取一个常数 s？如图所示：</p>
 <p>能否将 ASP 和 BSP 做一下折中呢？答案当然是可以的，这就是目前我认为最好的同步协议 SSP；SSP 的思路其实很简单，既然 ASP 是允许不同 worker 之间的迭代次数间隔任意大，而 BSP 则只允许为 0，那我是否可以取一个常数 s？如图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ssp.png" alt=""></p>
+<p><img src="ssp.png" alt=""></p>
 <p>不同的 worker 之间允许有迭代的间隔，但这个间隔数不允许超出一个指定的数值 s，图中 s=3.</p>
 <p>SSP 协议的详细介绍参见 [14]，CMU 的大拿 Eric Xing 在其中详细介绍了 SSP 的定义，以及其收敛性的保证。理论推导证明常数 s 不等于无穷大的情况下，算法一定可以在若干次迭代以后进入收敛状态。其实在 Eric 提出理论证明之前，工业界已经这么尝试过了：）</p>
 <p>顺便提一句，考察分布式算法的性能，一般会分为 statistical performance 和 hard performance 来看。前者指不同的同步协议导致算法收敛需要的迭代次数的多少，后者是单次迭代所对应的耗时。两者的关系和 precision\recall 关系类似，就不赘述了。有了 SSP，BSP 就可以通过指定 s=0 而得到。而 ASP 同样可以通过制定 s=∞来达到。</p>
@@ -456,7 +456,7 @@ ASP 的优势是最大限度利用了集群的计算能力，所有的 worker �
 <p>热备、冷备技术：为了防止 server node 挂掉，导致任务中断，可以采用两个技术，一个是对参数分片进行热备，每个分片存储在三个不同的 server node 中，以 master-slave 的形式存活。如果 master 挂掉，可以快速从 slave 获取并重启相关 task。</p>
 <p>除了热备，还可以定时写入 checkpoint 文件到分布式文件系统来对参数分片及其状态进行备份。进一步保证其安全性。</p>
 <p>Server node 管理：可以使用一致性哈希技术来解决 server node 的加入和退出问题，如图所示：</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/snl.png" alt=""></p>
+<p><img src="snl.png" alt=""></p>
 <p>当有 server node 加入或退出的时候，server manager 负责对参数进行重新分片或者合并。注意在对参数进行分片管理的情况下，一个分片只需要一把锁，这大大提升了系统的性能，也是参数服务器可以实用的一个关键点。</p>
 <h2><span id="4-大规模机器学习的四重境界">4. 大规模机器学习的四重境界</span></h2>
 <p>到这里可以回到我们的标题了，大规模机器学习的四重境界到底是什么呢？</p>
@@ -511,7 +511,7 @@ Elastic Scalability：使用一致性哈希算法，使得新的Server可以随�
 Fault Tolerance and Durability：
 节点故障是不可避免的。对于server节点来说，使用链备份来应对；而对于Worker来说，因为worker之间互相不通信，因此在某个worker失败后，新的worker可以直接加入
 Ease of Use：全局共享的参数可以被表示成各种形式：vector, matrices或是sparse类型，同时框架还提供对线性代数类型提供高性能的多线程计算库。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/ps_h3.png" alt=""></p>
+<p><img src="ps_h3.png" alt=""></p>
 <p>Parameter Server框架中，每个server都只负责分到的部分参数（server共同维持一个全局共享参数）。server节点可以和其他server节点通信，每个server负责自己分到的参数，server group共同维持所有参数的更新。server manage node负责维护一些元数据的一致性，例如各个节点的状态，参数的分配情况。</p>
 <p>worker节点之间没有通信，只和对应的server有通信。每个worker group有一个task scheduler，负责向worker分配任务，并且监控worker的运行情况。当有worker退出或加入时，task scheduler重新分配任务。</p>
 <p>##2.2.1 (Key,Value) Vectors
@@ -526,11 +526,11 @@ w.pull(R, dest)</p>
 <p>task即为一个RPC调用函数。举例而言，worker对server的RPC调用push()或pull()都是算作一个task，又或是scheduler中用户自定义的一个用来对任意其他节点进行RPC调用的函数都算做是task。</p>
 <p>而异步指的是，Tasks在被caller调用后立刻返回，但只有当caller收到callee的回复后，才将该task标记为结束。（在push()和pull()的例子中，worker==caller调用者，server==callee被调用者）
 默认而言，callee为了性能执行tasks都是并行的，但是如果caller希望串行执行task的话，可以在不同的task之间添加execute-after-finished依赖。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/dsd.png" alt=""></p>
+<p><img src="dsd.png" alt=""></p>
 <p>上图中，Task Scheduler的 调用了Worker中的WORKERITERATE()，这算做是一个task。其中Task Scheduler是caller，worker是callee。</p>
 <p>而WORKERITERATE()这个task却包括3步，第一步是计算梯度，因为是本地的，所以不算task。但是后续的push()和pull()都是subtask。</p>
 <p>假设，Scheduler要求iter10和iter11是独立的，但是iter11和iter12是添加了依赖的。那么对于其中某个worker来说，他的执行过程就类似于下图
-<img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/dsd1.png" alt=""></p>
+<img src="dsd1.png" alt=""></p>
 <p>该worker在iter10的梯度计算后就立刻计算iter11的梯度，然而在iter11的梯度计算完后，却等待push()+pull()两个subtask结束才开始iter12的计算。</p>
 <h2><span id="224-flexible-consistency">2.2.4 Flexible Consistency</span></h2>
 <p>异步task能够提高系统的效率，但是却会造成数据不一致，从而降低算法的收敛速率。</p>
@@ -561,7 +561,7 @@ w.pull(R, dest)</p>
 2.4.3 Replication and Consistency
 PS在数据一致性方面，使用的是一致性哈希算法，然后每个节点备份其逆时针的k个节点的参数。</p>
 <p>一致性哈希算法：即将数据按照某种hash算法映射到环上，然后将机器按照同样的hash算法映射到环上，将数据存储到环上顺时针最近的机器上。</p>
-<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/parameter-server/css.png" alt=""></p>
+<p><img src="css.png" alt=""></p>
 <p>如图，k=3，则S2，S3和S4复制了S1的参数。</p>
 <h1><span id="第二章-参数服务器设计理念与基本架构">第二章 参数服务器设计理念与基本架构</span></h1>
 <h1><span id="第三章-pslite的分析">第三章 pslite的分析</span></h1>
