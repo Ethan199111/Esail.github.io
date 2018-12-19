@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-12-19T06:06:09.000Z</updated>
+  <updated>2018-12-19T06:12:34.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -21,15 +21,16 @@
     <link href="http://www.yifanguo.top/2018/12/19/test/"/>
     <id>http://www.yifanguo.top/2018/12/19/test/</id>
     <published>2018-12-19T06:00:15.000Z</published>
-    <updated>2018-12-19T06:06:09.000Z</updated>
+    <updated>2018-12-19T06:12:34.000Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="./test/pslite.jpg" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h1><span id="test">test</span></h1><p><img src="./test/pslite.jpg" alt=""></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;&lt;img src=&quot;./test/pslite.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+        &lt;h1&gt;&lt;span id=&quot;test&quot;&gt;test&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;./test/pslite.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 
       
     
