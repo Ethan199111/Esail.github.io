@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://www.yifanguo.top/2018/12/19/pslite/pslite/node.png">
 <meta property="og:image" content="http://www.yifanguo.top/2018/12/19/pslite/pslite/msg.png">
 <meta property="og:image" content="http://www.yifanguo.top/2018/12/19/pslite/pslite/node_work.png">
-<meta property="og:updated_time" content="2018-12-19T03:14:46.000Z">
+<meta property="og:updated_time" content="2018-12-19T06:01:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pslite">
 <meta name="twitter:description" content="[toc] https://zhuanlan.zhihu.com/p/48794558 http://www.cnblogs.com/heguanyou/p/7868596.html https://blog.csdn.net/KangRoger/article/details/73307685 https://blog.csdn.net/xln0130/article/details/56960">
@@ -358,13 +358,13 @@ https://www.zybuluo.com/Dounm/note/517675</p>
 <h1><span id="rpc-vs-socket">RPC vs socket</span></h1>
 <p>两个老板手下各有一个负责接通MSN的秘书.这两个秘书就是基于RPC协议建立的会话层通信.老本不需要知道怎么使用MSN,只要告诉秘书,秘书就会通过MSN与对方建立会话请求和响应.而基于Socket的通信,老板需要会使用MSN,这样尽管老板需要事先培训一下MSN的简单使用常识,但若与对方通信时,无需经过秘书,效率更高.</p>
 <h1><span id="pslite全解析">Pslite全解析</span></h1>
-<p><img src="./pslite/pslite.jpg" alt="avatar"></p>
+<p><img src="./pslite/pslite.jpg" alt=""></p>
 <ul>
 <li>虚线实心箭头：依赖关系</li>
 <li>实心菱形： 合成关系，simpleApp中有一个customer成员</li>
 <li>空心三角+实线： 继承关系</li>
 </ul>
-<p><img src="./pslite/class.png" alt="avatar"></p>
+<p><img src="./pslite/class.png" alt=""></p>
 <h2><span id="postoffice">PostOffice</span></h2>
 <p>全局管理类,每个node只有一个该类的对象</p>
 <p>主要用来配置当前node的一些信息，例如当前node是哪种类型(server,worker,scheduler)，nodeid是啥，以及worker/server 的rank 到 node id的转换。</p>
@@ -409,16 +409,16 @@ customer::Wait()就是一直阻塞直到tracker</em>[t].first == tracker[t].seco
 <p>每当Van的recv thread收到一个message时，就会根据customer id的不同将message发给不同的customer的recv thread。
 同时该message对应的请求（设为req）则tracker_[req.timestamp].second++</p>
 <h1><span id="node">Node</span></h1>
-<p><img src="./pslite/node.png" alt="avatar"></p>
+<p><img src="./pslite/node.png" alt=""></p>
 <p>真的是非常巧妙的表示，学到了</p>
 <h1><span id="消息封装">消息封装</span></h1>
-<p><img src="./pslite/msg.png" alt="avatar"></p>
+<p><img src="./pslite/msg.png" alt=""></p>
 <p>Node 存放ip port id等信息
 Control存放command类型 command=BARRIER
 Meta timeStamp, 发送者id,接受者id, 控制信息control
 Message. 消息头Meta, 消息体data</p>
 <h1><span id="node之间协同工作">Node之间协同工作</span></h1>
-<p><img src="./pslite/node_work.png" alt="avatar"></p>
+<p><img src="./pslite/node_work.png" alt=""></p>
 
       
     </div>
@@ -452,6 +452,10 @@ Message. 消息头Meta, 消息体data</p>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/19/test/" rel="prev" title="test">
+                test <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -542,7 +546,7 @@ Message. 消息头Meta, 消息体data</p>
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

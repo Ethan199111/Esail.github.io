@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-12-19T03:14:46.000Z</updated>
+  <updated>2018-12-19T06:06:09.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -17,13 +17,35 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>test</title>
+    <link href="http://www.yifanguo.top/2018/12/19/test/"/>
+    <id>http://www.yifanguo.top/2018/12/19/test/</id>
+    <published>2018-12-19T06:00:15.000Z</published>
+    <updated>2018-12-19T06:06:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="./test/pslite.jpg" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;./test/pslite.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>pslite</title>
     <link href="http://www.yifanguo.top/2018/12/19/pslite/"/>
     <id>http://www.yifanguo.top/2018/12/19/pslite/</id>
     <published>2018-12-19T01:58:03.000Z</published>
-    <updated>2018-12-19T03:14:46.000Z</updated>
+    <updated>2018-12-19T06:01:35.000Z</updated>
     
-    <content type="html"><![CDATA[<p>[toc]</p><p>https://zhuanlan.zhihu.com/p/48794558http://www.cnblogs.com/heguanyou/p/7868596.htmlhttps://blog.csdn.net/KangRoger/article/details/73307685</p><p>https://blog.csdn.net/xln0130/article/details/5696001https://www.jianshu.com/p/d3e503ddd68ehttps://www.zybuluo.com/Dounm/note/517675</p><h1><span id="rpc-vs-socket">RPC vs socket</span></h1><p>两个老板手下各有一个负责接通MSN的秘书.这两个秘书就是基于RPC协议建立的会话层通信.老本不需要知道怎么使用MSN,只要告诉秘书,秘书就会通过MSN与对方建立会话请求和响应.而基于Socket的通信,老板需要会使用MSN,这样尽管老板需要事先培训一下MSN的简单使用常识,但若与对方通信时,无需经过秘书,效率更高.</p><h1><span id="pslite全解析">Pslite全解析</span></h1><p><img src="./pslite/pslite.jpg" alt="avatar"></p><ul><li>虚线实心箭头：依赖关系</li><li>实心菱形： 合成关系，simpleApp中有一个customer成员</li><li>空心三角+实线： 继承关系</li></ul><p><img src="./pslite/class.png" alt="avatar"></p><h2><span id="postoffice">PostOffice</span></h2><p>全局管理类,每个node只有一个该类的对象</p><p>主要用来配置当前node的一些信息，例如当前node是哪种类型(server,worker,scheduler)，nodeid是啥，以及worker/server 的rank 到 node id的转换。</p><p>Postoffice类利用Singleton模式来保证只有一个对象。</p><h2><span id="van">Van</span></h2><p>核心通信类，每个节点只有一个该对象，是Postoffice对象的成员。</p><p>Van类负责建立起节点之间的互相连接（例如Worker与Scheduler之间的连接），并且开启本地的receiving thread用来监听收到的message。</p><p>Van的子类为ZMQVan，即为用zmq库实现了连接的底层细节（zmq库是一个开源库，对socket进行了优良的封装</p><h2><span id="customer">Customer</span></h2><p>用于通信的对象。</p><p>每个Customer都与某个node id相绑定，代表当前节点发送到对应node id节点。</p><p>Customer对象维护request和response的状态，其中tracker_成员记录每个请求可能发送给了多少节点以及从多少个节点返回。tracker_ 下标为每个req标识的timestamp。</p><p>Customer也会启动一个receiving thread，而它接受到的消息来自于Van的receiving thread，即每个节点的Van对象收到message后，根据message的不同，推送到不同的customer对象中。</p><h2><span id="simpleapp">SimpleApp</span></h2><p>简单的通信类。每次通信发送int型的head和string型的body。</p><p>SimpleApp对象中包括一个Customer对象用来控制请求连接。</p><h2><span id="kvworker">KVWorker</span></h2><p>继承自SimpleApp，包括如下方法： Push(),Pull(),Wait()。</p><p>Push()和Pull()最后都会调用Send()函数，Send()对KVPairs进行切分，因为每个Server只保留一部分参数，因此切分后的SlicedKVpairs就会被发送给不同的Server。</p><p>切分函数可以由用户自行重写，默认为DefaultSlicer，每个SlicedKVPairs被包装成Message对象，然后用van::send()发送。</p><h2><span id="kvserver">KVServer</span></h2><p>继承自SimpleApp，包含如下方法：Process()和Response()。</p><p>Process()被注册到Customer对象中，当Customer对象的receiving thread接受到消息时，就调用Process()对数据进行处理。Process()内部的逻辑是调用 用户自行实现的一个std::function函数对象 对数据进行处理。</p><p>Response()就仅仅是向调用的worker发送信息</p><h2><span id="kvpairs">KVPairs</span></h2><p>拥有keys, values, lens等3个数组。lens和keys大小相等，表示每个key对应的value的个数。lens可为空，此时values被平分。</p><p>举例而言，若keys=[1,5]，lens=[2,3]，那么values[0],values[1]就对应的是keys[0]，而values[2],values[3],values[5]对应的就是keys[1]。而如果len为空，则values.size()必须是keys.size()（此处为2）的倍数，key[0]和key[1]各对应一半的values。</p><h2><span id="sarray">SArray</span></h2><p>shared array，用std::shared_ptr实现的数组，用于替代std::vector，避免数组的深拷贝。</p><p>#消息处理流程</p><p>无论是worker节点还是server节点，在程序的最开始都会执行Postoffice::start()。Postoffice::start()会初始化节点信息，并且调用Van::start()。而Van::start()则会让当前节点与Scheduler节点相连，并且启动一个本地线程recv thread来持续监听收到的message。</p><p>worker和server都继承自SimpleApp类，所以都有一个customer对象。customer对象本身也会启动一个recv thread，其中调用注册的recv_handle_函数对消息进行处理。</p><p>对于worker来说，其注册的recv_handle_是KVWorker::Process()函数。因为worker的recv thread接受到的消息主要是从server处pull下来的KV对，因此该Process()主要是接收message中的KV对；</p><p>而对于Server来说，其注册的recv_handle_是KVServer::Process()函数。因此server接受的是worker们push上来的KV对，需要对其进行处理，因此该Process()函数中调用的用户通过KVServer::set_request_handle()传入的函数对象。</p><p>每个customer对象都拥有一个tracker_(std::vector&lt;std::pair&lt;int, int&gt;&gt;类型)用来记录每个请求发送和返回的数量。tracker_的下标即为请求的timestamp，tracker_[t].first是该请求发送给了多少节点，tracker[t]<em>.second是该请求收到了多少节点的回复。customer::Wait()就是一直阻塞直到tracker</em>[t].first == tracker[t].second，用这个来控制同步异步依赖。</p><p>每当Van的recv thread收到一个message时，就会根据customer id的不同将message发给不同的customer的recv thread。同时该message对应的请求（设为req）则tracker_[req.timestamp].second++</p><h1><span id="node">Node</span></h1><p><img src="./pslite/node.png" alt="avatar"></p><p>真的是非常巧妙的表示，学到了</p><h1><span id="消息封装">消息封装</span></h1><p><img src="./pslite/msg.png" alt="avatar"></p><p>Node 存放ip port id等信息Control存放command类型 command=BARRIERMeta timeStamp, 发送者id,接受者id, 控制信息controlMessage. 消息头Meta, 消息体data</p><h1><span id="node之间协同工作">Node之间协同工作</span></h1><p><img src="./pslite/node_work.png" alt="avatar"></p>]]></content>
+    <content type="html"><![CDATA[<p>[toc]</p><p>https://zhuanlan.zhihu.com/p/48794558http://www.cnblogs.com/heguanyou/p/7868596.htmlhttps://blog.csdn.net/KangRoger/article/details/73307685</p><p>https://blog.csdn.net/xln0130/article/details/5696001https://www.jianshu.com/p/d3e503ddd68ehttps://www.zybuluo.com/Dounm/note/517675</p><h1><span id="rpc-vs-socket">RPC vs socket</span></h1><p>两个老板手下各有一个负责接通MSN的秘书.这两个秘书就是基于RPC协议建立的会话层通信.老本不需要知道怎么使用MSN,只要告诉秘书,秘书就会通过MSN与对方建立会话请求和响应.而基于Socket的通信,老板需要会使用MSN,这样尽管老板需要事先培训一下MSN的简单使用常识,但若与对方通信时,无需经过秘书,效率更高.</p><h1><span id="pslite全解析">Pslite全解析</span></h1><p><img src="./pslite/pslite.jpg" alt=""></p><ul><li>虚线实心箭头：依赖关系</li><li>实心菱形： 合成关系，simpleApp中有一个customer成员</li><li>空心三角+实线： 继承关系</li></ul><p><img src="./pslite/class.png" alt=""></p><h2><span id="postoffice">PostOffice</span></h2><p>全局管理类,每个node只有一个该类的对象</p><p>主要用来配置当前node的一些信息，例如当前node是哪种类型(server,worker,scheduler)，nodeid是啥，以及worker/server 的rank 到 node id的转换。</p><p>Postoffice类利用Singleton模式来保证只有一个对象。</p><h2><span id="van">Van</span></h2><p>核心通信类，每个节点只有一个该对象，是Postoffice对象的成员。</p><p>Van类负责建立起节点之间的互相连接（例如Worker与Scheduler之间的连接），并且开启本地的receiving thread用来监听收到的message。</p><p>Van的子类为ZMQVan，即为用zmq库实现了连接的底层细节（zmq库是一个开源库，对socket进行了优良的封装</p><h2><span id="customer">Customer</span></h2><p>用于通信的对象。</p><p>每个Customer都与某个node id相绑定，代表当前节点发送到对应node id节点。</p><p>Customer对象维护request和response的状态，其中tracker_成员记录每个请求可能发送给了多少节点以及从多少个节点返回。tracker_ 下标为每个req标识的timestamp。</p><p>Customer也会启动一个receiving thread，而它接受到的消息来自于Van的receiving thread，即每个节点的Van对象收到message后，根据message的不同，推送到不同的customer对象中。</p><h2><span id="simpleapp">SimpleApp</span></h2><p>简单的通信类。每次通信发送int型的head和string型的body。</p><p>SimpleApp对象中包括一个Customer对象用来控制请求连接。</p><h2><span id="kvworker">KVWorker</span></h2><p>继承自SimpleApp，包括如下方法： Push(),Pull(),Wait()。</p><p>Push()和Pull()最后都会调用Send()函数，Send()对KVPairs进行切分，因为每个Server只保留一部分参数，因此切分后的SlicedKVpairs就会被发送给不同的Server。</p><p>切分函数可以由用户自行重写，默认为DefaultSlicer，每个SlicedKVPairs被包装成Message对象，然后用van::send()发送。</p><h2><span id="kvserver">KVServer</span></h2><p>继承自SimpleApp，包含如下方法：Process()和Response()。</p><p>Process()被注册到Customer对象中，当Customer对象的receiving thread接受到消息时，就调用Process()对数据进行处理。Process()内部的逻辑是调用 用户自行实现的一个std::function函数对象 对数据进行处理。</p><p>Response()就仅仅是向调用的worker发送信息</p><h2><span id="kvpairs">KVPairs</span></h2><p>拥有keys, values, lens等3个数组。lens和keys大小相等，表示每个key对应的value的个数。lens可为空，此时values被平分。</p><p>举例而言，若keys=[1,5]，lens=[2,3]，那么values[0],values[1]就对应的是keys[0]，而values[2],values[3],values[5]对应的就是keys[1]。而如果len为空，则values.size()必须是keys.size()（此处为2）的倍数，key[0]和key[1]各对应一半的values。</p><h2><span id="sarray">SArray</span></h2><p>shared array，用std::shared_ptr实现的数组，用于替代std::vector，避免数组的深拷贝。</p><p>#消息处理流程</p><p>无论是worker节点还是server节点，在程序的最开始都会执行Postoffice::start()。Postoffice::start()会初始化节点信息，并且调用Van::start()。而Van::start()则会让当前节点与Scheduler节点相连，并且启动一个本地线程recv thread来持续监听收到的message。</p><p>worker和server都继承自SimpleApp类，所以都有一个customer对象。customer对象本身也会启动一个recv thread，其中调用注册的recv_handle_函数对消息进行处理。</p><p>对于worker来说，其注册的recv_handle_是KVWorker::Process()函数。因为worker的recv thread接受到的消息主要是从server处pull下来的KV对，因此该Process()主要是接收message中的KV对；</p><p>而对于Server来说，其注册的recv_handle_是KVServer::Process()函数。因此server接受的是worker们push上来的KV对，需要对其进行处理，因此该Process()函数中调用的用户通过KVServer::set_request_handle()传入的函数对象。</p><p>每个customer对象都拥有一个tracker_(std::vector&lt;std::pair&lt;int, int&gt;&gt;类型)用来记录每个请求发送和返回的数量。tracker_的下标即为请求的timestamp，tracker_[t].first是该请求发送给了多少节点，tracker[t]<em>.second是该请求收到了多少节点的回复。customer::Wait()就是一直阻塞直到tracker</em>[t].first == tracker[t].second，用这个来控制同步异步依赖。</p><p>每当Van的recv thread收到一个message时，就会根据customer id的不同将message发给不同的customer的recv thread。同时该message对应的请求（设为req）则tracker_[req.timestamp].second++</p><h1><span id="node">Node</span></h1><p><img src="./pslite/node.png" alt=""></p><p>真的是非常巧妙的表示，学到了</p><h1><span id="消息封装">消息封装</span></h1><p><img src="./pslite/msg.png" alt=""></p><p>Node 存放ip port id等信息Control存放command类型 command=BARRIERMeta timeStamp, 发送者id,接受者id, 控制信息controlMessage. 消息头Meta, 消息体data</p><h1><span id="node之间协同工作">Node之间协同工作</span></h1><p><img src="./pslite/node_work.png" alt=""></p>]]></content>
     
     <summary type="html">
     
@@ -467,31 +489,6 @@ Hyper-threading enables a si
     
     
       <category term="unix" scheme="http://www.yifanguo.top/tags/unix/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux_sychronization</title>
-    <link href="http://www.yifanguo.top/2018/07/30/linux-sychronization/"/>
-    <id>http://www.yifanguo.top/2018/07/30/linux-sychronization/</id>
-    <published>2018-07-29T17:41:38.000Z</published>
-    <updated>2018-07-30T08:47:51.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="linux中常见同步机制设计原理">Linux中常见同步机制设计原理</span></h1><p>-谈谈linux中常见并发访问的保护机制设计原理</p><h1><span id="自旋锁spin-lock">自旋锁（spin lock）</span></h1><p>自旋锁是linux中使用非常频繁的锁，原理简单。当进程A申请锁成功后，进程B申请锁就会失败，但是不会调度，原地自旋。就在原地转到天昏地暗只为等到进程A释放锁。由于不会睡眠和调度的特性，在中断上下文中，数据的保护一般都是选择自旋锁。如果有多个进程去申请锁。当第一个申请锁成功的线程在释放的时候，其他进程是竞争的关系。因此是一种不公平。所以现在的linux采用的是排队机制。先到先得。谁先申请，谁就先得到锁</p><h2><span id="next-and-owner">next and owner</span></h2><p>linux中针对每一个spin lock会有两个计数。分别是next和owner（初始值为0）。进程A申请锁时，会判断next和owner的值是否相等。如果相等就代表锁可以申请成功，否则原地自旋。直到owner和next的值相等才会退出自旋。假设进程A申请锁成功，然后会next加1。此时owner值为0，next值为1。进程B也申请锁，保存next得值到局部变量tmp（tmp = 1）中。由于next和owner值不相等，因此原地自旋读取owner的值，判断owner和tmp是否相等，直到相等退出自旋状态。当然next的值还是加1，变成2。进程A释放锁，此时会将owner的值加1，那么此时B进程的owner和tmp的值都是1，因此B进程获得锁。当B进程释放锁后，同样会将owner的值加1。最后owner和next都等于2，代表没有进程持有锁。next就是一个记录申请锁的次数，而owner是持有锁进程的计数值。</p><h1><span id="信号量semaphore">信号量（semaphore）</span></h1><p>信号量（semaphore）是进程间通信处理同步互斥的机制。是在多线程环境下使用的一种措施，它负责协调各个进程，以保证他们能够正确、合理的使用公共资源。 它和spin lock最大的不同之处就是：无法获取信号量的进程可以睡眠，因此会导致系统调度。</p><h2><span id="原理">原理</span></h2><p>信号量一般可以用来标记可用资源的个数。老规矩，还是举个例子。假设图书馆有2本《C语言从入门到放弃》书籍。A同学想学C语言，于是发现这本书特别的好。于是就去学校的图书馆借书，A同学成功的从图书馆借走一本。这时，A同学室友B同学发现A同学竟然在偷偷的学习武功秘籍（C语言）。于是，B同学也去借一本。此时，图书馆已经没有书了。C同学也想借这本书，可能是这本书太火了。图书馆管理员告诉C同学，图书馆这本书都被借走了。如果有同学换回来，会第一时间通知你。于是，管理员就把C同学的信息登记先来，以备后续通知C同学来借书。所以，C同学只能悲伤的走了（如果是自旋锁的原理的话，那么C同学将会端个小板凳坐在图书馆，一直要等到A同学或者B同学还书并借走）。</p><h1><span id="读写锁read-write-lock">读写锁（read-write lock）</span></h1><p>不管是自旋锁还是信号量在同一时间只能有一个进程进入临界区。对于有些情况，我们是可以区分读写操作的。因此，我们希望对于读操作的进程可以并发进行。对于写操作只限于一个进程进入临界区。而这种同步机制就是读写锁。读写锁一般具有以下几种性质。同一时间有且仅有一个写进程进入临界区。在没有写进程进入临界区的时候，同时可以有多个读进程进入临界区。读进程和写进程不可以同时进入临界区。读写锁有两种，一种是信号量类型，另一种是spin lock类型。下面以spin lock类型讲解。</p><p>##原理老规矩，还是举个例子理解读写锁。我绞尽脑汁才想到一个比较贴切的例子。这个例子来源于生活。我发现公司一般都会有保洁阿姨打扫厕所。如果以男厕所为例的话，我觉得男士进入厕所就相当于读者进入临界区。因为可以有多个男士进厕所。而保洁阿姨进入男士厕所就相当于写者进入临界区。假设A男士发现保洁阿姨不在打扫厕所，就进入厕所。随后B和C同时也进入厕所。然后保洁阿姨准备打扫厕所，发现有男士在厕所里面，因此只能在门口等待。ABC都离开了厕所。保洁阿姨迅速进入厕所打扫。然后D男士去上厕所，发现保洁阿姨在里面。灰溜溜的出来了在门口等着。现在体会到了写者（保洁阿姨）具有排他性，读者（男士）可以并发进入临界区了吧。</p><p>既然我们允许多个读者进入临界区，因此我们需要一个计数统计读者的个数。同时，由于写者永远只存在一个进入临界区，因此只需要一个bit标记是否有写进程进入临界区。所以，我们可以将两个计数合二为一。只需要1个unsigned int类型即可。最高位（bit31）代表是否有写者进入临界区，低31位（0~30bit）统计读者个数。</p><h1><span id="互斥量mutex">互斥量（mutex）</span></h1><p>前文提到的semaphore在初始化count计数的时候，可以分为计数信号量和互斥信号量（二值信号量）。mutex和初始化计数为1的二值信号量有很大的相似之处。他们都可以用做资源互斥。但是mutex却有一个特殊的地方：只有持锁者才能解锁。但是，二值信号量却可以在一个进程中获取信号量，在另一个进程中释放信号量。如果是应用在嵌入式应用的RTOS，针对mutex的实现还会考虑优先级反转问题。</p><p>原理既然mutex是一种二值信号量，因此就不需要像semaphore那样需要一个count计数。由于mutex具有“持锁者才能解锁”的特点，所以我们需要一个变量owner记录持锁进程。释放锁的时候必须是同一个进程才能释放。当然也需要一个链表头，主要用来便利睡眠等待的进程。原理和semaphore及其相似，因此在代码上也有体现。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;linux中常见同步机制设计原理&quot;&gt;Linux中常见同步机制设计原理&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;-谈谈linux中常见并发访问的保护机制设计原理&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;自旋锁spin-lock&quot;&gt;自旋锁（spin lock）&lt;/spa
-      
-    
-    </summary>
-    
-    
-      <category term="linux" scheme="http://www.yifanguo.top/tags/linux/"/>
     
   </entry>
   
