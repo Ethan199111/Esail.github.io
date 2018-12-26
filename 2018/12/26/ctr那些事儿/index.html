@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ctr," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Yifan Guo Personal Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="[TOC] CTR概述 转自【https://zhuanlan.zhihu.com/p/31499375】 click through rate 是用来估计一个用户（缩写为u）是否会点击一个广告或其它item（缩写为a）的技术  问题的核心在于建模，即：寻找一个函数  可以学习出数据中  的映射，即尽可能用数据  拟合  。这可以简化地理解为一个分类（Classification）问题 作为一种预">
+<meta name="keywords" content="ctr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctr那些事儿">
+<meta property="og:url" content="http://www.yifanguo.top/2018/12/26/ctr那些事儿/index.html">
+<meta property="og:site_name" content="Yifan Guo Personal Blog">
+<meta property="og:description" content="[TOC] CTR概述 转自【https://zhuanlan.zhihu.com/p/31499375】 click through rate 是用来估计一个用户（缩写为u）是否会点击一个广告或其它item（缩写为a）的技术  问题的核心在于建模，即：寻找一个函数  可以学习出数据中  的映射，即尽可能用数据  拟合  。这可以简化地理解为一个分类（Classification）问题 作为一种预">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-e5998fc5f766e99bbe92be20711a7206_hd.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=f">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=f%3A+X+%5Cto+y">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28X%2Cy%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=f">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-e366cc1eea72ef722c49a8933e1e46e0_hd.jpg">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-0d6a9486da21453f893c09ce72dfa7c5_hd.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7Ey_%7Bclick%7D+%3D+Bernoulli%28p_%7Bctr%7D%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=p_%7Bctr%7D">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-97bfe6be9ef47f6544fb5aa78a225d59_hd.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Cbegin%7Bsplit%7D+%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7Ep_%7Bctr%7D+%26%3D+f%28%5Cphi%28x%29%29+%5C%5C+%26%3D+%5Cfrac%7B1%7D%7B1%2Be%5E%7B-%5Cphi%28x%29%7D%7D%5C%5C+%5Cphi%28x%29+%26%3D+w%5ETx+%5Cend%7Bsplit%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_1%3D1%2C+x_2%3D0%2C+x_3%3D1%2C+x_4%3D0.">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=w">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=f%28%C2%B7%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=X">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=O%28N%5E2%29">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-2215e475e08325a0139828d2d00d8623_hd.jpg">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-ddeb06abfa253f77304644badb7bbb61_hd.jpg">
+<meta property="og:updated_time" content="2018-12-26T08:40:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ctr那些事儿">
+<meta name="twitter:description" content="[TOC] CTR概述 转自【https://zhuanlan.zhihu.com/p/31499375】 click through rate 是用来估计一个用户（缩写为u）是否会点击一个广告或其它item（缩写为a）的技术  问题的核心在于建模，即：寻找一个函数  可以学习出数据中  的映射，即尽可能用数据  拟合  。这可以简化地理解为一个分类（Classification）问题 作为一种预">
+<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-e5998fc5f766e99bbe92be20711a7206_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yifanguo.top/2018/12/26/ctr那些事儿/"/>
+
+
+
+
+
+  <title>ctr那些事儿 | Yifan Guo Personal Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/esail" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yifan Guo Personal Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-http">
+          <a href="/http/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            http
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-netty">
+          <a href="/netty/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            netty
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/12/26/ctr那些事儿/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan Guo Personal Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ctr那些事儿</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-26T16:13:39+08:00">
+                2018-12-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h1><span id="ctr概述">CTR概述</span></h1>
+<p>转自【https://zhuanlan.zhihu.com/p/31499375】</p>
+<p>click through rate 是用来估计一个用户（缩写为u）是否会点击一个广告或其它item（缩写为a）的技术</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-e5998fc5f766e99bbe92be20711a7206_hd.jpg" alt="v2-e5998fc5f766e99bbe92be20711a7206_hd"></p>
+<p>问题的核心在于建模，即：<strong>寻找一个函数</strong> <img src="https://www.zhihu.com/equation?tex=f" alt="f"> <strong>可以学习出数据中</strong> <img src="https://www.zhihu.com/equation?tex=f%3A+X+%5Cto+y" alt="f: X \to y"> <strong>的映射，即尽可能用数据</strong> <img src="https://www.zhihu.com/equation?tex=%28X%2Cy%29" alt="(X,y)"> <strong>拟合</strong> <img src="https://www.zhihu.com/equation?tex=f" alt="f"> 。这可以简化地理解为一个分类（Classification）问题</p>
+<p>作为一种预估问题，CTR预估潜在地包含了假设：<strong>过去的规律在未来依然有效。</strong></p>
+<p>我们会自然地想到，从历史估计未来，最简单的方式就是对历史数据做统计。那么是否用统计值来预估就可以了？</p>
+<p>不然。</p>
+<p>首先，统计量本身有<strong>置信度</strong>的概念，数据中很难保证每个特征都有充足的数据支持每个特征的置信度。比如，张三看了1kw的广告、点击了1k次，或许可以说张三的点击率是0.01%；但如果李四只看了1次广告、没有点击，却不能简单地认为李四的点击率一定为0%。其次，历史上一定有<strong>未被观察</strong>（unseen）的事件。比如“张三看宝马会点击”是一个事件，但张三不可能看过所有的广告；张三在历史上没有看过奔驰广告，统计也就无法得知他是否会点击奔驰广告。</p>
+<p>从另一个角度讲，传统的Machine Learning问题为便于建模，一般会隐含<strong>数据服从Gaussian分布</strong>的假设；但在互联网主要的展示（impression）、点击（click）、关注（follow）、转发（re-twitter）、交易（order）等数据中，由于强烈的“头部效应”，整体数据是呈现<strong>幂指数分布</strong>的——由于长尾的存在，对于部分特征来讲数据一定是不充分的。</p>
+<p>于是我们总结出CTR预估第一个问题：<strong>CTR预估是在不完善信息下做出的决策</strong>。换句话说就是：<strong>总有统计上不充分的情况出现，无论是unseen事件，还是seen但事件重复次数较少的情况。</strong></p>
+<p>回到“过去的规律在未来依然有效”这个假设。在实际应用中，这个假设是双刃剑：</p>
+<ul>
+<li>好的方面：过去的规律意味着可以利用历史信息，也就意味着利用更大量的<strong>样本</strong>（instance）、构造大量的<strong>特征</strong>（feature）、使用复杂的<strong>模型</strong>（model）的可能性。这也是CTR预估算法从2007年使用LR建模之后十多年不断发展和分化的基础。</li>
+<li>坏的方面：这个假设在现实中并不完全成立——数据的分布在并不被模型预知的情况下变动着。用户行为影响ranking，ranking反过来也会影响用户行为；再加上用户分布变化对数据分布的扰动、运营手段对数据分布的扰动等等复杂因素，经常会导致模型刚上线效果最好，然后可能渐渐地就不好用了。</li>
+</ul>
+<p>这就是CTR预估第二个问题：**CTR预估是在变化的分布上做出的估计。**换句话说就是：<strong>总有从历史上得不到的规律。</strong></p>
+<p>对于这两个问题，常见的解决思路有：</p>
+<ul>
+<li>
+<p>针对在不完善信息下做出决策的问题：</p>
+</li>
+<li>
+<ul>
+<li>试：引入E&amp;E机制快速试错；</li>
+<li>泛：引入更通用、更泛化的特征，在无法精细估计的情况下给出一个更通用的估计。</li>
+</ul>
+</li>
+<li>
+<p>针对在变化的分布上做出估计的问题：</p>
+</li>
+<li>
+<ul>
+<li>快：更快的模型迭代更新速度、在线学习；</li>
+<li>猜：引入博弈论，强化学习，对用户-系统交互行为进行建模。</li>
+</ul>
+</li>
+</ul>
+<h2><span id="一个例子">一个例子</span></h2>
+<p>考虑一个简单的CTR预估场景的例子。这里有两个特征（position_id、ad）。为了方便，我们把相同特征下的曝光和点击进行计数，聚合在一起。</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-e366cc1eea72ef722c49a8933e1e46e0_hd.jpg" alt="v2-e366cc1eea72ef722c49a8933e1e46e0_hd"></p>
+<blockquote>
+<p>以第一行数据为例：“ad=宝马”在“position_id=1”的位置曝光了10次，有6次点击。</p>
+</blockquote>
+<p>我们把每个特征进行one-hot encoding：</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-0d6a9486da21453f893c09ce72dfa7c5_hd.jpg" alt="v2-0d6a9486da21453f893c09ce72dfa7c5_hd"></p>
+<p>下面我们入手开始CTR预估建模。对于CTR预估问题，工业界解决的起点其实和大部分机器学习的通用思路是一致的：**先给出并使用一个较粗糙的解，然后把求解问题转化成一个优化问题。**毕竟，“随机猜”（random）也是一种模型，只是效果比较差而已。我们要优化出比random更好的解，也就是从test AUC = 0.5开始进行优化。</p>
+<p>CTR系统核心建模是针对展示（pv）和点击（click）的关系进行建模的：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7Ey_%7Bclick%7D+%3D+Bernoulli%28p_%7Bctr%7D%29" alt="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~y_{click} = Bernoulli(p_{ctr})"></p>
+<p>这一点是众多CTR预估算法的共同基础。而针对 <img src="https://www.zhihu.com/equation?tex=p_%7Bctr%7D" alt="p_{ctr}"> 建模主要有两大类途径：</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-97bfe6be9ef47f6544fb5aa78a225d59_hd.jpg" alt="v2-97bfe6be9ef47f6544fb5aa78a225d59_hd"></p>
+<p>以线性模型LR为例，核心建模为：
+<img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bsplit%7D+%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7E%7Ep_%7Bctr%7D+%26%3D+f%28%5Cphi%28x%29%29+%5C%5C+%26%3D+%5Cfrac%7B1%7D%7B1%2Be%5E%7B-%5Cphi%28x%29%7D%7D%5C%5C+%5Cphi%28x%29+%26%3D+w%5ETx+%5Cend%7Bsplit%7D" alt="\begin{split} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~p_{ctr} &amp;amp;= f(\phi(x)) \ &amp;amp;= \frac{1}{1+e^{-\phi(x)}}\ \phi(x) &amp;amp;= w^Tx \end{split}">
+在上图的例子中， <img src="https://www.zhihu.com/equation?tex=x" alt="x"> 为四维one-hot特征的取值，如对于上例的第一行数据：<img src="https://www.zhihu.com/equation?tex=x_1%3D1%2C+x_2%3D0%2C+x_3%3D1%2C+x_4%3D0." alt="x_1=1, x_2=0, x_3=1, x_4=0.">
+对应地，我们估计出的 <img src="https://www.zhihu.com/equation?tex=w" alt="w"> 也是一个四维向量，分别代表特征“psid=1、psid=2、ad=宝马、ad=奔驰”的权重。由这些权重，我们就可以估计出各种 <img src="https://www.zhihu.com/equation?tex=x" alt="x"> 取值下的点击率。</p>
+<p>可以看到，线性模型假设模型 <img src="https://www.zhihu.com/equation?tex=f%28%C2%B7%29" alt="f(·)"> 是<strong>线性可分</strong>的。当然，这并不意味着线性模型无法表示非线性：我们可以在feature <img src="https://www.zhihu.com/equation?tex=X" alt="X"> 中增加非线性特征来提供非线性。与此对应的是，<strong>非线性模型在模型假设中直接具有非线性</strong>。</p>
+<p>线性模型中，一般特征的规模都会特别大。这是因为线性模型如果要达到与非线性模型相似的模型效果（或者说表达能力），需要在特征侧做大量的工作：比如把原本非线性表达的特征离散化成局部线性的特征、把单一实体变换为高维度的one-hot encoding特征、以及由于上述的操作大量分割了实体之间的关系而需要添加大量组合（crossing）特征等等。这些变换都会大幅增加稀疏特征的维度。</p>
+<p>如果我们把线性模型和非线性模型的计算链路展开，会发现线性模型的特征维度高但计算深度少，模型相对很“宽（wide）”；而非线性模型则相对更“深（deep）”，模型计算更为复杂。相对应地，有些模型更倾向于在<strong>特征侧</strong>进行优化，而有的模型更针对于<strong>模型侧</strong>的调优。</p>
+<h2><span id="模型侧和特征侧优化">模型侧和特征侧优化</span></h2>
+<p>CTR预估中，模型侧的优化主要集中在各类<strong>非线性模型</strong>上，如基于Kernel的模型、NN、Boosting等。在实际的CTR预估系统中，NN和Boosting较为常用，而kernel的身影比较少见。这是因为基于kernel的模型中特征维度通常很高，且 <img src="https://www.zhihu.com/equation?tex=O%28N%5E2%29" alt="O(N^2)"> 的时间复杂度太高难以满足工业要求。</p>
+<p>在实际工程中，对模型侧的优化主要体现在：<strong>观察数据找规律，建模调参线上试</strong>。大致的步骤包括：</p>
+<ol>
+<li>观察数据；</li>
+<li>找到规律；</li>
+<li>根据规律做模型的假设；</li>
+<li>对模型假设中的参数用数据进行拟合；</li>
+<li>把拟合的结果用到线上，看看效果怎么样。</li>
+</ol>
+<p>举个例子：在某业务中，我们通过观察数据，认为图像特征是主要的影响CTR预估效果的因素；则我们在建模中引入CNN假设进行joint training，然后调参、离线验证，验证ok进行线上实验，完成一轮优化。其中，掌握模型的理论本质、适用范围和复杂度，针对需求对模型进行选择和业务适配，是模型侧优化的主要工作。</p>
+<p><strong>特征侧优化</strong></p>
+<p>特征侧有相对有迹可循的优化方法。常用的是<strong>层次化特征：保证细粒度ID无法命中的时候，层次化“上位”更粗粒度特征可以生效。</strong></p>
+<p>如某个场景中有如下的特征层次关系，其曝光量如色阶所示：</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-2215e475e08325a0139828d2d00d8623_hd.jpg" alt="2-2215e475e08325a0139828d2d00d8623_hd"></p>
+<ul>
+<li>1阶特征中，“小吃套餐”特征曝光太少，特征置信度低，则至少上位特征“某的基”可以命中生效。这是一个从最细粒度到更粗粒度的扩展过程；</li>
+<li>2阶组合特征中，最细粒度的“小吃素材&amp;顶部通栏2号位”曝光很少很难命中优化，可以取其中某一个的上位，形成“某的基&amp;顶部通栏2号位”；或者如果还不够，则扩充更多的维度，如“某的基&amp;通栏” 。越宏观的特征表达出的个性化信息越少，但是在数据不足时，能表达出特性的概率越大。</li>
+</ul>
+<p>一图以蔽之，模型侧和特征侧优化方法可以比较总结如下：</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/ctr%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/v2-ddeb06abfa253f77304644badb7bbb61_hd.jpg" alt="v2-ddeb06abfa253f77304644badb7bbb61_hd"></p>
+<h2><span id="逻辑回归">逻辑回归</span></h2>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctr/" rel="tag"># ctr</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/26/推荐系统遇上深度学习/" rel="next" title="推荐系统遇上深度学习">
+                <i class="fa fa-chevron-left"></i> 推荐系统遇上深度学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/26/美团机器学习实践阅读笔记/" rel="prev" title="美团机器学习实践阅读笔记">
+                美团机器学习实践阅读笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/timg.jpeg"
+                alt="Yifan Guo" />
+            
+              <p class="site-author-name" itemprop="name">Yifan Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">CTR概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">一个例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">模型侧和特征侧优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">逻辑回归</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yifan Guo</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">59.7k</span>
+  
+
+  
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+  
+
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.yifanguo.top/2018/12/26/ctr那些事儿/';
+          this.page.identifier = '2018/12/26/ctr那些事儿/';
+          this.page.title = 'ctr那些事儿';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

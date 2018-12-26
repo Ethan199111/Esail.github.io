@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Yifan Guo Personal Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="[toc] TensorFlow On Yarn源码详解   首先来看代码目录构成 12345678910111213141516events: eventHandler和event类，event由avro编写io: HdfsAvroFileSplitReader 主要是读取Avro Filemini: hadoop minicluster, 主要是测试用models: Job信息rpc: grp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TonY">
+<meta property="og:url" content="http://www.yifanguo.top/2018/12/21/TonY/index.html">
+<meta property="og:site_name" content="Yifan Guo Personal Blog">
+<meta property="og:description" content="[toc] TensorFlow On Yarn源码详解   首先来看代码目录构成 12345678910111213141516events: eventHandler和event类，event由avro编写io: HdfsAvroFileSplitReader 主要是读取Avro Filemini: hadoop minicluster, 主要是测试用models: Job信息rpc: grp">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/TonY/tony.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/tony.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/TonY/tf_ps.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/tf_ps.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/TonY/clien1.png">
+<meta property="og:image" content="http://www.yifanguo.top/2018/12/21/TonY/TonY/clien2.png">
+<meta property="og:updated_time" content="2018-12-21T12:04:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TonY">
+<meta name="twitter:description" content="[toc] TensorFlow On Yarn源码详解   首先来看代码目录构成 12345678910111213141516events: eventHandler和event类，event由avro编写io: HdfsAvroFileSplitReader 主要是读取Avro Filemini: hadoop minicluster, 主要是测试用models: Job信息rpc: grp">
+<meta name="twitter:image" content="http://www.yifanguo.top/2018/12/21/TonY/TonY/tony.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yifanguo.top/2018/12/21/TonY/"/>
+
+
+
+
+
+  <title>TonY | Yifan Guo Personal Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/esail" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yifan Guo Personal Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-http">
+          <a href="/http/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            http
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-netty">
+          <a href="/netty/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            netty
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/12/21/TonY/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan Guo Personal Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TonY</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-21T16:11:50+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<h1><span id="tensorflow-on-yarn源码详解">TensorFlow On Yarn源码详解</span></h1>
+<p><img src="./TonY/tony.png" alt="">
+<img src="tony.png" alt=""></p>
+<p>首先来看代码目录构成</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">events: eventHandler和event类，event由avro编写</span><br><span class="line">io: HdfsAvroFileSplitReader 主要是读取Avro File</span><br><span class="line">mini: hadoop minicluster, 主要是测试用</span><br><span class="line">models: Job信息</span><br><span class="line">rpc: grpc通信操作类</span><br><span class="line">tensorflow: 包含一些和tf相关的操作</span><br><span class="line">util: utils类包</span><br><span class="line"></span><br><span class="line">Constants: 常量类</span><br><span class="line">TaskExecutor: 运行task的executor</span><br><span class="line">TFConfig: TFConfig 存TFClusterSpec</span><br><span class="line">TFPolicyProvider：</span><br><span class="line">TonyApplicationMaster: AMContainer运行的类，主要class</span><br><span class="line">TonyClient：提交application的client</span><br><span class="line">TonyConfigurationKeys: Tony的配置类</span><br><span class="line">TonyJobMetadata：Tony job的元数据</span><br></pre></td></tr></table></figure></p>
+<h1><span id="源码分析">源码分析</span></h1>
+<p><img src="./TonY/tf_ps.png" alt="">
+<img src="tf_ps.png" alt=""></p>
+<p>先感受下最原始的tensorflow分布式如何运行</p>
+<h2><span id="tfconfig">TFConfig</span></h2>
+<p>这个类很简单就是用来表示tensorflow cluster spec的</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class TFConfig &#123;</span><br><span class="line"></span><br><span class="line">  private Map&lt;String, List&lt;String&gt;&gt; clusterSpec;</span><br><span class="line">  private Task task;</span><br><span class="line"></span><br><span class="line">  public static class Task &#123;</span><br><span class="line">    private String type;</span><br><span class="line">    private int index;</span><br></pre></td></tr></table></figure></p>
+<h2><span id="constants常量类">Constants常量类</span></h2>
+<p>常量类，代码里的魔法值都在这里</p>
+<h2><span id="tfpolicyprovider">TFPolicyProvider</span></h2>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> *  * PolicyProvider for Client to AM protocol.</span><br><span class="line"> *  */</span><br><span class="line">public class TFPolicyProvider extends PolicyProvider &#123;</span><br><span class="line"></span><br><span class="line">  private static final Service[] TF_AM_SERVICE =</span><br><span class="line">    new Service[]&#123;</span><br><span class="line">      new Service(</span><br><span class="line">        &quot;security.tf.client-am-protocol.acl&quot;,</span><br><span class="line">        TensorFlowCluster.class)&#125;;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public Service[] getServices() &#123;</span><br><span class="line">    return TF_AM_SERVICE;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>只有一个静态方法，返回的是hadoop authorize server.
+应该是client到AM的protocol</p>
+<h2><span id="tonyconfigurationkeys">TonyConfigurationKeys</span></h2>
+<p>Tony的配置类</p>
+<h2><span id="tonyjobmetadata">TonyJobMetadata</span></h2>
+<p>Tony application job的头信息</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * meta data for job</span><br><span class="line"> */</span><br><span class="line">public class TonyJobMetadata &#123;</span><br><span class="line">  private String id;</span><br><span class="line">  private String url;</span><br><span class="line">  private long started;</span><br><span class="line">  private long completed;</span><br><span class="line">  private String status;</span><br><span class="line">  private String user;</span><br></pre></td></tr></table></figure></p>
+<h2><span id="下方是三个重要类">下方是三个重要类</span></h2>
+<h2><span id="tonyclient">TonyClient</span></h2>
+<p>用来提交tonyApp的客户端</p>
+<h3><span id="先说类成员">先说类成员</span></h3>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private YarnClient yarnClient;</span><br><span class="line">private HdfsConfiguration hdfsConf = new HdfsConfiguration();</span><br><span class="line">private YarnConfiguration yarnConf = new YarnConfiguration();</span><br><span class="line">private Options opts;</span><br></pre></td></tr></table></figure></p>
+<p>yarnClient: 用来提交yarnApp的客户端
+hdfsConf: HdfsConfiguration hdfs的配置
+yarnConf: YarnConfiguration yarn的配置
+opts:Options Option类，启动yarnClient的一些command option选项</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private String amHost;</span><br><span class="line">private int amRpcPort;</span><br><span class="line">private boolean amRpcServerInitialized = false;</span><br><span class="line">private ApplicationRpcClient amRpcClient;</span><br></pre></td></tr></table></figure></p>
+<p>amHost: am所在的host地址
+amRpcPort: am监听的端口
+amRpcServerInitialized: 判断amRpc是否已经初始化
+ApplicationRpcClient: App用grpc通信的客户端</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// Containers set up.</span><br><span class="line">private String hdfsConfAddress = null;  hdfsConf的地址</span><br><span class="line">private String yarnConfAddress = null;  yarnConf的地址</span><br><span class="line">private long amMemory; am的Memory</span><br><span class="line">private int amVCores; am的cpu cores</span><br><span class="line">private int amGpus; am需要gpu???</span><br><span class="line">private String taskParams = null; task的一些参数</span><br><span class="line">private String pythonBinaryPath = null; python的binary path</span><br><span class="line">private String pythonVenv = null; python的virtual env</span><br><span class="line">private String srcDir = null; source目录，应该是依赖jar包地址</span><br><span class="line">private String hdfsClasspath = null; hdfs的类路径</span><br><span class="line">private String executes; 执行类的位置</span><br><span class="line">private long appTimeout; app的TimeOut</span><br><span class="line">private boolean secureMode; 是否要secureMode</span><br><span class="line">private Map&lt;String, String&gt; shellEnv = new HashMap&lt;&gt;(); 环境变量</span><br><span class="line">private Map&lt;String, String&gt; containerEnv = new HashMap&lt;&gt;(); container所需的环境变量</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private String tonyFinalConfPath;</span><br><span class="line">private Configuration tonyConf;</span><br><span class="line">private final long clientStartTime = System.currentTimeMillis();</span><br><span class="line">private Path appResourcesPath;</span><br><span class="line">private int hbInterval;</span><br><span class="line">private int maxHbMisses;</span><br></pre></td></tr></table></figure></p>
+<p>tonyFinalConfPath: 这个设计绝对有问题，后续参考xlearn来改改，这什么鬼
+tonyConf: Tony的configuration
+clientStartTime: client提交开始时间
+appResourcesPath: 运行这个app所需的资源路径 类似spark的 --jars
+hbInterval: 心跳检测
+maxHbMisses: 最多心跳检测miss次数</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private Set&lt;TaskUrl&gt; taskUrls = new HashSet&lt;&gt;(); 任务的urls</span><br></pre></td></tr></table></figure></p>
+<h3><span id="constructor">constructor</span></h3>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public TonyClient(Configuration conf) &#123;</span><br><span class="line">  initOptions();</span><br><span class="line">  tonyConf = conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>类构建没什么特别，会有一个command option的加载
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private void initOptions() &#123;</span><br><span class="line">  opts = Utils.getCommonOptions();</span><br><span class="line">  opts.addOption(&quot;conf&quot;, true, &quot;User specified configuration, as key=val pairs&quot;);</span><br><span class="line">  opts.addOption(&quot;conf_file&quot;, true, &quot;Name of user specified conf file, on the classpath&quot;);</span><br><span class="line">  opts.addOption(&quot;src_dir&quot;, true, &quot;Name of directory of source files.&quot;);</span><br><span class="line">  opts.addOption(&quot;help&quot;, false, &quot;Print usage&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="methods">methods</span></h3>
+<p>先来看看所有方法</p>
+<p><img src="./TonY/clien1.png" alt="">
+<img src="./TonY/clien2.png" alt=""></p>
+<p>多且乱 后续肯定要优化，至少也要接口化，这个肯定不能直接用</p>
+<h3><span id="run">run</span></h3>
+<p>入参 null
+返回 boolean</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarnClient.start();</span><br><span class="line">YarnClientApplication app = yarnClient.createApplication();</span><br><span class="line">GetNewApplicationResponse appResponse = app.getNewApplicationResponse();</span><br></pre></td></tr></table></figure></p>
+<p>老三样，几乎所有的yarnAppClient开始都是如此
+第一步： start yarnClient
+第二步： 创建app
+第三步： app拿到response</p>
+<p>这三步就是向resource manager拿到一些基本信息用的。</p>
+<p>后续都会接一个资源验证，如：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Truncate resource request to cluster&apos;s max resource capability.</span><br><span class="line">   if (amMemory &gt; maxMem) &#123;</span><br><span class="line">     LOG.warn(&quot;Truncating requested AM memory: &quot; + amMemory + &quot; to cluster&apos;s max: &quot; + maxMem);</span><br><span class="line">     amMemory = maxMem;</span><br><span class="line">   &#125;</span><br><span class="line">   int maxVCores = appResponse.getMaximumResourceCapability().getVirtualCores();</span><br><span class="line"></span><br><span class="line">   if (amVCores &gt; maxVCores) &#123;</span><br><span class="line">     LOG.warn(&quot;Truncating requested AM vcores: &quot; + amVCores + &quot; to cluster&apos;s max: &quot; + maxVCores);</span><br><span class="line">     amVCores = maxVCores;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>appResponse会拿到两个信息 memory和Vcores，这里没有拿到gpu,yarn对gpu的隔离应该只是在io层面，后续再看</p>
+<p>下一步一般都是先拿到hdfs的操作类FileSystem</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.get(hdfsConf);</span><br><span class="line">ApplicationSubmissionContext appContext = app.getApplicationSubmissionContext();</span><br><span class="line">ApplicationId appId = appContext.getApplicationId();</span><br></pre></td></tr></table></figure></p>
+<p>这里做了三步，其实appId也可以通过appResponse来拿</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appResourcesPath = new Path(fs.getHomeDirectory(), Constants.TONY_FOLDER + Path.SEPARATOR + appId.toString());</span><br></pre></td></tr></table></figure></p>
+<p>这个是app运行时的资源路径</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if (srcDir != null) &#123;</span><br><span class="line">  if (Utils.isArchive(srcDir)) &#123;</span><br><span class="line">    uploadFileAndSetConfResources(appResourcesPath, new Path(srcDir), Constants.TONY_SRC_ZIP_NAME, tonyConf, fs);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    Utils.zipFolder(Paths.get(srcDir), Paths.get(Constants.TONY_SRC_ZIP_NAME));</span><br><span class="line">    uploadFileAndSetConfResources(appResourcesPath, new Path(Constants.TONY_SRC_ZIP_NAME),</span><br><span class="line">      Constants.TONY_SRC_ZIP_NAME, tonyConf, fs);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们知道srcDir是运行app所需的jar包本地位置，这一步是把依赖的jars压缩下然后上传到appResourcesPath路径下</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">if (pythonVenv != null) &#123;</span><br><span class="line">   uploadFileAndSetConfResources(appResourcesPath, new Path(pythonVenv), Constants.PYTHON_VENV_ZIP, tonyConf, fs);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> if (yarnConfAddress != null) &#123;</span><br><span class="line">   uploadFileAndSetConfResources(appResourcesPath, new Path(yarnConfAddress),</span><br><span class="line">     Constants.YARN_SITE_CONF, tonyConf, fs);</span><br><span class="line"> &#125;</span><br><span class="line"> if (hdfsConfAddress != null) &#123;</span><br><span class="line">   uploadFileAndSetConfResources(appResourcesPath, new Path(hdfsConfAddress),</span><br><span class="line">     Constants.HDFS_SITE_CONF, tonyConf, fs);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>同理对yarnConf， hdfsConf还有pythonVenv也上传到appResourcePath. 这样app运行python文件就有了所有的依赖
+这个实现很不错</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">this.tonyFinalConfPath = Utils.getClientResourcesPath(appId.toString(), Constants.TONY_FINAL_XML);</span><br><span class="line">// Write user&apos;s overridden conf to an xml to be localized.</span><br><span class="line">try (OutputStream os = new FileOutputStream(this.tonyFinalConfPath)) &#123;</span><br><span class="line">  tonyConf.writeXml(os);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">  throw new RuntimeException(&quot;Failed to create &quot; + this.tonyFinalConfPath + &quot; conf file. Exiting.&quot;, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个是把最终的xml文件全部保存到本地，用来查看container启动的环境吗？</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String appName = tonyConf.get(TonyConfigurationKeys.APPLICATION_NAME,</span><br><span class="line">     TonyConfigurationKeys.DEFAULT_APPLICATION_NAME);</span><br><span class="line">   appContext.setApplicationName(appName);</span><br><span class="line">   appContext.setApplicationType(APP_TYPE);</span><br></pre></td></tr></table></figure></p>
+<p>set下app名字和app的type</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Set up resource type requirements</span><br><span class="line">  Resource capability = Resource.newInstance(amMemory, amVCores);</span><br><span class="line">  Utils.setCapabilityGPU(capability, amGpus);</span><br><span class="line">  appContext.setResource(capability);</span><br></pre></td></tr></table></figure></p>
+<p>这个是set am所需的资源 分别为memory, cpu cores和 gpu资源。gpu的设置很奇怪</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Set the queue to which this application is to be submitted in the RM</span><br><span class="line">String yarnQueue = tonyConf.get(TonyConfigurationKeys.YARN_QUEUE_NAME,</span><br><span class="line">  TonyConfigurationKeys.DEFAULT_YARN_QUEUE_NAME);</span><br><span class="line">appContext.setQueue(yarnQueue);</span><br></pre></td></tr></table></figure></p>
+<p>设置下提交队列</p>
+<p>最后一步</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Set the ContainerLaunchContext to describe the Container ith which the TonyApplicationMaster is launched.</span><br><span class="line">  ContainerLaunchContext amSpec =</span><br><span class="line">    createAMContainerSpec(appId, this.amMemory, this.taskParams, this.pythonBinaryPath, this.executes, getTokens());</span><br><span class="line">  appContext.setAMContainerSpec(amSpec);</span><br></pre></td></tr></table></figure></p>
+<p>创建ContainerLaunchContext这个类
+然后setAMContainerSpec 后续会重点讲这个方法，很关键</p>
+<p>然后提交app,</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String nodeLabel = tonyConf.get(TonyConfigurationKeys.APPLICATION_NODE_LABEL);</span><br><span class="line">    if (nodeLabel != null) &#123;</span><br><span class="line">      appContext.setNodeLabelExpression(nodeLabel);</span><br><span class="line">    &#125;</span><br><span class="line">    LOG.info(&quot;Submitting YARN application&quot;);</span><br><span class="line">    yarnClient.submitApplication(appContext);</span><br><span class="line">    ApplicationReport report = yarnClient.getApplicationReport(appId);</span><br><span class="line">    logTrackingAndRMUrls(report);</span><br><span class="line">    return monitorApplication(appId)</span><br></pre></td></tr></table></figure></p>
+<p>中间还有几个report相关的检测类，后面再看。</p>
+<p>至此整个提交任务的完成，我们简单总结下
+1.首先创建app然后拿到appReponse
+2.资源校验
+3.设置amContext
+4.最后提交appContext</p>
+<h3><span id="logtrackingandrmurls">logTrackingAndRMUrls</span></h3>
+<p>log的方法</p>
+<h3><span id="createyarnclient">createYarnClient</span></h3>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private void createYarnClient() &#123;</span><br><span class="line">   if (this.yarnConfAddress != null) &#123;</span><br><span class="line">     this.yarnConf.addResource(new Path(this.yarnConfAddress));</span><br><span class="line">   &#125;</span><br><span class="line">   if (this.hdfsConfAddress != null) &#123;</span><br><span class="line">     this.hdfsConf.addResource(new Path(this.hdfsConfAddress));</span><br><span class="line">   &#125;</span><br><span class="line">   int numRMConnectRetries = tonyConf.getInt(TonyConfigurationKeys.RM_CLIENT_CONNECT_RETRY_MULTIPLIER,</span><br><span class="line">     TonyConfigurationKeys.DEFAULT_RM_CLIENT_CONNECT_RETRY_MULTIPLIER);</span><br><span class="line">   long rmMaxWaitMS = yarnConf.getLong(YarnConfiguration.RESOURCEMANAGER_CONNECT_RETRY_INTERVAL_MS,</span><br><span class="line">     YarnConfiguration.DEFAULT_RESOURCEMANAGER_CONNECT_RETRY_INTERVAL_MS) * numRMConnectRetries;</span><br><span class="line">   yarnConf.setLong(YarnConfiguration.RESOURCEMANAGER_CONNECT_MAX_WAIT_MS, rmMaxWaitMS);</span><br><span class="line"></span><br><span class="line">   if (System.getenv(Constants.HADOOP_CONF_DIR) != null) &#123;</span><br><span class="line">     hdfsConf.addResource(new Path(System.getenv(Constants.HADOOP_CONF_DIR) + File.separatorChar + Constants.CORE_SITE_CONF));</span><br><span class="line">     yarnConf.addResource(new Path(System.getenv(Constants.HADOOP_CONF_DIR) + File.separatorChar + Constants.CORE_SITE_CONF));</span><br><span class="line">     hdfsConf.addResource(new Path(System.getenv(Constants.HADOOP_CONF_DIR) + File.separatorChar + Constants.HDFS_SITE_CONF));</span><br><span class="line">   &#125;</span><br><span class="line">   yarnClient = YarnClient.createYarnClient();</span><br><span class="line">   yarnClient.init(yarnConf);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个方法就是初始化tony的conf然后创建一个yarnClient</p>
+<h3><span id="init">init</span></h3>
+<p>不贴代码了 也是初始化conf的一些操作，然后调用createYarnClient
+init+createYarnClient就是在设置运行必须的配置</p>
+<h3><span id="inittonyconf">initTonyConf</span></h3>
+<p>同上</p>
+<h3><span id="createamcontainerspec">createAMContainerSpec</span></h3>
+<p>这个类是我们的关注重点</p>
+<p>首先是</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ContainerLaunchContext amContainer = Records.newRecord(ContainerLaunchContext.class);</span><br></pre></td></tr></table></figure></p>
+<p>这是创建一个新的CLC,就是container运行需要的上下文</p>
+<p>然后注意都需要set哪些</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">amContainer.setApplicationACLs(acls);</span><br><span class="line"></span><br><span class="line">   String command = TonyClient.buildCommand(amMemory, taskParams, pythonBinaryPath,</span><br><span class="line">     executes, shellEnv, containerEnv);</span><br><span class="line"></span><br><span class="line">   LOG.info(&quot;Completed setting up Application Master command &quot; + command);</span><br><span class="line">   amContainer.setCommands(ImmutableList.of(command));</span><br><span class="line">   if (tokens != null) &#123;</span><br><span class="line">     amContainer.setTokens(tokens);</span><br><span class="line">   &#125;</span><br><span class="line">   amContainer.setEnvironment(containerEnv);</span><br><span class="line">   amContainer.setLocalResources(localResources);</span><br></pre></td></tr></table></figure></p>
+<p>分别是acls 一个控制list
+commands:运行程序的命令
+tokens: tokens
+setEnvironment: 运行的环境变量
+setLocalResources： 运行am所依赖的本地资源</p>
+<p>最后renturn clc</p>
+<h3><span id="buildcommand">buildCommand</span></h3>
+<p>java command</p>
+<h3><span id="gettokens">getTokens</span></h3>
+<p>delegation tokens</p>
+<h3><span id="monitorapplication">monitorApplication</span></h3>
+<p>检测app的运行情况</p>
+<h3><span id="initrpcclient">initRpcClient</span></h3>
+<p>初始化rpcClient</p>
+<h2><span id=""></span></h2>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/dt/" rel="next" title="dt">
+                <i class="fa fa-chevron-left"></i> dt
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/24/spark/" rel="prev" title="spark">
+                spark <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/timg.jpeg"
+                alt="Yifan Guo" />
+            
+              <p class="site-author-name" itemprop="name">Yifan Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow On Yarn源码详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">TFConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">Constants常量类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">TFPolicyProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">TonyConfigurationKeys</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">TonyJobMetadata</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.6.</span> <span class="nav-text">下方是三个重要类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.</span> <span class="nav-text">TonyClient</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.1.</span> <span class="nav-text">先说类成员</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.2.</span> <span class="nav-text">constructor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.3.</span> <span class="nav-text">methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.4.</span> <span class="nav-text">run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.5.</span> <span class="nav-text">logTrackingAndRMUrls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.6.</span> <span class="nav-text">createYarnClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.7.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.8.</span> <span class="nav-text">initTonyConf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.9.</span> <span class="nav-text">createAMContainerSpec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.10.</span> <span class="nav-text">buildCommand</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.11.</span> <span class="nav-text">getTokens</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.12.</span> <span class="nav-text">monitorApplication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.13.</span> <span class="nav-text">initRpcClient</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.8.</span> <span class="nav-text"></span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yifan Guo</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">59.7k</span>
+  
+
+  
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+  
+
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.yifanguo.top/2018/12/21/TonY/';
+          this.page.identifier = '2018/12/21/TonY/';
+          this.page.title = 'TonY';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>
