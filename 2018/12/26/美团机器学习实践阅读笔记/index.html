@@ -81,22 +81,23 @@
 
 
 
-<meta name="description" content="[TOC] 第16章 分布式机器学习 分布式机器学习需要解决如下三个问题：  如何更好切分成多个任务 如何调度子任务 均衡各节点负载  参数服务器  参数的获取与提交：计算节点从参数服务节点上获取当前的梯度，然后根据本地分配的训练样本进行梯度计算，通过几轮迭代后将更新后的梯度推送给参数服务器节点。参数在参数服务器需要高效地进行分布式存储，同时计算节点和参数服务节点之间的通信要足够高效 参数值的同步">
+<meta name="description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="美团机器学习实践阅读笔记">
 <meta property="og:url" content="http://www.yifanguo.top/2018/12/26/美团机器学习实践阅读笔记/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="[TOC] 第16章 分布式机器学习 分布式机器学习需要解决如下三个问题：  如何更好切分成多个任务 如何调度子任务 均衡各节点负载  参数服务器  参数的获取与提交：计算节点从参数服务节点上获取当前的梯度，然后根据本地分配的训练样本进行梯度计算，通过几轮迭代后将更新后的梯度推送给参数服务器节点。参数在参数服务器需要高效地进行分布式存储，同时计算节点和参数服务节点之间的通信要足够高效 参数值的同步">
+<meta property="og:description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E9%9D%9E%E5%87%B8%E9%97%AE%E9%A2%98.png">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%AF%94%E8%BE%83.png">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/rabit.png">
-<meta property="og:updated_time" content="2018-12-26T11:29:04.000Z">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E5%AE%9E%E6%97%B6%E7%89%B9%E5%BE%81.png">
+<meta property="og:updated_time" content="2018-12-27T02:55:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="美团机器学习实践阅读笔记">
-<meta name="twitter:description" content="[TOC] 第16章 分布式机器学习 分布式机器学习需要解决如下三个问题：  如何更好切分成多个任务 如何调度子任务 均衡各节点负载  参数服务器  参数的获取与提交：计算节点从参数服务节点上获取当前的梯度，然后根据本地分配的训练样本进行梯度计算，通过几轮迭代后将更新后的梯度推送给参数服务器节点。参数在参数服务器需要高效地进行分布式存储，同时计算节点和参数服务节点之间的通信要足够高效 参数值的同步">
+<meta name="twitter:description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png">
 
 
@@ -327,7 +328,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  5
                 </span>
               
             </div>
@@ -349,6 +350,42 @@
 
       
         <p>[TOC]</p>
+<h1><span id="第1章-问题建模">第1章 问题建模</span></h1>
+<p>机器学习应用流程：</p>
+<p>&lt;pre class=&quot;mermaid&quot;&gt;graph TD;
+问题建模--&gt;特征工程
+特征工程--&gt;模型选择
+模型选择--&gt;模型融合&lt;/pre&gt;</p>
+<p>线下指标(AUC)要和线上指标(Page Views)等保持一致</p>
+<p>精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的</p>
+<p>召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所谓，但是我们希望召回率尽量高</p>
+<h2><span id="auc-vs-roc">AUC VS ROC</span></h2>
+<p>真正率 = TP / (TP + FN)</p>
+<p>假正率 = FP / (FP + TN)</p>
+<h2><span id="auc-area-under-roc-curve">AUC area under roc curve</span></h2>
+<p>auc越大说明模型越可能将正样本排在负样本前面</p>
+<p>auc还有一些统计特性，auc等于随机挑选一个正样本和负样本时，分类器将正样本排前面的概率</p>
+<p>AUC只对正负样本排序能力强弱，对score大小和精度没有要求</p>
+<p>auc越高模型的排序能力越强</p>
+<p>AUC把所有正样本排在负样本前面，AUC=1.0</p>
+<h2><span id="对数损失-logistic-loss">对数损失 logistic loss</span></h2>
+<p>对预测概率的似然估计</p>
+<p>对数损失最小化本质上是利用样本中的已知分布，求解导致这种分布的最佳模型参数，</p>
+<p>使这种分布出现概率最大</p>
+<p>logloss衡量的是预测概率分布和真实概率分布的差异性，取值越小越好。</p>
+<p>与AUC不同，logloss对预测概率敏感</p>
+<h2><span id="回归metric">回归metric</span></h2>
+<h3><span id="平均绝对误差-mean-absolute-error-mae">平均绝对误差 mean absolute error MAE</span></h3>
+<p>也叫L1-norm loss.</p>
+<p>MAE是绝对误差的平均值</p>
+<p>使用MAE做lossFuc 是对数据分布的median做拟合</p>
+<h3><span id="均方根误差-rmse-root-mean-squared-error">均方根误差 RMSE--root mean squared error</span></h3>
+<p>RMSE代表的是预测值和真实值差值的样本标准差</p>
+<p>和MAE比，RMSE对大误差样本有更大的惩罚，对outlier敏感，健壮性不如MAE</p>
+<p>用RMSE做lossFuc是对数据分布的mean做拟合</p>
+<h2><span id="12样本选择">1.2样本选择</span></h2>
+<h1><span id="第2章-特征工程">第2章 特征工程</span></h1>
+<p>数据和特征决定了机器学习算法的上限，模型和算法只是不断逼近这个上限而已</p>
 <h1><span id="第16章-分布式机器学习">第16章 分布式机器学习</span></h1>
 <p>分布式机器学习需要解决如下三个问题：</p>
 <ol>
@@ -386,6 +423,14 @@
 <p>同步结束后，各个节点会继续计算到下一次AllReduce通信同步。</p>
 <p>如果有节点发生故障，该故障节点会从集群中找到最近的节点，拿到上一轮的模型文件，然后重新开始计算，其他无故障的节点等待故障节点计算完成后再AllReduce</p>
 <h2><span id="pslite">PSlite</span></h2>
+<p>啥都没说，duang。美团用zmq,应该是pslite改的</p>
+<h1><span id="第17章-特征工程">第17章 特征工程</span></h1>
+<h2><span id="特征生产">特征生产</span></h2>
+<h3><span id="离线特征生产">离线特征生产</span></h3>
+<p>所谓的离线特征主要是从历史数据中总结和归纳出来的特征表示。原始数据一般保存在分布式储存Hive, HBase,ES或者DB中。</p>
+<p>离线特征的生产过程主要包括特征计算和定时调度(linkedin的azakaban)</p>
+<h3><span id="实时特征">实时特征</span></h3>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E5%AE%9E%E6%97%B6%E7%89%B9%E5%BE%81.png" alt="实时特征"></p>
 
       
     </div>
@@ -425,6 +470,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/26/ehCache/" rel="prev" title="ehCache">
+                ehCache <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -515,7 +564,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -528,7 +577,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -568,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">第16章 分布式机器学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">参数服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">梯度如何更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.1.</span> <span class="nav-text">参数平均法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.</span> <span class="nav-text">异步梯度下降更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.3.</span> <span class="nav-text">比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">XGBoost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.1.</span> <span class="nav-text">xgboost容错</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">PSlite</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">第1章 问题建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">AUC VS ROC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">AUC area under roc curve</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">对数损失 logistic loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">回归metric</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.1.</span> <span class="nav-text">平均绝对误差 mean absolute error MAE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.2.</span> <span class="nav-text">均方根误差 RMSE--root mean squared error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">1.2样本选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">第2章 特征工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">第16章 分布式机器学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">参数服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">梯度如何更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.1.</span> <span class="nav-text">参数平均法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.2.</span> <span class="nav-text">异步梯度下降更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.3.</span> <span class="nav-text">比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">XGBoost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.1.</span> <span class="nav-text">xgboost容错</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">PSlite</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">第17章 特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">特征生产</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.1.</span> <span class="nav-text">离线特征生产</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.2.</span> <span class="nav-text">实时特征</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -588,7 +637,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -602,7 +651,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">59.7k</span>
+    <span title="Site words total count">65.3k</span>
   
 
   

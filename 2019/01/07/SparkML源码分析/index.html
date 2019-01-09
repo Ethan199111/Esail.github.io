@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spark," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Yifan Guo Personal Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="[TOC] Latex $$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$ 决策树 如何划分属性 在决策树算法中，如何选择最优划分属性是最关键的一步。一般而言，随着划分过程的不断进行，我们希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度(purity)”越来越高。 有几种度量样本集合纯度的指标。在MLlib中，信息熵和基尼指数">
+<meta name="keywords" content="spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Yifan Guo Personal Blog">
+<meta property="og:url" content="http://www.yifanguo.top/2019/01/07/SparkML源码分析/index.html">
+<meta property="og:site_name" content="Yifan Guo Personal Blog">
+<meta property="og:description" content="[TOC] Latex $$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$ 决策树 如何划分属性 在决策树算法中，如何选择最优划分属性是最关键的一步。一般而言，随着划分过程的不断进行，我们希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度(purity)”越来越高。 有几种度量样本集合纯度的指标。在MLlib中，信息熵和基尼指数">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/SparkML%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/gbdt2.png">
+<meta property="og:updated_time" content="2019-01-09T05:35:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yifan Guo Personal Blog">
+<meta name="twitter:description" content="[TOC] Latex $$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$ 决策树 如何划分属性 在决策树算法中，如何选择最优划分属性是最关键的一步。一般而言，随着划分过程的不断进行，我们希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度(purity)”越来越高。 有几种度量样本集合纯度的指标。在MLlib中，信息熵和基尼指数">
+<meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/SparkML%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/gbdt2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.yifanguo.top/2019/01/07/SparkML源码分析/"/>
+
+
+
+
+
+  <title> | Yifan Guo Personal Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/esail" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yifan Guo Personal Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-http">
+          <a href="/http/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            http
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-netty">
+          <a href="/netty/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            netty
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2019/01/07/SparkML源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yifan Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yifan Guo Personal Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-07T20:02:44+08:00">
+                2019-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h1><span id="latex">Latex</span></h1>
+<p>$$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$</p>
+<h1><span id="决策树">决策树</span></h1>
+<h2><span id="如何划分属性">如何划分属性</span></h2>
+<p>在决策树算法中，如何选择最优划分属性是最关键的一步。一般而言，随着划分过程的不断进行，我们希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度(purity)”越来越高。 有几种度量样本集合纯度的指标。在<code>MLlib</code>中，信息熵和基尼指数用于决策树分类，方差用于决策树回归。</p>
+<h2><span id="信息熵">信息熵</span></h2>
+<p>信息熵是度量样本集合纯度最常用的一种指标，假设当前样本集合<code>D</code>中第<code>k</code>类样本所占的比例为<code>p_k</code>，则<code>D</code>的信息熵定义为：</p>
+<p>$$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$</p>
+<p><code>Ent(D)</code>的值越小，则<code>D</code>的纯度越高</p>
+<h2><span id="gini基尼系数">Gini基尼系数</span></h2>
+<p>$$  Gini(D)  = 1- \sum_{i=1}^{|Y|} p_{k}^2$$</p>
+<p>直观来说，<code>Gini(D)</code>反映了从数据集<code>D</code>中随机取样两个样本，其类别标记不一致的概率。因此，<code>Gini(D)</code>越小，则数据集<code>D</code>的纯度越高。</p>
+<h2><span id="方差">方差</span></h2>
+<p>$$  Var(D)  = 1/N \sum_{i=1}^{N} (y_{i} - 1/N\sum_{i=1}^{N}y_{i})$$</p>
+<p>这个也是sparkMLlib使用的方式</p>
+<p>##信息增益</p>
+<p>假设切分大小为<code>N</code>的数据集<code>D</code>为两个数据集<code>D_left</code>和<code>D_right</code>，那么信息增益可以表示为如下的形式</p>
+<p>$$IG(D,s) = impurity(D) - \frac{N_{left}}{N} impurity(D)  -\frac{N_{right}}{N} impurity(D) $$</p>
+<p>imformation gain</p>
+<p>一般情况下，信息增益越大，则意味着使用属性<code>a</code>来进行划分所获得的纯度提升越大。因此我们可以用信息增益来进行决策树的划分属性选择。</p>
+<h2><span id="决策树的缺点"><strong>决策树的缺点：</strong></span></h2>
+<p>1.对那些各类别数据量不一致的数据，在决策树种，</p>
+<p>信息增益的结果偏向那些具有更多数值的特征</p>
+<p>2.容易过拟合</p>
+<p>3.忽略了数据集中属性之间的相关性</p>
+<h1><span id="随机森林">随机森林</span></h1>
+<h2><span id="1-bagging">1 bagging</span></h2>
+<p><code>Bagging</code>采用自助采样法(<code>bootstrap sampling</code>)采样数据。给定包含<code>m</code>个样本的数据集，我们先随机取出一个样本放入采样集中，再把该样本放回初始数据集，使得下次采样时，样本仍可能被选中， 这样，经过<code>m</code>次随机采样操作，我们得到包含<code>m</code>个样本的采样集。</p>
+<p>按照此方式，我们可以采样出<code>T</code>个含<code>m</code>个训练样本的采样集，然后基于每个采样集训练出一个基本学习器，再将这些基本学习器进行结合。这就是<code>Bagging</code>的一般流程。在对预测输出进行结合时，<code>Bagging</code>通常使用简单投票法， 对回归问题使用简单平均法。若分类预测时，出现两个类收到同样票数的情形，则最简单的做法是随机选择一个，也可以进一步考察学习器投票的置信度来确定最终胜者。</p>
+<p><code>Bagging</code>的算法描述如下图所示。</p>
+<p>输入： 训练集 D={(x1,y1),...}
+基础学习算法 $$ B$$
+训练次数T
+过程：</p>
+<ol>
+<li>
+<p>for t=1,2,...., T do</p>
+</li>
+<li>
+<p>$$h_{t} =  B(D, D_{bs})$$</p>
+</li>
+<li>
+<p>End for</p>
+<p>输出：$$H_{x} = argmax {y}\in{Y} \sum_{t=1}^{T}I(h_{t}(x) = y)$$</p>
+</li>
+</ol>
+<h2><span id="2-随机森林">2 随机森林</span></h2>
+<p>随机森林是<code>Bagging</code>的一个扩展变体。随机森林在以决策树为基学习器构建<code>Bagging</code>集成的基础上，进一步在决策树的训练过程中引入了随机属性选择。具体来讲，传统决策树在选择划分属性时， 在当前节点的属性集合（假设有<code>d</code>个属性）中选择一个最优属性；而在随机森林中，对基决策树的每个节点，先从该节点的属性集合中随机选择一个包含<code>k</code>个属性的子集，然后再从这个子集中选择一个最优属性用于划分。 这里的参数<code>k</code>控制了随机性的引入程度。若令<code>k=d</code>，则基决策树的构建与传统决策树相同；若令<code>k=1</code>，则是随机选择一个属性用于划分。在<code>MLlib</code>中，有两种选择用于分类，即<code>k=log2(d)</code>、<code>k=sqrt(d)</code>； 一种选择用于回归，即<code>k=1/3d</code>。</p>
+<p>可以看出，随机森林对<code>Bagging</code>只做了小改动，但是与<code>Bagging</code>中基学习器的“多样性”仅仅通过样本扰动（通过对初始训练集采样）而来不同，随机森林中基学习器的多样性不仅来自样本扰动，还来自属性扰动。 这使得最终集成的泛化性能可通过个体学习器之间差异度的增加而进一步提升。</p>
+<h2><span id="3-随机森林在分布式环境下的优化策略">3 随机森林在分布式环境下的优化策略</span></h2>
+<ul>
+<li>切分点抽样统计</li>
+<li>特征装箱（<code>Binning</code>）</li>
+<li>逐层训练（<code>level-wise training</code>）</li>
+</ul>
+<h1><span id="梯度提升树">梯度提升树</span></h1>
+<h2><span id="1-boosting">1 boosting</span></h2>
+<p><code>Boosting</code>是一类将弱学习器提升为强学习器的算法。这类算法的工作机制类似：先从初始训练集中训练出一个基学习器，再根据基学习器的表现对训练样本分布进行调整，使得先前基学习器做错的训练样本在后续受到更多关注。 然后基于调整后的样本分布来训练下一个基学习器；如此重复进行，直至基学习器的数目达到事先指定的值<code>T</code>，最终将这<code>T</code>个基学习器进行加权结合。</p>
+<p><code>Boost</code>算法是在算法开始时，为每一个样本赋上一个相等的权重值，也就是说，最开始的时候，大家都是一样重要的。 在每一次训练中得到的模型，会使得数据点的估计有所差异，所以在每一步结束后，我们需要对权重值进行处理，而处理的方式就是通过<strong>增加错分点的权重</strong>，这样使得某些点如果老是被分错，那么就会被“严重关注”，也就被赋上一个很高的权重。 然后等进行了<code>N</code>次迭代，将会得到<code>N</code>个简单的基分类器（<code>basic learner</code>），最后将它们组合起来，可以对它们进行加权（错误率越大的基分类器权重值越小，错误率越小的基分类器权重值越大）、或者让它们进行投票等得到一个最终的模型。</p>
+<p>梯度提升（<code>gradient boosting</code>）属于<code>Boost</code>算法的一种，也可以说是<code>Boost</code>算法的一种改进，它与传统的<code>Boost</code>有着很大的区别，它的每一次计算都是为了减少上一次的残差(<code>residual</code>)，而为了减少这些残差，可以在残差减少的梯度(<code>Gradient</code>)方向上建立一个新模型。所以说，在<code>Gradient Boost</code>中，每个新模型的建立是为了使得先前模型残差往梯度方向减少， 与传统的<code>Boost</code>算法对正确、错误的样本进行加权有着极大的区别。</p>
+<p>梯度提升算法的核心在于，每棵树是从先前所有树的残差中来学习。<strong>利用的是当前模型中损失函数的负梯度值作为提升树算法中的残差的近似值</strong>，进而拟合一棵回归（分类）树。</p>
+<p>##2 梯度提升</p>
+<p><img src="/Users/yifanguo/Desktop/blog/source/_posts/SparkML%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/gbdt2.png" alt="gbdt2"></p>
+<h2><span id="3-随机梯度提升">3 随机梯度提升</span></h2>
+<p>有文献证明，注入随机性到上述的过程中可以提高函数估计的性能。受到<code>Breiman</code>的影响，将随机性作为一个考虑的因素。在每次迭代中，随机的在训练集中抽取一个子样本集，然后在后续的操作中用这个子样本集代替全体样本。</p>
+<h1><span id="线性模型">线性模型</span></h1>
+<h2><span id="1-数学描述">1 数学描述</span></h2>
+<p>许多标准的机器学习算法可以归结为凸优化问题。例如，找到凸函数<code>f</code>的一个极小值的任务，这个凸函数依赖于可变向量<code>w</code>（在<code>spark</code>源码中，一般表示为<code>weights</code>）。 形式上，我们可以将其当作一个凸优化问题${min}_{w}f(w)$。它的目标函数可以表示为如下公式 <strong>(1)</strong>：</p>
+<p>​	$$f(W) = \lambda R(W) + \frac{1}{n} \sum_{i=1}^{n}L(w; x_{i}, y{i})$$</p>
+<p>在上式中，向量<code>x</code>表示训练数据集，<code>y</code>表示它相应的标签，也是我们想预测的值。如果<code>L(w;x,y)</code>可以表示为${w}^{T}x​$和<code>y</code>的函数， 我们称这个方法为线性的。<code>spark.mllib</code>中的几种分类算法和回归算法可以归为这一类。</p>
+<p>目标函数<code>f</code>包含两部分：正则化(<code>regularizer</code>)，用于控制模型的复杂度；损失函数，用于度量模型的误差。损失函数<code>L(w;.)</code>是一个典型的基于<code>w</code>的凸函数。固定的正则化参数<code>gamma</code>定义了两种目标的权衡（<code>trade-off</code>）, 这两个目标分别是最小化损失(训练误差)以及最小化模型复杂度(为了避免过拟合)。</p>
+<h1><span id="spark-ml整体架构">Spark ML整体架构</span></h1>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MLlib standardizes APIs for machine learning algorithms to make it easier to combine multiple algorithms into a single pipeline, or workflow. This section covers the key concepts introduced by the Pipelines API, where the pipeline concept is mostly inspired by the scikit-learn project.</span><br><span class="line"></span><br><span class="line">DataFrame: This ML API uses DataFrame from Spark SQL as an ML dataset, which can hold a variety of data types. E.g., a DataFrame could have different columns storing text, feature vectors, true labels, and predictions.</span><br><span class="line"></span><br><span class="line">Transformer: A Transformer is an algorithm which can transform one DataFrame into another DataFrame. E.g., an ML model is a Transformer which transforms a DataFrame with features into a DataFrame with predictions.</span><br><span class="line"></span><br><span class="line">Estimator: An Estimator is an algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model.</span><br><span class="line"></span><br><span class="line">Pipeline: A Pipeline chains multiple Transformers and Estimators together to specify an ML workflow.</span><br><span class="line"></span><br><span class="line">Parameter: All Transformers and Estimators now share a common API for specifying parameters.</span><br></pre></td></tr></table></figure></p>
+<p>sparkML基本上是按照上述介绍搭起来的，最基本的是PipelineStage 是Pipeline中的一步。</p>
+<p>主要是estimator 和 transformer.</p>
+<p>数据类型是dataFrame</p>
+<h2><span id="estimator">Estimator</span></h2>
+<p>estimator就一个method 就是fit</p>
+<p>&lt;pre class=&quot;mermaid&quot;&gt;graph LR;
+ProbabilisticClassifier --&gt; Classifier;
+Classifier --&gt; Predictor;
+Predictor --&gt; Estimator;&lt;/pre&gt;</p>
+<p>ProbabilisticClassifier</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class DecisionTreeClassifier @Since(&quot;1.4.0&quot;) (</span><br><span class="line">    @Since(&quot;1.4.0&quot;) override val uid: String)</span><br><span class="line">  extends ProbabilisticClassifier[Vector, DecisionTreeClassifier, DecisionTreeClassificationModel]</span><br></pre></td></tr></table></figure></p>
+<h2><span id="transformer">Transformer</span></h2>
+<p>transformer就是把一个df转成另一个df</p>
+<h1><span id="logistic-regression">Logistic Regression</span></h1>
+<p>spark的LR支持二分类和多分类，默认是二分类</p>
+<p>看看LR的train都干了什么</p>
+<p>首先LR支持样本有权重，只要df里有weight就行</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val instances: RDD[Instance] =</span><br><span class="line">      dataset.select(col($(labelCol)), w, col($(featuresCol))).rdd.map &#123;</span><br><span class="line">        case Row(label: Double, weight: Double, features: Vector) =&gt;</span><br><span class="line">          Instance(label, weight, features)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    if (handlePersistence) instances.persist(StorageLevel.MEMORY_AND_DISK)</span><br></pre></td></tr></table></figure></p>
+<p>这一步是把df里的label, weight, features都挑出来，如果没有weight 就默认是1</p>
+<p>instances.persist 是确定数据的储存级别，默认就是MEMORY_AND_DISK</p>
+<p>我们常用的rdd.cache() 本质上是 persist(StorageLevel.MEMORY_ONLY) 即把rdd的数据加载到内存</p>
+<p>关于spark对内存的管理，可以看</p>
+<p>https://www.ibm.com/developerworks/cn/analytics/library/ba-cn-apache-spark-memory-management/index.html</p>
+<p>https://www.jianshu.com/u/5b15278387a0</p>
+<p>中间用的是Breeze的LBFGS优化器</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BreezeOWLQN[Int, BDV[Double]]($(maxIter), 10, regParamL1Fun, $(tol))</span><br></pre></td></tr></table></figure></p>
+<p>最后组装model</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val model = copyValues(new LogisticRegressionModel(uid, coefficientMatrix, interceptVector,</span><br><span class="line">  numClasses, isMultinomial))</span><br></pre></td></tr></table></figure></p>
+<h2><span id="treeaggregate">TreeAggregate</span></h2>
+<p>treeAggregate也是spark rdd一个非常重要的操作，是数据聚合操作</p>
+<p>可以看这篇</p>
+<p>https://blog.csdn.net/u011724402/article/details/79057450</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与aggregate不同的是treeAggregate多了depth的参数，其他参数含义相同。aggregate在执行完SeqOp后会将计算结果拿到driver端使用CombOp遍历一次SeqOp计算的结果，最终得到聚合结果。而treeAggregate不会一次就Comb得到最终结果，SeqOp得到的结果也许很大，直接拉到driver可能会OutOfMemory，因此它会先把分区的结果做局部聚合(reduceByKey)，如果分区数过多时会做分区合并，之后再把结果拿到driver端做reduce</span><br></pre></td></tr></table></figure></p>
+<h2><span id="gradientdescent">GradientDescent</span></h2>
+<p>所有在spark上实现并行的ML的算法都可以参考梯度下降的做法</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">while (!converged &amp;&amp; i &lt;= numIterations) &#123;</span><br><span class="line">	// 把权重分发给executor, 每轮迭代都要发一次！？这就是spark的瓶颈</span><br><span class="line">  val bcWeights = data.context.broadcast(weights)</span><br><span class="line">  // Sample a subset (fraction miniBatchFraction) of the total data</span><br><span class="line">  // compute and sum up the subgradients on this subset (this is one map-reduce)</span><br><span class="line">  val (gradientSum, lossSum, miniBatchSize) = data.sample(false, miniBatchFraction, 42 + i)</span><br><span class="line">    .treeAggregate((BDV.zeros[Double](n), 0.0, 0L))(</span><br><span class="line">      seqOp = (c, v) =&gt; &#123;</span><br><span class="line">        // c: (grad, loss, count), v: (label, features)</span><br><span class="line">        val l = gradient.compute(v._2, v._1, bcWeights.value, Vectors.fromBreeze(c._1))</span><br><span class="line">        (c._1, c._2 + l, c._3 + 1)</span><br><span class="line">      &#125;,</span><br><span class="line">      combOp = (c1, c2) =&gt; &#123;</span><br><span class="line">        // c: (grad, loss, count)</span><br><span class="line">        (c1._1 += c2._1, c1._2 + c2._2, c1._3 + c2._3)</span><br><span class="line">      &#125;)</span><br><span class="line">  bcWeights.destroy(blocking = false)</span><br><span class="line"></span><br><span class="line">  if (miniBatchSize &gt; 0) &#123;</span><br><span class="line">    /**</span><br><span class="line">     * lossSum is computed using the weights from the previous iteration</span><br><span class="line">     * and regVal is the regularization value computed in the previous iteration as well.</span><br><span class="line">     */</span><br><span class="line">    stochasticLossHistory += lossSum / miniBatchSize + regVal</span><br><span class="line">    val update = updater.compute(</span><br><span class="line">      weights, Vectors.fromBreeze(gradientSum / miniBatchSize.toDouble),</span><br><span class="line">      stepSize, i, regParam)</span><br><span class="line">    weights = update._1</span><br><span class="line">    regVal = update._2</span><br><span class="line"></span><br><span class="line">    previousWeights = currentWeights</span><br><span class="line">    currentWeights = Some(weights)</span><br><span class="line">    if (previousWeights != None &amp;&amp; currentWeights != None) &#123;</span><br><span class="line">      converged = isConverged(previousWeights.get,</span><br><span class="line">        currentWeights.get, convergenceTol)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    logWarning(s&quot;Iteration ($i/$numIterations). The size of sampled batch is zero&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">  i += 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/02/LightGBM模型解读/" rel="next" title="LightGBM模型解读">
+                <i class="fa fa-chevron-left"></i> LightGBM模型解读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/timg.jpeg"
+                alt="Yifan Guo" />
+            
+              <p class="site-author-name" itemprop="name">Yifan Guo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Latex</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">如何划分属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">信息熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">Gini基尼系数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">决策树的缺点：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">随机森林</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">1 bagging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">2 随机森林</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">3 随机森林在分布式环境下的优化策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">梯度提升树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">1 boosting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">3 随机梯度提升</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">线性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">1 数学描述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Spark ML整体架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">Estimator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">Transformer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">Logistic Regression</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.1.</span> <span class="nav-text">TreeAggregate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.2.</span> <span class="nav-text">GradientDescent</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yifan Guo</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">65.3k</span>
+  
+
+  
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+  
+
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.yifanguo.top/2019/01/07/SparkML源码分析/';
+          this.page.identifier = '2019/01/07/SparkML源码分析/';
+          this.page.title = '';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

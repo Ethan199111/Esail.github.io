@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2018-12-26T11:29:04.000Z</updated>
+  <updated>2019-01-09T05:35:51.000Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -17,25 +17,126 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>美团机器学习实践阅读笔记</title>
-    <link href="http://www.yifanguo.top/2018/12/26/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
-    <id>http://www.yifanguo.top/2018/12/26/美团机器学习实践阅读笔记/</id>
-    <published>2018-12-26T08:56:04.000Z</published>
-    <updated>2018-12-26T11:29:04.000Z</updated>
+    <title></title>
+    <link href="http://www.yifanguo.top/2019/01/07/SparkML%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    <id>http://www.yifanguo.top/2019/01/07/SparkML源码分析/</id>
+    <published>2019-01-07T12:02:44.000Z</published>
+    <updated>2019-01-09T05:35:51.000Z</updated>
     
-    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="第16章-分布式机器学习">第16章 分布式机器学习</span></h1><p>分布式机器学习需要解决如下三个问题：</p><ol><li>如何更好切分成多个任务</li><li>如何调度子任务</li><li>均衡各节点负载</li></ol><h2><span id="参数服务器">参数服务器</span></h2><ul><li>参数的获取与提交：计算节点从参数服务节点上获取当前的梯度，然后根据本地分配的训练样本进行梯度计算，通过几轮迭代后将更新后的梯度推送给参数服务器节点。参数在参数服务器需要高效地进行分布式存储，同时计算节点和参数服务节点之间的通信要足够高效</li><li>参数值的同步问题：根据参数服务器的设计和运行原理，我们可以得知在每一个时刻计算节点的梯度和当前参数服务节点上储存的梯度可能是不一致的。</li></ul><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png" alt="ps"></p><p>什么时候计算节点与参数服务器节点更新同步一次参数呢？</p><p>这个更新同步过程对每个计算节点来说都是相互独立的。一般来说，一个比较简单而且常用的方式是，我们可以采用固定的迭代轮数，每个计算节点迭代这个轮数后和参数服务节点做一次同步</p><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E9%9D%9E%E5%87%B8%E9%97%AE%E9%A2%98.png" alt="非凸问题"></p><h2><span id="梯度如何更新">梯度如何更新</span></h2><p>主要有参数平均法和基于更新方法两种</p><h3><span id="参数平均法">参数平均法</span></h3><p>参数平均法的核心思想是将每个计算节点获取的参数值求平均后作为全局参数值，可以证明参数平均法的结果在数学意义上等同于用单个机器进行训练</p><h3><span id="异步梯度下降更新">异步梯度下降更新</span></h3><p>相对于在工作节点与参数服务器之间传递参数，我们只传递梯度更新信息。</p><h3><span id="比较">比较</span></h3><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%AF%94%E8%BE%83.png" alt="比较"></p><h2><span id="xgboost">XGBoost</span></h2><p>使用rabit,rabit在MPI的allReduce和broadcast操作原语这个基础上提供了更好的容错处理功能，弥补了MPI的不足</p><p>xgboost优化了rabit的MR流程</p><ol><li>每一轮迭代结束后，计算结果不用放入储存系统。保留在内存里</li><li>每一轮迭代后没有数据重新分发的过程(no shuffle)</li></ol><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/rabit.png" alt="rabit"></p><h3><span id="xgboost容错">xgboost容错</span></h3><p>rabit在一轮AllReduce后，会把在各个节点内存中将模型结果缓存为checkpoint,并加版本号</p><p>同步结束后，各个节点会继续计算到下一次AllReduce通信同步。</p><p>如果有节点发生故障，该故障节点会从集群中找到最近的节点，拿到上一轮的模型文件，然后重新开始计算，其他无故障的节点等待故障节点计算完成后再AllReduce</p><h2><span id="pslite">PSlite</span></h2>]]></content>
+    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="latex">Latex</span></h1><p>$$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$</p><h1><span id="决策树">决策树</span></h1><h2><span id="如何划分属性">如何划分属性</span></h2><p>在决策树算法中，如何选择最优划分属性是最关键的一步。一般而言，随着划分过程的不断进行，我们希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度(purity)”越来越高。 有几种度量样本集合纯度的指标。在<code>MLlib</code>中，信息熵和基尼指数用于决策树分类，方差用于决策树回归。</p><h2><span id="信息熵">信息熵</span></h2><p>信息熵是度量样本集合纯度最常用的一种指标，假设当前样本集合<code>D</code>中第<code>k</code>类样本所占的比例为<code>p_k</code>，则<code>D</code>的信息熵定义为：</p><p>$$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$</p><p><code>Ent(D)</code>的值越小，则<code>D</code>的纯度越高</p><h2><span id="gini基尼系数">Gini基尼系数</span></h2><p>$$  Gini(D)  = 1- \sum_{i=1}^{|Y|} p_{k}^2$$</p><p>直观来说，<code>Gini(D)</code>反映了从数据集<code>D</code>中随机取样两个样本，其类别标记不一致的概率。因此，<code>Gini(D)</code>越小，则数据集<code>D</code>的纯度越高。</p><h2><span id="方差">方差</span></h2><p>$$  Var(D)  = 1/N \sum_{i=1}^{N} (y_{i} - 1/N\sum_{i=1}^{N}y_{i})$$</p><p>这个也是sparkMLlib使用的方式</p><p>##信息增益</p><p>假设切分大小为<code>N</code>的数据集<code>D</code>为两个数据集<code>D_left</code>和<code>D_right</code>，那么信息增益可以表示为如下的形式</p><p>$$IG(D,s) = impurity(D) - \frac{N_{left}}{N} impurity(D)  -\frac{N_{right}}{N} impurity(D) $$</p><p>imformation gain</p><p>一般情况下，信息增益越大，则意味着使用属性<code>a</code>来进行划分所获得的纯度提升越大。因此我们可以用信息增益来进行决策树的划分属性选择。</p><h2><span id="决策树的缺点"><strong>决策树的缺点：</strong></span></h2><p>1.对那些各类别数据量不一致的数据，在决策树种，</p><p>信息增益的结果偏向那些具有更多数值的特征</p><p>2.容易过拟合</p><p>3.忽略了数据集中属性之间的相关性</p><h1><span id="随机森林">随机森林</span></h1><h2><span id="1-bagging">1 bagging</span></h2><p><code>Bagging</code>采用自助采样法(<code>bootstrap sampling</code>)采样数据。给定包含<code>m</code>个样本的数据集，我们先随机取出一个样本放入采样集中，再把该样本放回初始数据集，使得下次采样时，样本仍可能被选中， 这样，经过<code>m</code>次随机采样操作，我们得到包含<code>m</code>个样本的采样集。</p><p>按照此方式，我们可以采样出<code>T</code>个含<code>m</code>个训练样本的采样集，然后基于每个采样集训练出一个基本学习器，再将这些基本学习器进行结合。这就是<code>Bagging</code>的一般流程。在对预测输出进行结合时，<code>Bagging</code>通常使用简单投票法， 对回归问题使用简单平均法。若分类预测时，出现两个类收到同样票数的情形，则最简单的做法是随机选择一个，也可以进一步考察学习器投票的置信度来确定最终胜者。</p><p><code>Bagging</code>的算法描述如下图所示。</p><p>输入： 训练集 D={(x1,y1),...}基础学习算法 $$ B$$训练次数T过程：</p><ol><li><p>for t=1,2,...., T do</p></li><li><p>$$h_{t} =  B(D, D_{bs})$$</p></li><li><p>End for</p><p>输出：$$H_{x} = argmax {y}\in{Y} \sum_{t=1}^{T}I(h_{t}(x) = y)$$</p></li></ol><h2><span id="2-随机森林">2 随机森林</span></h2><p>随机森林是<code>Bagging</code>的一个扩展变体。随机森林在以决策树为基学习器构建<code>Bagging</code>集成的基础上，进一步在决策树的训练过程中引入了随机属性选择。具体来讲，传统决策树在选择划分属性时， 在当前节点的属性集合（假设有<code>d</code>个属性）中选择一个最优属性；而在随机森林中，对基决策树的每个节点，先从该节点的属性集合中随机选择一个包含<code>k</code>个属性的子集，然后再从这个子集中选择一个最优属性用于划分。 这里的参数<code>k</code>控制了随机性的引入程度。若令<code>k=d</code>，则基决策树的构建与传统决策树相同；若令<code>k=1</code>，则是随机选择一个属性用于划分。在<code>MLlib</code>中，有两种选择用于分类，即<code>k=log2(d)</code>、<code>k=sqrt(d)</code>； 一种选择用于回归，即<code>k=1/3d</code>。</p><p>可以看出，随机森林对<code>Bagging</code>只做了小改动，但是与<code>Bagging</code>中基学习器的“多样性”仅仅通过样本扰动（通过对初始训练集采样）而来不同，随机森林中基学习器的多样性不仅来自样本扰动，还来自属性扰动。 这使得最终集成的泛化性能可通过个体学习器之间差异度的增加而进一步提升。</p><h2><span id="3-随机森林在分布式环境下的优化策略">3 随机森林在分布式环境下的优化策略</span></h2><ul><li>切分点抽样统计</li><li>特征装箱（<code>Binning</code>）</li><li>逐层训练（<code>level-wise training</code>）</li></ul><h1><span id="梯度提升树">梯度提升树</span></h1><h2><span id="1-boosting">1 boosting</span></h2><p><code>Boosting</code>是一类将弱学习器提升为强学习器的算法。这类算法的工作机制类似：先从初始训练集中训练出一个基学习器，再根据基学习器的表现对训练样本分布进行调整，使得先前基学习器做错的训练样本在后续受到更多关注。 然后基于调整后的样本分布来训练下一个基学习器；如此重复进行，直至基学习器的数目达到事先指定的值<code>T</code>，最终将这<code>T</code>个基学习器进行加权结合。</p><p><code>Boost</code>算法是在算法开始时，为每一个样本赋上一个相等的权重值，也就是说，最开始的时候，大家都是一样重要的。 在每一次训练中得到的模型，会使得数据点的估计有所差异，所以在每一步结束后，我们需要对权重值进行处理，而处理的方式就是通过<strong>增加错分点的权重</strong>，这样使得某些点如果老是被分错，那么就会被“严重关注”，也就被赋上一个很高的权重。 然后等进行了<code>N</code>次迭代，将会得到<code>N</code>个简单的基分类器（<code>basic learner</code>），最后将它们组合起来，可以对它们进行加权（错误率越大的基分类器权重值越小，错误率越小的基分类器权重值越大）、或者让它们进行投票等得到一个最终的模型。</p><p>梯度提升（<code>gradient boosting</code>）属于<code>Boost</code>算法的一种，也可以说是<code>Boost</code>算法的一种改进，它与传统的<code>Boost</code>有着很大的区别，它的每一次计算都是为了减少上一次的残差(<code>residual</code>)，而为了减少这些残差，可以在残差减少的梯度(<code>Gradient</code>)方向上建立一个新模型。所以说，在<code>Gradient Boost</code>中，每个新模型的建立是为了使得先前模型残差往梯度方向减少， 与传统的<code>Boost</code>算法对正确、错误的样本进行加权有着极大的区别。</p><p>梯度提升算法的核心在于，每棵树是从先前所有树的残差中来学习。<strong>利用的是当前模型中损失函数的负梯度值作为提升树算法中的残差的近似值</strong>，进而拟合一棵回归（分类）树。</p><p>##2 梯度提升</p><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/SparkML%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/gbdt2.png" alt="gbdt2"></p><h2><span id="3-随机梯度提升">3 随机梯度提升</span></h2><p>有文献证明，注入随机性到上述的过程中可以提高函数估计的性能。受到<code>Breiman</code>的影响，将随机性作为一个考虑的因素。在每次迭代中，随机的在训练集中抽取一个子样本集，然后在后续的操作中用这个子样本集代替全体样本。</p><h1><span id="线性模型">线性模型</span></h1><h2><span id="1-数学描述">1 数学描述</span></h2><p>许多标准的机器学习算法可以归结为凸优化问题。例如，找到凸函数<code>f</code>的一个极小值的任务，这个凸函数依赖于可变向量<code>w</code>（在<code>spark</code>源码中，一般表示为<code>weights</code>）。 形式上，我们可以将其当作一个凸优化问题${min}_{w}f(w)$。它的目标函数可以表示为如下公式 <strong>(1)</strong>：</p><p>​$$f(W) = \lambda R(W) + \frac{1}{n} \sum_{i=1}^{n}L(w; x_{i}, y{i})$$</p><p>在上式中，向量<code>x</code>表示训练数据集，<code>y</code>表示它相应的标签，也是我们想预测的值。如果<code>L(w;x,y)</code>可以表示为${w}^{T}x​$和<code>y</code>的函数， 我们称这个方法为线性的。<code>spark.mllib</code>中的几种分类算法和回归算法可以归为这一类。</p><p>目标函数<code>f</code>包含两部分：正则化(<code>regularizer</code>)，用于控制模型的复杂度；损失函数，用于度量模型的误差。损失函数<code>L(w;.)</code>是一个典型的基于<code>w</code>的凸函数。固定的正则化参数<code>gamma</code>定义了两种目标的权衡（<code>trade-off</code>）, 这两个目标分别是最小化损失(训练误差)以及最小化模型复杂度(为了避免过拟合)。</p><h1><span id="spark-ml整体架构">Spark ML整体架构</span></h1><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MLlib standardizes APIs for machine learning algorithms to make it easier to combine multiple algorithms into a single pipeline, or workflow. This section covers the key concepts introduced by the Pipelines API, where the pipeline concept is mostly inspired by the scikit-learn project.</span><br><span class="line"></span><br><span class="line">DataFrame: This ML API uses DataFrame from Spark SQL as an ML dataset, which can hold a variety of data types. E.g., a DataFrame could have different columns storing text, feature vectors, true labels, and predictions.</span><br><span class="line"></span><br><span class="line">Transformer: A Transformer is an algorithm which can transform one DataFrame into another DataFrame. E.g., an ML model is a Transformer which transforms a DataFrame with features into a DataFrame with predictions.</span><br><span class="line"></span><br><span class="line">Estimator: An Estimator is an algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model.</span><br><span class="line"></span><br><span class="line">Pipeline: A Pipeline chains multiple Transformers and Estimators together to specify an ML workflow.</span><br><span class="line"></span><br><span class="line">Parameter: All Transformers and Estimators now share a common API for specifying parameters.</span><br></pre></td></tr></table></figure></p><p>sparkML基本上是按照上述介绍搭起来的，最基本的是PipelineStage 是Pipeline中的一步。</p><p>主要是estimator 和 transformer.</p><p>数据类型是dataFrame</p><h2><span id="estimator">Estimator</span></h2><p>estimator就一个method 就是fit</p><p>&lt;pre class=&quot;mermaid&quot;&gt;graph LR;ProbabilisticClassifier --&gt; Classifier;Classifier --&gt; Predictor;Predictor --&gt; Estimator;&lt;/pre&gt;</p><p>ProbabilisticClassifier</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class DecisionTreeClassifier @Since(&quot;1.4.0&quot;) (</span><br><span class="line">    @Since(&quot;1.4.0&quot;) override val uid: String)</span><br><span class="line">  extends ProbabilisticClassifier[Vector, DecisionTreeClassifier, DecisionTreeClassificationModel]</span><br></pre></td></tr></table></figure></p><h2><span id="transformer">Transformer</span></h2><p>transformer就是把一个df转成另一个df</p><h1><span id="logistic-regression">Logistic Regression</span></h1><p>spark的LR支持二分类和多分类，默认是二分类</p><p>看看LR的train都干了什么</p><p>首先LR支持样本有权重，只要df里有weight就行</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val instances: RDD[Instance] =</span><br><span class="line">      dataset.select(col($(labelCol)), w, col($(featuresCol))).rdd.map &#123;</span><br><span class="line">        case Row(label: Double, weight: Double, features: Vector) =&gt;</span><br><span class="line">          Instance(label, weight, features)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    if (handlePersistence) instances.persist(StorageLevel.MEMORY_AND_DISK)</span><br></pre></td></tr></table></figure></p><p>这一步是把df里的label, weight, features都挑出来，如果没有weight 就默认是1</p><p>instances.persist 是确定数据的储存级别，默认就是MEMORY_AND_DISK</p><p>我们常用的rdd.cache() 本质上是 persist(StorageLevel.MEMORY_ONLY) 即把rdd的数据加载到内存</p><p>关于spark对内存的管理，可以看</p><p>https://www.ibm.com/developerworks/cn/analytics/library/ba-cn-apache-spark-memory-management/index.html</p><p>https://www.jianshu.com/u/5b15278387a0</p><p>中间用的是Breeze的LBFGS优化器</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BreezeOWLQN[Int, BDV[Double]]($(maxIter), 10, regParamL1Fun, $(tol))</span><br></pre></td></tr></table></figure></p><p>最后组装model</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val model = copyValues(new LogisticRegressionModel(uid, coefficientMatrix, interceptVector,</span><br><span class="line">  numClasses, isMultinomial))</span><br></pre></td></tr></table></figure></p><h2><span id="treeaggregate">TreeAggregate</span></h2><p>treeAggregate也是spark rdd一个非常重要的操作，是数据聚合操作</p><p>可以看这篇</p><p>https://blog.csdn.net/u011724402/article/details/79057450</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与aggregate不同的是treeAggregate多了depth的参数，其他参数含义相同。aggregate在执行完SeqOp后会将计算结果拿到driver端使用CombOp遍历一次SeqOp计算的结果，最终得到聚合结果。而treeAggregate不会一次就Comb得到最终结果，SeqOp得到的结果也许很大，直接拉到driver可能会OutOfMemory，因此它会先把分区的结果做局部聚合(reduceByKey)，如果分区数过多时会做分区合并，之后再把结果拿到driver端做reduce</span><br></pre></td></tr></table></figure></p><h2><span id="gradientdescent">GradientDescent</span></h2><p>所有在spark上实现并行的ML的算法都可以参考梯度下降的做法</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">while (!converged &amp;&amp; i &lt;= numIterations) &#123;</span><br><span class="line">// 把权重分发给executor, 每轮迭代都要发一次！？这就是spark的瓶颈</span><br><span class="line">  val bcWeights = data.context.broadcast(weights)</span><br><span class="line">  // Sample a subset (fraction miniBatchFraction) of the total data</span><br><span class="line">  // compute and sum up the subgradients on this subset (this is one map-reduce)</span><br><span class="line">  val (gradientSum, lossSum, miniBatchSize) = data.sample(false, miniBatchFraction, 42 + i)</span><br><span class="line">    .treeAggregate((BDV.zeros[Double](n), 0.0, 0L))(</span><br><span class="line">      seqOp = (c, v) =&gt; &#123;</span><br><span class="line">        // c: (grad, loss, count), v: (label, features)</span><br><span class="line">        val l = gradient.compute(v._2, v._1, bcWeights.value, Vectors.fromBreeze(c._1))</span><br><span class="line">        (c._1, c._2 + l, c._3 + 1)</span><br><span class="line">      &#125;,</span><br><span class="line">      combOp = (c1, c2) =&gt; &#123;</span><br><span class="line">        // c: (grad, loss, count)</span><br><span class="line">        (c1._1 += c2._1, c1._2 + c2._2, c1._3 + c2._3)</span><br><span class="line">      &#125;)</span><br><span class="line">  bcWeights.destroy(blocking = false)</span><br><span class="line"></span><br><span class="line">  if (miniBatchSize &gt; 0) &#123;</span><br><span class="line">    /**</span><br><span class="line">     * lossSum is computed using the weights from the previous iteration</span><br><span class="line">     * and regVal is the regularization value computed in the previous iteration as well.</span><br><span class="line">     */</span><br><span class="line">    stochasticLossHistory += lossSum / miniBatchSize + regVal</span><br><span class="line">    val update = updater.compute(</span><br><span class="line">      weights, Vectors.fromBreeze(gradientSum / miniBatchSize.toDouble),</span><br><span class="line">      stepSize, i, regParam)</span><br><span class="line">    weights = update._1</span><br><span class="line">    regVal = update._2</span><br><span class="line"></span><br><span class="line">    previousWeights = currentWeights</span><br><span class="line">    currentWeights = Some(weights)</span><br><span class="line">    if (previousWeights != None &amp;&amp; currentWeights != None) &#123;</span><br><span class="line">      converged = isConverged(previousWeights.get,</span><br><span class="line">        currentWeights.get, convergenceTol)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    logWarning(s&quot;Iteration ($i/$numIterations). The size of sampled batch is zero&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">  i += 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;第16章-分布式机器学习&quot;&gt;第16章 分布式机器学习&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;分布式机器学习需要解决如下三个问题：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;如何更好切分成多个任务&lt;/li&gt;
-&lt;li&gt;如何调度子任务&lt;/li&gt;
-&lt;li&gt;均
+&lt;h1&gt;&lt;span id=&quot;latex&quot;&gt;Latex&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;$$  Ent(D) = - \sum_{i=1}^{|Y|} p_{k}\log_{2}p_{k}$$&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;决策树&quot;&gt;决策树&lt;/span
+      
+    
+    </summary>
+    
+    
+      <category term="spark" scheme="http://www.yifanguo.top/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LightGBM模型解读</title>
+    <link href="http://www.yifanguo.top/2019/01/02/LightGBM%E6%A8%A1%E5%9E%8B%E8%A7%A3%E8%AF%BB/"/>
+    <id>http://www.yifanguo.top/2019/01/02/LightGBM模型解读/</id>
+    <published>2019-01-02T10:32:11.000Z</published>
+    <updated>2019-01-02T10:59:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>https://zhuanlan.zhihu.com/p/28768447</p><h2><span id="训练配置"><strong>训练配置：</strong></span></h2><p>6307410个样本做训练集</p><p><strong>num_trees</strong> = 2 // 树的棵树</p><p><strong>categorical_feature</strong>=1,2,3,5,6,8,299 //类别特征编号</p><p><strong>num_leaves</strong> = 6 // 每棵树的叶子数</p><p><strong>max_depth</strong> = 3 // 树的深度</p><p><strong>learning_rate</strong> = 0.1 // 学习率</p><p><strong>bagging_fraction</strong> = 0.8 // 样本采样比例</p><h2><span id="训练出的lightgbm模型文件及其含义解析"><strong>训练出的LightGBM模型文件及其含义解析：</strong></span></h2><p><strong>tree</strong> // 模型中子模型的名字，gbdt的子模型是tree</p><p><strong>num_class</strong>=1 // 类别数量，二分类问题变成了概率问题</p><p><strong>label_index</strong>=0 // lable所在列</p><p><strong>max_feature_idx</strong>=1365 //最大的特征index， 0~1365，LightGBM认为特征从0开始编码</p><p>(这个+1就是特征纬度)</p><p><strong>objective</strong>=binary //学习目标</p><p><strong>sigmoid</strong>=1 //结果输出时sigmoid的参数 output[0] = 1.0f / (1.0f + std::exp(-sigmoid_ * input[0]));，越大sigmoid越陡峭</p><p><strong>feature_names</strong>=Column_0 Column_1 Column_2 ... Column_1363 Column_1364 Column_1365 // 特征名字，就是”Column_” + 数据中特征index</p><p><strong>feature_infos</strong>=none 0:1 [0:10742] 1487112:0 [0:3999191] ...</p><p>// 没有“[]”的是category 特征的bin中的特征取值</p><p>// 有“[]”是数值特征的bin中的最小、最大值</p><p>// none表示此特征没有使用</p><p>// 第1棵树</p><p><strong>Tree</strong>=0 // 树的编号，从0开始</p><p><strong>num_leaves</strong>=6 // 树中叶子的数量</p><p><strong>split_feature</strong>=150 197 381 63 197 //6个叶子，分裂5次，有5个内部节点和分裂特征，这个特征编号是在原样本中的特征编号</p><p><strong>split_gain</strong>=579239.62681873201 101591.49813184602 78186.521895228478 75276.734034747526 57589.418844881991 // 每次分裂的增益</p><p><strong>threshold</strong>=0.028499999999999998 0.016500000000000001 554.04549999999995 3.1340000000000003 0.043499999999999997 // 分裂特征的特征值分界点</p><p><strong>decision_type</strong>=0 0 0 0 0 //5个内部节点的判定类型值，判定类型值是int8_t，以bit形式，第一低位存储是否是category特征，第二低位存储是否使用左子节点作为默认去向，第三、第四低位存储是None(0)、Zero(1)、NaN(2)中的哪种</p><p><strong>left_child</strong>=1 3 -2 -1 -4</p><p><strong>right_child</strong>=2 -3 4 -5 -6</p><p><strong>leaf_parent</strong>=3 2 1 4 3 4</p><p>// 树的结构</p><p>// 有5个内部节点，默认编号是：0、1、2、3、4</p><p>// 有6个叶子节点，编号分别是：-1、-2、-3、-4、-5、-6</p><p>// left_child表示这5个内部节点的左子节点，正值表示内部节点的节点编号，负值表示叶子节点的节点编号</p><p>// right_child表示这5个内部节点的左子节点</p><p>// leaf_parent 表示-1、-2、-3、-4、-5、-6这6个叶子节点的父节点编号</p><p>// 于是这个树的结构就是这样</p><p>![屏幕快照 2019-01-02 18.37.00](/Users/yifanguo/Desktop/blog/source/_posts/LightGBM模型解读/屏幕快照 2019-01-02 18.37.00.png)</p><p><strong>leaf_value</strong>=0.013151525839652695 -0.0031140914212769983 -0.017382907119786403 0.038475160439658297 -0.10110187665371873 0.091299535945193661 //各个叶子节点的预测值</p><p><strong>leaf_count</strong>=171831 511580 1078379 893167 1432378 958588 // 各个叶子节点的样本数量，这里总共有5045923个</p><p><strong>internal_value</strong>=0 -0.55733646225250466 0.54728595683818304 -0.85735596237957235 0.67893796844992116 // 各个中间节点的预测值</p><p><strong>internal_count</strong>=5045923 2682588 2363335 1604209 1851755 // 各个中间节点的样本数，1604209[中间节点3的样本数] = 171831 [叶子节点-1的样本数] + 1432378[叶子节点-5的样本数]</p><p>//可以看出这棵树的训练只用了5045923个样本，而实际训练集样本有6307410个，这是因为在模型配置文件中设置了采样比例为0.8</p><p><strong>shrinkage</strong>=0.1 // 设定的学习率</p><p>// 第二棵树，含义参考第一棵树</p><p>Tree=1</p><p>num_leaves=6</p><p>split_feature=145 161 198 11 381</p><p>split_gain=474253.30131810816 93455.112333323515 62969.704987476958 55878.668231101008 32961.303899061735</p><p>threshold=0.026500000000000003 0.018500000000000003 0.043499999999999997 8.4154999999999998 663.125</p><p>decision_type=0 0 0 0 0</p><p>left_child=1 3 4 -1 -2</p><p>right_child=2 -3 -4 -5 -6</p><p>leaf_parent=3 4 1 2 3 4</p><p>leaf_value=0.010494795842311992 -0.024170274578830017 -0.010405728632592726 0.075110240965977765 -0.08865782202254327 0.038228215007066219</p><p>leaf_count=167445 301508 975432 1063548 1556038 981952</p><p>internal_value=0 -0.50125289035240339 0.49837677764421778 -0.76617891719378095 0.25393645325883307</p><p>internal_count=5045923 2698915 2347008 1723483 1283460</p><p>shrinkage=0.1</p><p>// 特征重要性</p><p><strong>feature importances</strong>:</p><p><strong>Column_197=2</strong> // 特征197，重要性排最高，重要性值为2，表示在所有树中有两次作为中间节点的分裂特征</p><p>Column_381=2 // 所有树中有两次作为中间节点的分裂特征</p><p>Column_11=1 // 所有树中有一次作为中间节点的分裂特征</p><p>Column_63=1</p><p>Column_145=1</p><p>Column_150=1</p><p>Column_161=1</p><p>Column_198=1</p><p>// 重要性值是统计特征在所有树中作为中间节点（分裂节点）的分裂特征且分裂增益为正的次数，可以理解成是对分裂作用越大的特征越重要</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;https://zhuanlan.zhihu.com/p/28768447&lt;/p&gt;
+&lt;h2&gt;&lt;span id=&quot;训练配置&quot;&gt;&lt;strong&gt;训练配置：&lt;/strong&gt;&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;6307410个样本做训练集&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;num_tre
+      
+    
+    </summary>
+    
+    
+      <category term="lgb" scheme="http://www.yifanguo.top/tags/lgb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>glint</title>
+    <link href="http://www.yifanguo.top/2018/12/28/glint/"/>
+    <id>http://www.yifanguo.top/2018/12/28/glint/</id>
+    <published>2018-12-28T02:51:54.000Z</published>
+    <updated>2019-01-08T03:35:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="目的">目的</span></h1><p>实在受不鸟这些复杂的又充满bug的参数服务器，我就想要一个用jvm语言写的参数分布式缓存而已</p><h1><span id="调研glint">调研Glint</span></h1><p>简单，能看明白</p><h1><span id="ps就两个操作">PS就两个操作</span></h1><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(1) Asynchronously ‘Pull’ data from the servers.  </span><br><span class="line">this will query parts of the matrix or vector.</span><br><span class="line">(2) Asynchronously ‘Push’ data to the servers. </span><br><span class="line">this will update parts of the matrix or vector.</span><br></pre></td></tr></table></figure></p><p>简化到就两个操作，pull和push</p><h1><span id="ps的目的">PS的目的</span></h1><p>ps的目的就是存放一个大型的分布式matrix，想那么多没用。</p><p>并且可以让用户快速query和update这个matrix</p><p>把参数想成个表，这里用redis也可以替代</p><p>这需要去切分matrix, 每个节点只存放matrix中的几行</p><p>算法只需要通过pull和push 来和这个matrix进行交互，不需要知道data的物理位置</p><h1><span id="pull-action">Pull Action</span></h1><p>Whenever an algorithm wants to retrieve entries from the matrixit will call the pull method.  is method triggers an asynchronouspull request with a specific set of row and column indices thatshould be retrieved.</p><p>The request is split up into smaller requestsbased on the partitioning of the matrix such that there will be atmost one request per parameter server.</p><p>这句话没看明白，怎么算是一个ps至多一个请求</p><h1><span id="源码解读">源码解读</span></h1><h2><span id="几个点">几个点</span></h2><ol><li>数据是用dense来表示的</li></ol><h2><span id="先看组成">先看组成</span></h2><p>exceptions</p><p>iterators</p><p>messages</p><p>models</p><p>partitioning</p><p>serialization</p><p>utils</p><p>yarn</p><p>client</p><p>main</p><p>master</p><p>server</p><h2><span id="exceptions">exceptions</span></h2><p>三个exceptions model创建，pull push exceptions</p><h2><span id="iterators迭代器">iterators迭代器</span></h2><p>先看基类</p><p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">PipelineIterator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">abstract class PipelineIterator[T](duration: Duration = Duration.Inf)(implicit ec: ExecutionContext) extends Iterator[T] &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取下一个，返回是一个Future</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> def <span class="title">fetchNextFuture</span><span class="params">()</span>: Future[T]</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="keyword">protected</span> var index: Int </span>= <span class="number">0</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">protected</span> var total: Int = <span class="number">0</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> var nextFuture: Future[T] = fetchNextFuture()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当前index没有到total 就继续</span></span><br><span class="line">  override def hasNext: Boolean = index &lt; total</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下一个</span></span><br><span class="line">  <span class="function">override def <span class="title">next</span><span class="params">()</span>: T </span>= &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Await and return the result </span></span><br><span class="line">    <span class="comment">// duration 超时</span></span><br><span class="line">    val result = Await.result(nextFuture, duration)</span><br><span class="line">    index += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> (hasNext) &#123;</span><br><span class="line">      nextFuture = fetchNextFuture()</span><br><span class="line">    &#125;</span><br><span class="line">    result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>三个集成</p><p>ColumnIterator</p><p>RowBlockIterator</p><p>RowIterator</p><h2><span id="消息messages">消息messages</span></h2><h3><span id="master">master</span></h3><p>ClientList</p><p>RegisterClient</p><p>RegisterServer</p><p>ServerList</p><p>这些消息也很简答， 就是注册client server以及拿到list</p><h3><span id="servers">servers</span></h3><p>包含了logic, request ,response 主要是和ps交互的信息</p><h2><span id="models模型在client和server端的操作">Models模型在client和server端的操作</span></h2><h3><span id="client">client</span></h3><p>首先客户端这边包含两个trait, BigMatrix， BigVector</p><p>BigMatrix</p><ul><li><p>rows: Long</p></li><li><p>Cols:Int</p></li><li><p>pull</p></li><li><p>push</p></li><li><p>destroy</p></li><li><p>save</p></li></ul><p>BigVector</p><ul><li>size</li><li>pull</li><li>push</li><li>destroy</li><li>save</li></ul><p>Client还有三个基于上述两个trait的实现</p><p>先看async</p><h3><span id="async">async</span></h3><p>重点是async的matrix</p><h2><span id="partitioning">partitioning</span></h2><p>这个模块是重点中的重点，详细来看，参数如何分区的</p><p>主要包含了两个cyclic 和 range</p><p>cyclic的是 轮询， number of partitions就是ps的node数量</p><p>range是自定义划分</p><p>##serialization</p><p>使用了unsafe和bytebuffer来解析</p><h2><span id="core-classes">core classes</span></h2><p>下面来说四个核心类，Client, Main, Master, Server</p><h3><span id="client">Client</span></h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;目的&quot;&gt;目的&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;实在受不鸟这些复杂的又充满bug的参数服务器，我就想要一个用jvm语言写的参数分布式缓存而已&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;调研glint&quot;&gt;调研Glint&lt;/span&gt;&lt;/h
+      
+    
+    </summary>
+    
+    
+      <category term="ps" scheme="http://www.yifanguo.top/tags/ps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ehCache</title>
+    <link href="http://www.yifanguo.top/2018/12/26/ehCache/"/>
+    <id>http://www.yifanguo.top/2018/12/26/ehCache/</id>
+    <published>2018-12-26T12:16:15.000Z</published>
+    <updated>2018-12-26T12:16:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>https://www.jianshu.com/p/5a0669d6305e</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;https://www.jianshu.com/p/5a0669d6305e&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="cache" scheme="http://www.yifanguo.top/tags/cache/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>美团机器学习实践阅读笔记</title>
+    <link href="http://www.yifanguo.top/2018/12/26/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
+    <id>http://www.yifanguo.top/2018/12/26/美团机器学习实践阅读笔记/</id>
+    <published>2018-12-26T08:56:04.000Z</published>
+    <updated>2018-12-27T02:55:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="第1章-问题建模">第1章 问题建模</span></h1><p>机器学习应用流程：</p><p>&lt;pre class=&quot;mermaid&quot;&gt;graph TD;问题建模--&gt;特征工程特征工程--&gt;模型选择模型选择--&gt;模型融合&lt;/pre&gt;</p><p>线下指标(AUC)要和线上指标(Page Views)等保持一致</p><p>精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的</p><p>召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所谓，但是我们希望召回率尽量高</p><h2><span id="auc-vs-roc">AUC VS ROC</span></h2><p>真正率 = TP / (TP + FN)</p><p>假正率 = FP / (FP + TN)</p><h2><span id="auc-area-under-roc-curve">AUC area under roc curve</span></h2><p>auc越大说明模型越可能将正样本排在负样本前面</p><p>auc还有一些统计特性，auc等于随机挑选一个正样本和负样本时，分类器将正样本排前面的概率</p><p>AUC只对正负样本排序能力强弱，对score大小和精度没有要求</p><p>auc越高模型的排序能力越强</p><p>AUC把所有正样本排在负样本前面，AUC=1.0</p><h2><span id="对数损失-logistic-loss">对数损失 logistic loss</span></h2><p>对预测概率的似然估计</p><p>对数损失最小化本质上是利用样本中的已知分布，求解导致这种分布的最佳模型参数，</p><p>使这种分布出现概率最大</p><p>logloss衡量的是预测概率分布和真实概率分布的差异性，取值越小越好。</p><p>与AUC不同，logloss对预测概率敏感</p><h2><span id="回归metric">回归metric</span></h2><h3><span id="平均绝对误差-mean-absolute-error-mae">平均绝对误差 mean absolute error MAE</span></h3><p>也叫L1-norm loss.</p><p>MAE是绝对误差的平均值</p><p>使用MAE做lossFuc 是对数据分布的median做拟合</p><h3><span id="均方根误差-rmse-root-mean-squared-error">均方根误差 RMSE--root mean squared error</span></h3><p>RMSE代表的是预测值和真实值差值的样本标准差</p><p>和MAE比，RMSE对大误差样本有更大的惩罚，对outlier敏感，健壮性不如MAE</p><p>用RMSE做lossFuc是对数据分布的mean做拟合</p><h2><span id="12样本选择">1.2样本选择</span></h2><h1><span id="第2章-特征工程">第2章 特征工程</span></h1><p>数据和特征决定了机器学习算法的上限，模型和算法只是不断逼近这个上限而已</p><h1><span id="第16章-分布式机器学习">第16章 分布式机器学习</span></h1><p>分布式机器学习需要解决如下三个问题：</p><ol><li>如何更好切分成多个任务</li><li>如何调度子任务</li><li>均衡各节点负载</li></ol><h2><span id="参数服务器">参数服务器</span></h2><ul><li>参数的获取与提交：计算节点从参数服务节点上获取当前的梯度，然后根据本地分配的训练样本进行梯度计算，通过几轮迭代后将更新后的梯度推送给参数服务器节点。参数在参数服务器需要高效地进行分布式存储，同时计算节点和参数服务节点之间的通信要足够高效</li><li>参数值的同步问题：根据参数服务器的设计和运行原理，我们可以得知在每一个时刻计算节点的梯度和当前参数服务节点上储存的梯度可能是不一致的。</li></ul><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png" alt="ps"></p><p>什么时候计算节点与参数服务器节点更新同步一次参数呢？</p><p>这个更新同步过程对每个计算节点来说都是相互独立的。一般来说，一个比较简单而且常用的方式是，我们可以采用固定的迭代轮数，每个计算节点迭代这个轮数后和参数服务节点做一次同步</p><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E9%9D%9E%E5%87%B8%E9%97%AE%E9%A2%98.png" alt="非凸问题"></p><h2><span id="梯度如何更新">梯度如何更新</span></h2><p>主要有参数平均法和基于更新方法两种</p><h3><span id="参数平均法">参数平均法</span></h3><p>参数平均法的核心思想是将每个计算节点获取的参数值求平均后作为全局参数值，可以证明参数平均法的结果在数学意义上等同于用单个机器进行训练</p><h3><span id="异步梯度下降更新">异步梯度下降更新</span></h3><p>相对于在工作节点与参数服务器之间传递参数，我们只传递梯度更新信息。</p><h3><span id="比较">比较</span></h3><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E6%AF%94%E8%BE%83.png" alt="比较"></p><h2><span id="xgboost">XGBoost</span></h2><p>使用rabit,rabit在MPI的allReduce和broadcast操作原语这个基础上提供了更好的容错处理功能，弥补了MPI的不足</p><p>xgboost优化了rabit的MR流程</p><ol><li>每一轮迭代结束后，计算结果不用放入储存系统。保留在内存里</li><li>每一轮迭代后没有数据重新分发的过程(no shuffle)</li></ol><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/rabit.png" alt="rabit"></p><h3><span id="xgboost容错">xgboost容错</span></h3><p>rabit在一轮AllReduce后，会把在各个节点内存中将模型结果缓存为checkpoint,并加版本号</p><p>同步结束后，各个节点会继续计算到下一次AllReduce通信同步。</p><p>如果有节点发生故障，该故障节点会从集群中找到最近的节点，拿到上一轮的模型文件，然后重新开始计算，其他无故障的节点等待故障节点计算完成后再AllReduce</p><h2><span id="pslite">PSlite</span></h2><p>啥都没说，duang。美团用zmq,应该是pslite改的</p><h1><span id="第17章-特征工程">第17章 特征工程</span></h1><h2><span id="特征生产">特征生产</span></h2><h3><span id="离线特征生产">离线特征生产</span></h3><p>所谓的离线特征主要是从历史数据中总结和归纳出来的特征表示。原始数据一般保存在分布式储存Hive, HBase,ES或者DB中。</p><p>离线特征的生产过程主要包括特征计算和定时调度(linkedin的azakaban)</p><h3><span id="实时特征">实时特征</span></h3><p><img src="/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E5%AE%9E%E6%97%B6%E7%89%B9%E5%BE%81.png" alt="实时特征"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;第1章-问题建模&quot;&gt;第1章 问题建模&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;机器学习应用流程：&lt;/p&gt;
+&lt;p&gt;&amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD;
+问题建模--&amp;gt;特征工程
+
       
     
     </summary>
@@ -212,15 +313,15 @@
     <link href="http://www.yifanguo.top/2018/12/24/spark/"/>
     <id>http://www.yifanguo.top/2018/12/24/spark/</id>
     <published>2018-12-24T02:12:20.000Z</published>
-    <updated>2018-12-24T02:12:52.000Z</updated>
+    <updated>2019-01-03T03:12:58.000Z</updated>
     
-    <content type="html"><![CDATA[<p>[toc]</p><h1><span id="spark内核设计的艺术架构设计与实现">Spark内核设计的艺术架构设计与实现</span></h1><h1><span id="spark-vs-mr">Spark vs MR</span></h1><p>spark是基于内存的MR需要使用磁盘</p><h1><span id="宽依赖和窄依赖">宽依赖和窄依赖</span></h1><p>https://www.jianshu.com/p/5c2301dfa360</p><p>窄依赖与窄依赖比较</p><p>宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只会传入到另一个子RDD分区，通常在一个节点内完成。当RDD分区丢失时，对于窄依赖来说，由于父RDD的一个分区只对应一个子RDD分区，这样只需要重新计算与子RDD分区对应的父RDD分区就行。这个计算对数据的利用是100%的当RDD分区丢失时，对于宽依赖来说，重算的父RDD分区只有一部分数据是对应丢失的子RDD分区的，另一部分就造成了多余的计算。宽依赖中的子RDD分区通常来自多个父RDD分区，极端情况下，所有父RDD都有可能重新计算。如下图，par4丢失，则需要重新计算par1,par2,par3,产生了冗余数据par5</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">宽依赖，窄依赖函数</span><br><span class="line"></span><br><span class="line">窄依赖的函数有：</span><br><span class="line">map, filter, union, join(父RDD是hash-partitioned ), mapPartitions, mapValues</span><br><span class="line">宽依赖的函数有：</span><br><span class="line">groupByKey, join(父RDD不是hash-partitioned ), partitionBy</span><br></pre></td></tr></table></figure></p><h1><span id="rdd-resillient-distributed-dataset">RDD resillient distributed dataset</span></h1><p>只有spark action才会将RDD及其DAG（lineage) 提交到DAGScheduler</p><p>RDD 的祖先一定是一个跟数据源相关的RDD, 负责从数据源迭代读取数据</p><h1><span id="dag-directed-acycle-graph">DAG directed acycle graph</span></h1><p>DAG用来反映各RDD之间的依赖或血缘关系</p><h1><span id="partition">Partition</span></h1><p>一个RDD可以划分为多个分区，spark根据partition来确定task数量</p><h1><span id="narrowdependency-窄依赖">NarrowDependency 窄依赖</span></h1><p>子RDD依赖于父RDD中固定的partition</p><h1><span id="shuffledependency-宽依赖">ShuffleDependency 宽依赖</span></h1><p>子RDD对父RDD中所有的partition都可能产生依赖子RDD对父RDD各个partition的依赖将取决于分区计算器 partitioner的算法</p><h1><span id="job-用户提交的作业">Job 用户提交的作业</span></h1><p>当RDD及其DAG被提交给DAGScheduler调度后，DAGScheduler会将所有RDD中的转换及动作看出一个job. 一个job由1到多个Task组成</p><h1><span id="stage-job的执行阶段">Stage job的执行阶段</span></h1><p>DAGScheduler按照shuffleDependency作为Stage的划分节点对RDD的DAG进行Stage划分上游的Stage为shuffleMapStage. 因此一个job可能被划分为一到多个Stage.</p><p>Stage分为shuffleMapStage 和ResultStage</p><h1><span id="task">Task</span></h1><p>ShuffleMapTask, ResultTask</p><h1><span id="shuffle">Shuffle</span></h1><p>shuffle用于打通map任务的输出和reduce任务的输入</p>]]></content>
+    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="spark内核设计的艺术架构设计与实现">Spark内核设计的艺术架构设计与实现</span></h1><h1><span id="spark-vs-mr">Spark vs MR</span></h1><p>spark是基于内存的MR需要使用磁盘</p><h1><span id="宽依赖和窄依赖">宽依赖和窄依赖</span></h1><p>https://www.jianshu.com/p/5c2301dfa360</p><p>窄依赖与窄依赖比较</p><p>宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只会传入到另一个子RDD分区，通常在一个节点内完成。当RDD分区丢失时，对于窄依赖来说，由于父RDD的一个分区只对应一个子RDD分区，这样只需要重新计算与子RDD分区对应的父RDD分区就行。这个计算对数据的利用是100%的当RDD分区丢失时，对于宽依赖来说，重算的父RDD分区只有一部分数据是对应丢失的子RDD分区的，另一部分就造成了多余的计算。宽依赖中的子RDD分区通常来自多个父RDD分区，极端情况下，所有父RDD都有可能重新计算。如下图，par4丢失，则需要重新计算par1,par2,par3,产生了冗余数据par5</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">宽依赖，窄依赖函数</span><br><span class="line"></span><br><span class="line">窄依赖的函数有：</span><br><span class="line">map, filter, union, join(父RDD是hash-partitioned ), mapPartitions, mapValues</span><br><span class="line">宽依赖的函数有：</span><br><span class="line">groupByKey, join(父RDD不是hash-partitioned ), partitionBy</span><br></pre></td></tr></table></figure></p><h1><span id="rdd-resillient-distributed-dataset">RDD resillient distributed dataset</span></h1><p>只有spark action才会将RDD及其DAG（lineage) 提交到DAGScheduler</p><p>RDD 的祖先一定是一个跟数据源相关的RDD, 负责从数据源迭代读取数据</p><h1><span id="dag-directed-acycle-graph">DAG directed acycle graph</span></h1><p>DAG用来反映各RDD之间的依赖或血缘关系</p><h1><span id="partition">Partition</span></h1><p>一个RDD可以划分为多个分区，spark根据partition来确定task数量</p><h1><span id="narrowdependency-窄依赖">NarrowDependency 窄依赖</span></h1><p>子RDD依赖于父RDD中固定的partition</p><h1><span id="shuffledependency-宽依赖">ShuffleDependency 宽依赖</span></h1><p>子RDD对父RDD中所有的partition都可能产生依赖子RDD对父RDD各个partition的依赖将取决于分区计算器 partitioner的算法</p><h1><span id="job-用户提交的作业">Job 用户提交的作业</span></h1><p>当RDD及其DAG被提交给DAGScheduler调度后，DAGScheduler会将所有RDD中的转换及动作看出一个job. 一个job由1到多个Task组成</p><h1><span id="stage-job的执行阶段">Stage job的执行阶段</span></h1><p>DAGScheduler按照shuffleDependency作为Stage的划分节点对RDD的DAG进行Stage划分上游的Stage为shuffleMapStage. 因此一个job可能被划分为一到多个Stage.</p><p>Stage分为shuffleMapStage 和ResultStage</p><h1><span id="task">Task</span></h1><p>ShuffleMapTask, ResultTask</p><h1><span id="shuffle">Shuffle</span></h1><p>shuffle用于打通map任务的输出和reduce任务的输入</p><h1><span id="spark-partition-最佳数量">spark partition 最佳数量</span></h1><p>那么多少的partition数是合适的呢，这里我们参考spark doc给出的建议，<a href="http://spark.apache.org/docs/latest/programming-guide.html#spark-programming-guide">Typically you want 2-4 partitions for each CPU in your cluster</a>。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;[toc]&lt;/p&gt;
+        &lt;p&gt;[TOC]&lt;/p&gt;
 &lt;h1&gt;&lt;span id=&quot;spark内核设计的艺术架构设计与实现&quot;&gt;Spark内核设计的艺术架构设计与实现&lt;/span&gt;&lt;/h1&gt;
 &lt;h1&gt;&lt;span id=&quot;spark-vs-mr&quot;&gt;Spark vs MR&lt;/span&gt;&lt;/h1&gt;
 &lt;p&gt;spark是
@@ -422,96 +523,6 @@ https://blog.csdn.net/KangRoger/articl
     
     
       <category term="socket" scheme="http://www.yifanguo.top/tags/socket/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>xgboost</title>
-    <link href="http://www.yifanguo.top/2018/10/17/xgboost/"/>
-    <id>http://www.yifanguo.top/2018/10/17/xgboost/</id>
-    <published>2018-10-17T11:41:44.000Z</published>
-    <updated>2018-10-19T02:10:13.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="xgboost" scheme="http://www.yifanguo.top/tags/xgboost/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lightgbm</title>
-    <link href="http://www.yifanguo.top/2018/10/17/lightgbm-0/"/>
-    <id>http://www.yifanguo.top/2018/10/17/lightgbm-0/</id>
-    <published>2018-10-17T10:49:34.000Z</published>
-    <updated>2018-10-18T02:42:10.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="background">background</span></h1><p>In recent years, with the emergence of big data (in terms of both the number of features and the number of instances), GBDT is facing new challenges, especially in the tradeoff between accuracy and efficiency.</p><h1><span id="why-introduct-lightgbm">why introduct lightgbm</span></h1><p>A major reason is that for each feature, they need to scan all the data instances to estimate the information gain of all possible split points, which is very time consuming.</p><h1><span id="what-is-lightgbm">what is lightgbm</span></h1><p>GOSS: Gradient-based One-Side SamplingEFB: Exclusive Feature Bundling</p><h1><span id="goss">GOSS</span></h1><p>ince the data instances with larger gradients play a more important role in the computation of information gain, GOSS can obtain quite accurate estimation of the information gain with a much smaller data size.</p><h1><span id="efb">EFB</span></h1><p>With EFB, we bundle mutually exclusive features (i.e., they rarely take nonzero values simultaneously), to reduce the number of features.</p><h1><span id="gbdt">GBDT</span></h1><p>GBDT is an ensemble model of decision trees,In each iteration, GBDT learns the decision trees by fitting the negative gradients (also known as residual errors).</p><p>The main cost in GBDT lies in learning the decision trees, and the most time-consuming part in learning a decision tree is to find the best split points</p><h1><span id="goss-implementaion">GOSS implementaion</span></h1><p>GOSS keeps all the instances with large gradients and performs random sampling on the instances with small gradients.</p><p><img src="/Users/yifanguo/Desktop/xgb.png" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;background&quot;&gt;background&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;In recent years, with the emergence of big data (in terms of both the number of features
-      
-    
-    </summary>
-    
-    
-      <category term="lightgbm" scheme="http://www.yifanguo.top/tags/lightgbm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lightGBM on spark</title>
-    <link href="http://www.yifanguo.top/2018/10/08/mmlSpark/"/>
-    <id>http://www.yifanguo.top/2018/10/08/mmlSpark/</id>
-    <published>2018-10-07T18:28:18.000Z</published>
-    <updated>2018-10-12T07:44:53.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>[toc]</p><h1><span id="lightgbm-on-spark-参数配置">LightGBM on Spark 参数配置</span></h1><h1><span id="官方参数说明">官方参数说明</span></h1><p>http://lightgbm.apachecn.org/cn/latest/Parameters.html</p><h1><span id="工程地址">工程地址</span></h1><p>https://g.hz.netease.com/guoyifan01/lightgbmOnSpark</p><h1><span id="configuration">configuration</span></h1><h2><span id="通用">通用</span></h2><table><thead><tr><th>parameter</th><th>lightgbm param</th><th>default</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>prePartition</td><td>is_pre_partition</td><td>True</td><td>bool</td><td>true 如果训练数据 pre-partitioned, 不同的机器使用不同的分区</td></tr><tr><td>boostingType</td><td>boosting_type</td><td>gbdt</td><td>string</td><td>gbdt,rf, dart, goss</td></tr><tr><td>parallelism</td><td>tree_learner</td><td>data_parallel</td><td>string</td><td>数据并行的 tree learner</td></tr><tr><td>defaultListenPort</td><td>无</td><td>12400</td><td>int</td><td>The default listen port on executors, used for testing</td></tr><tr><td>numIterations</td><td>num_iterations</td><td>100</td><td>int</td><td>boosting 的迭代次数</td></tr><tr><td>learningRate</td><td>learning_rate</td><td>0.1</td><td>double</td><td>学习率</td></tr><tr><td>numLeaves</td><td>num_leaves</td><td>31</td><td>int</td><td>一棵树上的叶子数</td></tr><tr><td>maxBin</td><td>max_bin</td><td>255</td><td>int</td><td>工具箱的最大数特征值决定了容量 工具箱的最小数特征值可能会降低训练的准确性, 但是可能会增加一些一般的影响（处理过度学习）LightGBM 将根据 max_bin 自动压缩内存。 例如, 如果 maxbin=255, 那么 LightGBM 将使用 uint8t 的特性值</td></tr><tr><td>baggingFraction</td><td>bagging_fraction</td><td>1.0</td><td>double</td><td>类似于 feature_fraction, 但是它将在不进行重采样的情况下随机选择部分数据 可以用来加速训练 可以用来处理过拟合 Note: 为了启用 bagging, bagging_freq 应该设置为非零值</td></tr><tr><td>baggingFreq</td><td>bagging_freq</td><td>0</td><td>int</td><td>bagging 的频率, 0 意味着禁用 bagging. k 意味着每 k 次迭代执行bagging Note: 为了启用 bagging, bagging_fraction 设置适当</td></tr><tr><td>baggingSeed</td><td>bagging_seed</td><td>3</td><td>int</td><td>Bagging seed</td></tr><tr><td>earlyStoppingRound</td><td>early_stopping_round</td><td>0</td><td>int</td><td>Early stopping round</td></tr><tr><td>featureFraction</td><td>feature_fraction</td><td>1.0</td><td>double</td><td>Feature fraction</td></tr><tr><td>maxDepth</td><td>max_depth</td><td>-1</td><td>int</td><td>-1意味着没有限制</td></tr><tr><td>minSumHessianInLeaf</td><td>min_sum_hessian_in_leaf</td><td>1e-3</td><td>Double</td><td>Minimal sum hessian in one leaf</td></tr><tr><td>无</td><td>num_machines</td><td>1</td><td>int</td><td>并行运行的机器数量，在spark上，有多少个executor就有多少个机器</td></tr><tr><td>timeout</td><td>无</td><td>120s</td><td>second</td><td>socket超时</td></tr><tr><td>objective</td><td>application</td><td>regression</td><td>enum</td><td>regression, regression_l1, huber, fair, poisson, quantile, quantile_l2, binary, multiclass, multiclassova, xentropy, xentlambda, lambdarank</td></tr><tr><td>min_data_in_leaf</td><td>min_data_in_leaf</td><td>20</td><td>int</td><td>min_data_in_leaf</td></tr><tr><td>min_data_in_bin</td><td>min_data_in_bin</td><td>3</td><td>int</td><td>min_data_in_bin</td></tr><tr><td>lambda_l1</td><td>lambda_l1</td><td>0</td><td>double</td><td>lambda_l1</td></tr><tr><td>lambda_l2</td><td>lambda_l2</td><td>0</td><td>double</td><td>lambda_l2</td></tr><tr><td>modelString</td><td>无</td><td>“”</td><td>String</td><td>model存成String格式</td></tr></tbody></table><p>##分类</p><table><thead><tr><th>parameter</th><th>lightgbm param</th><th>default</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>无</td><td>metric</td><td>binary_logloss,auc</td><td>String</td><td>度量</td></tr></tbody></table><p>##回归</p><table><thead><tr><th>parameter</th><th>lightgbm param</th><th>default</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>alpha</td><td>alpha</td><td>0.9</td><td>double</td><td>Huber loss 和 Quantile regression 的参数. 将用于 regression 任务</td></tr><tr><td>tweedieVariancePower</td><td>tweedie_variance_power</td><td>1.5</td><td>double</td><td>control the variance of tweedie distribution, must be between 1 and 2</td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;[toc]&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;lightgbm-on-spark-参数配置&quot;&gt;LightGBM on Spark 参数配置&lt;/span&gt;&lt;/h1&gt;
-&lt;h1&gt;&lt;span id=&quot;官方参数说明&quot;&gt;官方参数说明&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;http://lig
-      
-    
-    </summary>
-    
-    
-      <category term="ml" scheme="http://www.yifanguo.top/tags/ml/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>LightGBM</title>
-    <link href="http://www.yifanguo.top/2018/10/08/LightGBM/"/>
-    <id>http://www.yifanguo.top/2018/10/08/LightGBM/</id>
-    <published>2018-10-07T17:07:39.000Z</published>
-    <updated>2018-10-08T08:08:35.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="light-gbm">light gbm</span></h1>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;light-gbm&quot;&gt;light gbm&lt;/span&gt;&lt;/h1&gt;
-
-      
-    
-    </summary>
-    
-    
-      <category term="ml" scheme="http://www.yifanguo.top/tags/ml/"/>
     
   </entry>
   

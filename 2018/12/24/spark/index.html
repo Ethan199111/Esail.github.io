@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="[toc] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
+<meta name="description" content="[TOC] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spark">
 <meta property="og:url" content="http://www.yifanguo.top/2018/12/24/spark/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="[toc] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
+<meta property="og:description" content="[TOC] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-24T02:12:52.000Z">
+<meta property="og:updated_time" content="2019-01-03T03:12:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spark">
-<meta name="twitter:description" content="[toc] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
+<meta name="twitter:description" content="[TOC] Spark内核设计的艺术架构设计与实现 Spark vs MR spark是基于内存的 MR需要使用磁盘 宽依赖和窄依赖 https://www.jianshu.com/p/5c2301dfa360 窄依赖与窄依赖比较 宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只">
 
 
 
@@ -321,7 +321,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  3
                 </span>
               
             </div>
@@ -342,7 +342,7 @@
       
 
       
-        <p>[toc]</p>
+        <p>[TOC]</p>
 <h1><span id="spark内核设计的艺术架构设计与实现">Spark内核设计的艺术架构设计与实现</span></h1>
 <h1><span id="spark-vs-mr">Spark vs MR</span></h1>
 <p>spark是基于内存的
@@ -376,6 +376,8 @@ MR需要使用磁盘</p>
 <p>ShuffleMapTask, ResultTask</p>
 <h1><span id="shuffle">Shuffle</span></h1>
 <p>shuffle用于打通map任务的输出和reduce任务的输入</p>
+<h1><span id="spark-partition-最佳数量">spark partition 最佳数量</span></h1>
+<p>那么多少的partition数是合适的呢，这里我们参考spark doc给出的建议，<a href="http://spark.apache.org/docs/latest/programming-guide.html#spark-programming-guide">Typically you want 2-4 partitions for each CPU in your cluster</a>。</p>
 
       
     </div>
@@ -503,7 +505,7 @@ MR需要使用磁盘</p>
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -516,7 +518,7 @@ MR需要使用磁盘</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -556,7 +558,7 @@ MR需要使用磁盘</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Spark内核设计的艺术架构设计与实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Spark vs MR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">宽依赖和窄依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">RDD resillient distributed dataset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">DAG directed acycle graph</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Partition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">NarrowDependency 窄依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">ShuffleDependency 宽依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Job 用户提交的作业</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Stage job的执行阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Task</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">Shuffle</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Spark内核设计的艺术架构设计与实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Spark vs MR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">宽依赖和窄依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">RDD resillient distributed dataset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">DAG directed acycle graph</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Partition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">NarrowDependency 窄依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">ShuffleDependency 宽依赖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Job 用户提交的作业</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Stage job的执行阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Task</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">Shuffle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">spark partition 最佳数量</span></a></li></ol></div>
             
 
           </div>
@@ -576,7 +578,7 @@ MR需要使用磁盘</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -590,7 +592,7 @@ MR需要使用磁盘</p>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">59.7k</span>
+    <span title="Site words total count">65.3k</span>
   
 
   
