@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="with vs extends https://stackoverflow.com/questions/41031166/scala-extends-vs-with">
+<meta name="description" content="[TOC] scala 并发 Java内存模型主要围绕原子性、可见性、有序性展开。synchronized语句是最基本的并发处理方式。 2.1 进程和线程 JVM与操作系统：启动一个JVM实例会创建一个进程。在JVM进程中可以有多个线程同时运行。与Python之类语言的运行时系统不同，JVM不实现自定义线程——每个JVM线程直接与一个OS线程对应。JAVA线程的运行方式与OS线程的运行方式非常相似">
 <meta name="keywords" content="scala">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala的一些解释">
 <meta property="og:url" content="http://www.yifanguo.top/2018/10/07/Scala/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="with vs extends https://stackoverflow.com/questions/41031166/scala-extends-vs-with">
+<meta property="og:description" content="[TOC] scala 并发 Java内存模型主要围绕原子性、可见性、有序性展开。synchronized语句是最基本的并发处理方式。 2.1 进程和线程 JVM与操作系统：启动一个JVM实例会创建一个进程。在JVM进程中可以有多个线程同时运行。与Python之类语言的运行时系统不同，JVM不实现自定义线程——每个JVM线程直接与一个OS线程对应。JAVA线程的运行方式与OS线程的运行方式非常相似">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-08T08:07:20.000Z">
+<meta property="og:updated_time" content="2019-01-10T10:46:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala的一些解释">
-<meta name="twitter:description" content="with vs extends https://stackoverflow.com/questions/41031166/scala-extends-vs-with">
+<meta name="twitter:description" content="[TOC] scala 并发 Java内存模型主要围绕原子性、可见性、有序性展开。synchronized语句是最基本的并发处理方式。 2.1 进程和线程 JVM与操作系统：启动一个JVM实例会创建一个进程。在JVM进程中可以有多个线程同时运行。与Python之类语言的运行时系统不同，JVM不实现自定义线程——每个JVM线程直接与一个OS线程对应。JAVA线程的运行方式与OS线程的运行方式非常相似">
 
 
 
@@ -322,7 +322,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -343,8 +343,75 @@
       
 
       
-        <h1><span id="with-vs-extends">with vs extends</span></h1>
-<p>https://stackoverflow.com/questions/41031166/scala-extends-vs-with</p>
+        <p>[TOC]</p>
+<h1><span id="scala-并发">scala 并发</span></h1>
+<p>Java内存模型主要围绕原子性、可见性、有序性展开。synchronized语句是最基本的并发处理方式。</p>
+<h3><span id="21-进程和线程">2.1 进程和线程</span></h3>
+<p>JVM与操作系统：启动一个JVM实例会创建一个进程。在JVM进程中可以有多个线程同时运行。与Python之类语言的运行时系统不同，JVM不实现自定义线程——每个JVM线程直接与一个OS线程对应。JAVA线程的运行方式与OS线程的运行方式非常相似。</p>
+<h3><span id="22-创建和启动线程">2.2 创建和启动线程</span></h3>
+<p>join方法会暂停main线程的执行过程，直到t执行完毕。实际是将main线程切换到了waiting状态。处于waiting状态的线程会交出CPU的控制权。</p>
+<p>sleep方法会使当前线程进入timed waiting状态。</p>
+<p>多线程的执行顺序是不确定的。</p>
+<h3><span id="23-原子执行方式">2.3 原子执行方式</span></h3>
+<p>最简单的线程通信：共享变量。t线程使用join将main线程暂停，读取-修改-回写result；t线程结束后，main线程读取到的result已经被修改过。</p>
+<p>在Scala中，synchronized语句是在JVM中进行线程间通信的基本机制</p>
+<p>#Chapter 1</p>
+<ol>
+<li>
+<p>scala的包装类型会被自动编译成基本类型</p>
+</li>
+<li>
+<p>scala没有强制类型转换，要用方法,toInt</p>
+</li>
+<li>
+<p>scala没有++, 要用+=1</p>
+</li>
+<li>
+<p>&quot;Hello.distinct&quot; helo</p>
+</li>
+<li>
+<p>Array(1,2,3)
+res8: Array[Int] = Array(1, 2, 3)</p>
+</li>
+<li>
+<p>scala&gt; &quot;crazy&quot;*3
+res10: String = crazycrazycrazy</p>
+</li>
+</ol>
+<h1><span id="chapter-2">Chapter 2</span></h1>
+<ol>
+<li>val被声明为lazy时，它的初始化会被推迟到首次对它取值</li>
+</ol>
+<h1><span id="chapter3-数组">Chapter3 数组</span></h1>
+<p>scala&gt; val s = (180, &quot;guoyifan&quot;, 85)
+s: (Int, String, Int) = (180,guoyifan,85)</p>
+<p>scala&gt; s._1
+res24: Int = 180</p>
+<p>scala&gt; s._2
+res25: String = guoyifan</p>
+<p>scala&gt; s._3
+res26: Int = 85</p>
+<p>scala&gt; val s = Array(&quot;&lt;&quot;, &quot;-&quot;)
+s: Array[String] = Array(&lt;, -)</p>
+<p>scala&gt; s.zip(Array(2,10))
+res27: Array[(String, Int)] = Array((&lt;,2), (-,10))</p>
+<p>scala&gt; s.zip(Array(3,10))
+res28: Array[(String, Int)] = Array((&lt;,3), (-,10))</p>
+<p>scala&gt; s.zip(Array(3,10,10))
+res29: Array[(String, Int)] = Array((&lt;,3), (-,10))</p>
+<p>scala&gt; val keys = (&quot;g&quot;, &quot;s&quot;)
+keys: (String, String) = (g,s)</p>
+<p>scala&gt; val values = (1, 2)
+values: (Int, Int) = (1,2)</p>
+<p>scala&gt; keys.zip(values).toMap
+&lt;console&gt;:20: error: value zip is not a member of (String, String)
+​       keys.zip(values).toMap
+​            ^</p>
+<p>scala&gt; s.zip(Array(2,10)).toMap
+res31: scala.collection.immutable.Map[String,Int] = Map(&lt; -&gt; 2, - -&gt; 10)</p>
+<p>scala&gt;</p>
+<h1><span id="chapter5-class">Chapter5 class</span></h1>
+<h1><span id="chapter6-单例">Chapter6 单例</span></h1>
 
       
     </div>
@@ -531,7 +598,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">with vs extends</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">scala 并发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.</span> <span class="nav-text">2.1 进程和线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.2 创建和启动线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.3.</span> <span class="nav-text">2.3 原子执行方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Chapter 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Chapter3 数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Chapter5 class</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Chapter6 单例</span></a></li></ol></div>
             
 
           </div>
@@ -565,7 +632,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">65.3k</span>
+    <span title="Site words total count">67.7k</span>
   
 
   
