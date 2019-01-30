@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -102,7 +102,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -302,6 +302,16 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/07/SparkML源码分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/07/SparkML源码分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -600,7 +610,10 @@
 <p>数据类型是dataFrame</p>
 <h2><span id="estimator">Estimator</span></h2>
 <p>estimator就一个method 就是fit</p>
-<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">   ProbabilisticClassifier --&gt; Classifier;</span><br><span class="line">   Classifier --&gt; Predictor;</span><br><span class="line">   Predictor --&gt; Estimator;</span><br></pre></td></tr></table></figure></p>
+<p>&lt;pre class=&quot;mermaid&quot;&gt;graph LR;
+ProbabilisticClassifier --&gt; Classifier;
+Classifier --&gt; Predictor;
+Predictor --&gt; Estimator;&lt;/pre&gt;</p>
 <p>ProbabilisticClassifier</p>
 <p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class DecisionTreeClassifier @Since(&quot;1.4.0&quot;) (</span><br><span class="line">    @Since(&quot;1.4.0&quot;) override val uid: String)</span><br><span class="line">  extends ProbabilisticClassifier[Vector, DecisionTreeClassifier, DecisionTreeClassificationModel]</span><br></pre></td></tr></table></figure></p>
 <h2><span id="transformer">Transformer</span></h2>
@@ -704,14 +717,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
     </div>
-
   
 
 
@@ -968,6 +974,13 @@
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
@@ -986,24 +999,6 @@
 
   
 
-    
-
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2019/01/07/SparkML源码分析/';
-          this.page.identifier = '2019/01/07/SparkML源码分析/';
-          this.page.title = 'SparkML源码分析';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
-    
-
-  
-
 
 
 
@@ -1019,12 +1014,38 @@
 
 
 
+  
 
 
 
 
 
 
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'KEMmgyPyFfhr16k5eObb6hNb-gzGzoHsz',
+        appKey: '3NaHttXmiYWcqAs4ihatgQqo',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 

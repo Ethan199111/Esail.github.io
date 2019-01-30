@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="[TOC] 第1章 问题建模 机器学习应用流程： 1234graph TD;    问题建模--&amp;gt;特征工程    特征工程--&amp;gt;模型选择    模型选择--&amp;gt;模型融合 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所">
+<meta name="description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="美团机器学习实践阅读笔记">
 <meta property="og:url" content="http://www.yifanguo.top/2018/12/26/美团机器学习实践阅读笔记/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="[TOC] 第1章 问题建模 机器学习应用流程： 1234graph TD;    问题建模--&amp;gt;特征工程    特征工程--&amp;gt;模型选择    模型选择--&amp;gt;模型融合 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所">
+<meta property="og:description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png">
 <meta property="og:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E9%9D%9E%E5%87%B8%E9%97%AE%E9%A2%98.png">
@@ -97,7 +97,7 @@
 <meta property="og:updated_time" content="2018-12-27T02:55:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="美团机器学习实践阅读笔记">
-<meta name="twitter:description" content="[TOC] 第1章 问题建模 机器学习应用流程： 1234graph TD;    问题建模--&amp;gt;特征工程    特征工程--&amp;gt;模型选择    模型选择--&amp;gt;模型融合 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所">
+<meta name="twitter:description" content="[TOC] 第1章 问题建模 机器学习应用流程： &amp;lt;pre class=&amp;quot;mermaid&amp;quot;&amp;gt;graph TD; 问题建模--&amp;gt;特征工程 特征工程--&amp;gt;模型选择 模型选择--&amp;gt;模型融合&amp;lt;/pre&amp;gt; 线下指标(AUC)要和线上指标(Page Views)等保持一致 精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的 召回率R =">
 <meta name="twitter:image" content="http://www.yifanguo.top/Users/yifanguo/Desktop/blog/source/_posts/%E7%BE%8E%E5%9B%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E8%B7%B5%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/ps.png">
 
 
@@ -106,7 +106,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -307,6 +307,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/26/美团机器学习实践阅读笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/26/美团机器学习实践阅读笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -352,7 +362,10 @@
         <p>[TOC]</p>
 <h1><span id="第1章-问题建模">第1章 问题建模</span></h1>
 <p>机器学习应用流程：</p>
-<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph TD;</span><br><span class="line">    问题建模--&gt;特征工程</span><br><span class="line">    特征工程--&gt;模型选择</span><br><span class="line">    模型选择--&gt;模型融合</span><br></pre></td></tr></table></figure></p>
+<p>&lt;pre class=&quot;mermaid&quot;&gt;graph TD;
+问题建模--&gt;特征工程
+特征工程--&gt;模型选择
+模型选择--&gt;模型融合&lt;/pre&gt;</p>
 <p>线下指标(AUC)要和线上指标(Page Views)等保持一致</p>
 <p>精确率 = TP/(TP+FP) 及预测为T的结果中多少是对的</p>
 <p>召回率R = TP/(TP+FN) 及预测中召回了多少个T, 预测地震时，精确率无所谓，但是我们希望召回率尽量高</p>
@@ -501,14 +514,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
     </div>
-
   
 
 
@@ -765,6 +771,13 @@
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
@@ -783,24 +796,6 @@
 
   
 
-    
-
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2018/12/26/美团机器学习实践阅读笔记/';
-          this.page.identifier = '2018/12/26/美团机器学习实践阅读笔记/';
-          this.page.title = '美团机器学习实践阅读笔记';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
-    
-
-  
-
 
 
 
@@ -816,12 +811,38 @@
 
 
 
+  
 
 
 
 
 
 
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'KEMmgyPyFfhr16k5eObb6hNb-gzGzoHsz',
+        appKey: '3NaHttXmiYWcqAs4ihatgQqo',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 
