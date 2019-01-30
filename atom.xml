@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Yifan Guo Personal Blog</title>
   
-  
+  <subtitle>you got a dream, you gotta protected it</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
