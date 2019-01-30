@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="reactive,">
+  <meta name="keywords" content="overview,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="backpressure 背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。 Observer pattern RxJava 以观察者模式为骨架 Observable ( 被观察者 ) / Observer ( 观察者 ) Flowable （被观察者）/ Subscriber （观察者）">
-<meta name="keywords" content="reactive">
+<meta name="description" content="这个是整个知识图谱的架构，分为三大块：基础知识，机器学习，大数据 [TOC] 基础知识 编程语言 java c++ python scala 数据结构 基础数据结构 高级数据结构 基础算法 基础算法 高级算法 操作系统 操作系统基础知识 linux 网络通信 内存管理 分布式 机器学习 基础机器学习 强化学习 深度学习 数学知识 线性代数 统计与概率论 凸优化 大数据 大数据基础知识 分布式存储">
+<meta name="keywords" content="overview">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rxjava">
-<meta property="og:url" content="http://www.yifanguo.top/2018/07/29/rxjava/index.html">
+<meta property="og:title" content="knowledgeTree">
+<meta property="og:url" content="http://www.yifanguo.top/2019/01/22/knowledgeTree/index.html">
 <meta property="og:site_name" content="Yifan Guo Personal Blog">
-<meta property="og:description" content="backpressure 背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。 Observer pattern RxJava 以观察者模式为骨架 Observable ( 被观察者 ) / Observer ( 观察者 ) Flowable （被观察者）/ Subscriber （观察者）">
+<meta property="og:description" content="这个是整个知识图谱的架构，分为三大块：基础知识，机器学习，大数据 [TOC] 基础知识 编程语言 java c++ python scala 数据结构 基础数据结构 高级数据结构 基础算法 基础算法 高级算法 操作系统 操作系统基础知识 linux 网络通信 内存管理 分布式 机器学习 基础机器学习 强化学习 深度学习 数学知识 线性代数 统计与概率论 凸优化 大数据 大数据基础知识 分布式存储">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-30T04:23:16.000Z">
+<meta property="og:updated_time" content="2019-01-22T02:13:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rxjava">
-<meta name="twitter:description" content="backpressure 背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。 Observer pattern RxJava 以观察者模式为骨架 Observable ( 被观察者 ) / Observer ( 观察者 ) Flowable （被观察者）/ Subscriber （观察者）">
+<meta name="twitter:title" content="knowledgeTree">
+<meta name="twitter:description" content="这个是整个知识图谱的架构，分为三大块：基础知识，机器学习，大数据 [TOC] 基础知识 编程语言 java c++ python scala 数据结构 基础数据结构 高级数据结构 基础算法 基础算法 高级算法 操作系统 操作系统基础知识 linux 网络通信 内存管理 分布式 机器学习 基础机器学习 强化学习 深度学习 数学知识 线性代数 统计与概率论 凸优化 大数据 大数据基础知识 分布式存储">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.yifanguo.top/2018/07/29/rxjava/">
+  <link rel="canonical" href="http://www.yifanguo.top/2019/01/22/knowledgeTree/">
 
 
 
 
 
-  <title>rxjava | Yifan Guo Personal Blog</title>
+  <title>knowledgeTree | Yifan Guo Personal Blog</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2018/07/29/rxjava/">
+    <link itemprop="mainEntityOfPage" href="http://www.yifanguo.top/2019/01/22/knowledgeTree/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yifan Guo">
@@ -275,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rxjava</h1>
+          <h1 class="post-title" itemprop="name headline">knowledgeTree</h1>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-29T20:56:42+08:00">
-                2018-07-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T10:03:19+08:00">
+                2019-01-22
               </time>
             
 
@@ -343,12 +343,42 @@
       
 
       
-        <h1><span id="backpressure">backpressure</span></h1>
-<p>背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
-<h1><span id="observer-pattern">Observer pattern</span></h1>
-<p>RxJava 以观察者模式为骨架
-Observable ( 被观察者 ) / Observer ( 观察者 )
-Flowable （被观察者）/ Subscriber （观察者）</p>
+        <p>这个是整个知识图谱的架构，分为三大块：基础知识，机器学习，大数据</p>
+<p>[TOC]</p>
+<h1><span id="基础知识">基础知识</span></h1>
+<h2><span id="编程语言">编程语言</span></h2>
+<h3><span id="java">java</span></h3>
+<h3><span id="c">c++</span></h3>
+<h3><span id="python">python</span></h3>
+<h3><span id="scala">scala</span></h3>
+<h2><span id="数据结构">数据结构</span></h2>
+<h3><span id="基础数据结构">基础数据结构</span></h3>
+<h3><span id="高级数据结构">高级数据结构</span></h3>
+<h2><span id="基础算法">基础算法</span></h2>
+<h3><span id="基础算法">基础算法</span></h3>
+<h3><span id="高级算法">高级算法</span></h3>
+<h2><span id="操作系统">操作系统</span></h2>
+<h3><span id="操作系统基础知识">操作系统基础知识</span></h3>
+<h3><span id="linux">linux</span></h3>
+<h2><span id="网络通信">网络通信</span></h2>
+<h2><span id="内存管理">内存管理</span></h2>
+<h2><span id="分布式">分布式</span></h2>
+<h1><span id="机器学习">机器学习</span></h1>
+<h2><span id="基础机器学习">基础机器学习</span></h2>
+<h2><span id="强化学习">强化学习</span></h2>
+<h2><span id="深度学习">深度学习</span></h2>
+<h2><span id="数学知识">数学知识</span></h2>
+<h3><span id="线性代数">线性代数</span></h3>
+<h3><span id="统计与概率论">统计与概率论</span></h3>
+<h3><span id="凸优化">凸优化</span></h3>
+<h1><span id="大数据">大数据</span></h1>
+<h2><span id="大数据基础知识">大数据基础知识</span></h2>
+<h2><span id="分布式存储">分布式存储</span></h2>
+<h3><span id="hdfs">hdfs</span></h3>
+<h2><span id="分布式计算">分布式计算</span></h2>
+<h3><span id="spark">spark</span></h3>
+<h2><span id="分布式结构化存储">分布式结构化存储</span></h2>
+<h3><span id="hbase">hbase</span></h3>
 
       
     </div>
@@ -366,7 +396,7 @@ Flowable （被观察者）/ Subscriber （观察者）</p>
       
         <div class="post-tags">
           
-            <a href="/tags/reactive/" rel="tag"># reactive</a>
+            <a href="/tags/overview/" rel="tag"># overview</a>
           
         </div>
       
@@ -379,8 +409,8 @@ Flowable （被观察者）/ Subscriber （观察者）</p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/29/vertxDemos/" rel="next" title="vertxDemos">
-                <i class="fa fa-chevron-left"></i> vertxDemos
+              <a href="/2019/01/21/一文读懂逻辑回归/" rel="next" title="一文读懂逻辑回归">
+                <i class="fa fa-chevron-left"></i> 一文读懂逻辑回归
               </a>
             
           </div>
@@ -388,10 +418,6 @@ Flowable （被观察者）/ Subscriber （观察者）</p>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/29/dubboRpc/" rel="prev" title="dubboRpc">
-                dubboRpc <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -533,7 +559,7 @@ Flowable （被观察者）/ Subscriber （观察者）</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">backpressure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Observer pattern</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">编程语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.1.</span> <span class="nav-text">java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.2.</span> <span class="nav-text">c++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.3.</span> <span class="nav-text">python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.4.</span> <span class="nav-text">scala</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.1.</span> <span class="nav-text">基础数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.2.</span> <span class="nav-text">高级数据结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">基础算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.1.</span> <span class="nav-text">基础算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.2.</span> <span class="nav-text">高级算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.1.</span> <span class="nav-text">操作系统基础知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.2.</span> <span class="nav-text">linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">网络通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.6.</span> <span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.7.</span> <span class="nav-text">分布式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">机器学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">基础机器学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">强化学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">深度学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">数学知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.1.</span> <span class="nav-text">线性代数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.2.</span> <span class="nav-text">统计与概率论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.3.</span> <span class="nav-text">凸优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">大数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">大数据基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">分布式存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.1.</span> <span class="nav-text">hdfs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">分布式计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.1.</span> <span class="nav-text">spark</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">分布式结构化存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.1.</span> <span class="nav-text">hbase</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -709,9 +735,9 @@ Flowable （被观察者）/ Subscriber （观察者）</p>
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://www.yifanguo.top/2018/07/29/rxjava/';
-          this.page.identifier = '2018/07/29/rxjava/';
-          this.page.title = 'rxjava';
+          this.page.url = 'http://www.yifanguo.top/2019/01/22/knowledgeTree/';
+          this.page.identifier = '2019/01/22/knowledgeTree/';
+          this.page.title = 'knowledgeTree';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://www-yifanguo-top.disqus.com/embed.js';
