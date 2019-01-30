@@ -1,5 +1,5 @@
 body {
-  background-image: url("/images/t.jpg");
+  background-image: url("/images/t.png");
   background-attachment: fixed;
   background-repeat: repeat;
   background-size: contain;
@@ -1829,7 +1829,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #7dcbff;
+  background: #7a0d61;
 }
 .links-of-blogroll {
   font-size: 13px;
