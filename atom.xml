@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.yifanguo.top/"/>
-  <updated>2019-02-21T12:12:55.031Z</updated>
+  <updated>2019-04-17T06:51:36.745Z</updated>
   <id>http://www.yifanguo.top/</id>
   
   <author>
@@ -15,6 +15,45 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>online_learning</title>
+    <link href="http://www.yifanguo.top/2019/04/17/online-learning/"/>
+    <id>http://www.yifanguo.top/2019/04/17/online-learning/</id>
+    <published>2019-04-17T06:51:36.000Z</published>
+    <updated>2019-04-17T06:51:36.745Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>recsystem01</title>
+    <link href="http://www.yifanguo.top/2019/03/20/recsystem01/"/>
+    <id>http://www.yifanguo.top/2019/03/20/recsystem01/</id>
+    <published>2019-03-20T03:30:23.000Z</published>
+    <updated>2019-03-20T03:31:47.112Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="recommender-system01">recommender system01</span></h1>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;recommender-system01&quot;&gt;recommender system01&lt;/span&gt;&lt;/h1&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="recommender" scheme="http://www.yifanguo.top/tags/recommender/"/>
+    
+  </entry>
   
   <entry>
     <title>JAVA_MAGIC_UNSAFE</title>
@@ -468,55 +507,6 @@
     
     
       <category term="决策树" scheme="http://www.yifanguo.top/tags/%E5%86%B3%E7%AD%96%E6%A0%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ml_list</title>
-    <link href="http://www.yifanguo.top/2018/12/24/ml-list/"/>
-    <id>http://www.yifanguo.top/2018/12/24/ml-list/</id>
-    <published>2018-12-24T02:27:53.000Z</published>
-    <updated>2018-12-24T02:32:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="ml常见模型">ML常见模型</span></h1><h2><span id="logistic-regression">logistic regression</span></h2><h2><span id="knn">knn</span></h2><h2><span id="naive-bayes">naive bayes</span></h2><h2><span id="rf">rf</span></h2><h2><span id="gbdt">gbdt</span></h2><h2><span id="svm">svm</span></h2><h2><span id="pca">pca</span></h2><h2><span id="svd">svd</span></h2><h2><span id="lda">lda</span></h2><h2><span id="psi">psi</span></h2><h2><span id="kmeans">kmeans</span></h2><h2><span id="kmodes">kmodes</span></h2><h2><span id="crf">crf</span></h2><h2><span id="markov">markov</span></h2><h2><span id="lasso">lasso</span></h2>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1&gt;&lt;span id=&quot;ml常见模型&quot;&gt;ML常见模型&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span id=&quot;logistic-regression&quot;&gt;logistic regression&lt;/span&gt;&lt;/h2&gt;
-&lt;h2&gt;&lt;span id=&quot;knn&quot;&gt;knn&lt;/span&gt;&lt;/h
-      
-    
-    </summary>
-    
-    
-      <category term="interview" scheme="http://www.yifanguo.top/tags/interview/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spark</title>
-    <link href="http://www.yifanguo.top/2018/12/24/spark/"/>
-    <id>http://www.yifanguo.top/2018/12/24/spark/</id>
-    <published>2018-12-24T02:12:20.000Z</published>
-    <updated>2019-01-03T03:12:58.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>[TOC]</p><h1><span id="spark内核设计的艺术架构设计与实现">Spark内核设计的艺术架构设计与实现</span></h1><h1><span id="spark-vs-mr">Spark vs MR</span></h1><p>spark是基于内存的MR需要使用磁盘</p><h1><span id="宽依赖和窄依赖">宽依赖和窄依赖</span></h1><p>https://www.jianshu.com/p/5c2301dfa360</p><p>窄依赖与窄依赖比较</p><p>宽依赖往往对应着shuffle操作，需要在运行的过程中将同一个RDD分区传入到不同的RDD分区中，中间可能涉及到多个节点之间数据的传输，而窄依赖的每个父RDD分区通常只会传入到另一个子RDD分区，通常在一个节点内完成。当RDD分区丢失时，对于窄依赖来说，由于父RDD的一个分区只对应一个子RDD分区，这样只需要重新计算与子RDD分区对应的父RDD分区就行。这个计算对数据的利用是100%的当RDD分区丢失时，对于宽依赖来说，重算的父RDD分区只有一部分数据是对应丢失的子RDD分区的，另一部分就造成了多余的计算。宽依赖中的子RDD分区通常来自多个父RDD分区，极端情况下，所有父RDD都有可能重新计算。如下图，par4丢失，则需要重新计算par1,par2,par3,产生了冗余数据par5</p><p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">宽依赖，窄依赖函数</span><br><span class="line"></span><br><span class="line">窄依赖的函数有：</span><br><span class="line">map, filter, union, join(父RDD是hash-partitioned ), mapPartitions, mapValues</span><br><span class="line">宽依赖的函数有：</span><br><span class="line">groupByKey, join(父RDD不是hash-partitioned ), partitionBy</span><br></pre></td></tr></table></figure></p><h1><span id="rdd-resillient-distributed-dataset">RDD resillient distributed dataset</span></h1><p>只有spark action才会将RDD及其DAG（lineage) 提交到DAGScheduler</p><p>RDD 的祖先一定是一个跟数据源相关的RDD, 负责从数据源迭代读取数据</p><h1><span id="dag-directed-acycle-graph">DAG directed acycle graph</span></h1><p>DAG用来反映各RDD之间的依赖或血缘关系</p><h1><span id="partition">Partition</span></h1><p>一个RDD可以划分为多个分区，spark根据partition来确定task数量</p><h1><span id="narrowdependency-窄依赖">NarrowDependency 窄依赖</span></h1><p>子RDD依赖于父RDD中固定的partition</p><h1><span id="shuffledependency-宽依赖">ShuffleDependency 宽依赖</span></h1><p>子RDD对父RDD中所有的partition都可能产生依赖子RDD对父RDD各个partition的依赖将取决于分区计算器 partitioner的算法</p><h1><span id="job-用户提交的作业">Job 用户提交的作业</span></h1><p>当RDD及其DAG被提交给DAGScheduler调度后，DAGScheduler会将所有RDD中的转换及动作看出一个job. 一个job由1到多个Task组成</p><h1><span id="stage-job的执行阶段">Stage job的执行阶段</span></h1><p>DAGScheduler按照shuffleDependency作为Stage的划分节点对RDD的DAG进行Stage划分上游的Stage为shuffleMapStage. 因此一个job可能被划分为一到多个Stage.</p><p>Stage分为shuffleMapStage 和ResultStage</p><h1><span id="task">Task</span></h1><p>ShuffleMapTask, ResultTask</p><h1><span id="shuffle">Shuffle</span></h1><p>shuffle用于打通map任务的输出和reduce任务的输入</p><h1><span id="spark-partition-最佳数量">spark partition 最佳数量</span></h1><p>那么多少的partition数是合适的呢，这里我们参考spark doc给出的建议，<a href="http://spark.apache.org/docs/latest/programming-guide.html#spark-programming-guide">Typically you want 2-4 partitions for each CPU in your cluster</a>。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;spark内核设计的艺术架构设计与实现&quot;&gt;Spark内核设计的艺术架构设计与实现&lt;/span&gt;&lt;/h1&gt;
-&lt;h1&gt;&lt;span id=&quot;spark-vs-mr&quot;&gt;Spark vs MR&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;spark是
-      
-    
-    </summary>
-    
     
   </entry>
   
